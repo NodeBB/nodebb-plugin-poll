@@ -11,7 +11,7 @@
 		},
 		parsePoll: function(poll, callback) {
 			poll = View.parseResults(poll);
-			console.log(poll);
+			//console.log(poll);
 			window.templates.parse('poll/view', poll, callback);
 		},
 		insertPoll: function(poll, callback) {
@@ -106,7 +106,7 @@
 		init: function(poll) {
 			View.insertPoll(poll, function() {
 				var pollView = $('#poll-id-' + poll.pollid);
-				console.log(poll.hasvoted);
+				//console.log(poll.hasvoted);
 				if (poll.hasvoted) {
 					View.showResultPanel(pollView);
 					pollView.find('#poll-view-button-voting').remove();
