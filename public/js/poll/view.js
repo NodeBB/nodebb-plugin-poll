@@ -3,7 +3,7 @@
 		parseResults: function(poll) {
 			for (var option in poll.options) {
 				if (poll.options.hasOwnProperty(option)) {
-					var percentage = (poll.options[option].votecount / poll.votecount) * 100;
+					var percentage = (poll.options[option].votecount / poll.info.votecount) * 100;
 					poll.options[option].percentage = isNaN(percentage) ? 0 : percentage;
 				}
 			}
@@ -105,7 +105,7 @@
 	Poll.view = {
 		init: function(poll) {
 			View.insertPoll(poll, function() {
-				var pollView = $('#poll-id-' + poll.pollid);
+				var pollView = $('#poll-id-' + poll.info.pollid);
 				//console.log(poll.hasvoted);
 				if (poll.hasvoted) {
 					View.showResultPanel(pollView);
