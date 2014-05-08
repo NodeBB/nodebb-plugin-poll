@@ -92,5 +92,5 @@
 
 			return result;
 		}
-	}
+	};
 })(window.Poll);

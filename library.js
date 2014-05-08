@@ -2,8 +2,10 @@ var	NodeBB = require('./lib/nodebb'),
 	Config = require('./lib/config'),
 	Sockets = require('./lib/sockets'),
 	Hooks = require('./lib/hooks'),
+	Admin = require('./lib/admin'),
 
 	PluginSockets = NodeBB.pluginSockets,
+	AdminSockets = NodeBB.adminSockets,
 
 	app;
 
@@ -21,6 +23,7 @@ Poll.init = {
 		app.get('/admin/poll', middleware.admin.buildHeader, renderAdmin);
 		app.get('/api/admin/poll', renderAdmin);
 		PluginSockets.poll = Sockets;
+		AdminSockets.poll = Config.settingSockets;
 		Hooks.tools.app = app;
 	},
 	admin: {
@@ -34,7 +37,7 @@ Poll.init = {
 			callback(null, custom_header);
 		}
 	}
-}
+};
 
 Poll.hooks = Hooks;
 

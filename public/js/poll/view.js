@@ -3,9 +3,10 @@
 		init: function(poll) {
 			View.insertPoll(poll, function() {
 				var pollView = $('#poll-id-' + poll.info.pollid);
-				//console.log(poll.hasvoted);
-				if (poll.hasvoted) {
+
+				if (poll.hasvoted || app.uid === 0) {
 					View.showResultPanel(pollView);
+					//Lets just remove this for now
 					pollView.find('#poll-view-button-voting').remove();
 				} else {
 					View.showVotingPanel(pollView);
@@ -29,7 +30,6 @@
 		},
 		parsePoll: function(poll, callback) {
 			poll = View.parseResults(poll);
-			//console.log(poll);
 			window.templates.parse('poll/view', poll, callback);
 		},
 		insertPoll: function(poll, callback) {
@@ -118,7 +118,7 @@
 				}
 			}
 		}
-	}
+	};
 
 	Poll.view = {
 		init: View.init,
