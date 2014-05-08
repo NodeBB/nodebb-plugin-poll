@@ -1,9 +1,9 @@
-<div id="poll-id-{pollid}" class="poll-view-container" data-pollid="{pollid}">
+<div id="poll-id-{info.pollid}" class="poll-view-container" data-pollid="{info.pollid}">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{title}</h3>
+                    <h3 class="panel-title">{info.title}</h3>
                 </div>
                 <div class="panel-body">
                     <div class="poll-view-options hidden">
