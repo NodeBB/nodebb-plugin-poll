@@ -1,5 +1,23 @@
 (function(Poll) {
 	var View = {
+		init: function(poll) {
+			View.insertPoll(poll, function() {
+				var pollView = $('#poll-id-' + poll.info.pollid);
+				//console.log(poll.hasvoted);
+				if (poll.hasvoted) {
+					View.showResultPanel(pollView);
+					pollView.find('#poll-view-button-voting').remove();
+				} else {
+					View.showVotingPanel(pollView);
+				}
+
+				for (var a in View.actions) {
+					if (View.actions.hasOwnProperty(a)) {
+						View.actions[a].register(pollView);
+					}
+				}
+			});
+		},
 		parseResults: function(poll) {
 			for (var option in poll.options) {
 				if (poll.options.hasOwnProperty(option)) {
@@ -103,24 +121,7 @@
 	}
 
 	Poll.view = {
-		init: function(poll) {
-			View.insertPoll(poll, function() {
-				var pollView = $('#poll-id-' + poll.info.pollid);
-				//console.log(poll.hasvoted);
-				if (poll.hasvoted) {
-					View.showResultPanel(pollView);
-					pollView.find('#poll-view-button-voting').remove();
-				} else {
-					View.showVotingPanel(pollView);
-				}
-
-				for (var a in View.actions) {
-					if (View.actions.hasOwnProperty(a)) {
-						View.actions[a].register(pollView);
-					}
-				}
-			});
-		},
+		init: View.init,
 		update: View.update,
 		updateResults: View.updateResults
 	};
