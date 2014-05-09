@@ -1,6 +1,8 @@
 (function(Poll) {
 	var S;
 
+	//Todo: load settings (like option limit) from server
+
 	function initialise() {
 		require(['composer', 'string'], function(composer, String) {
 			S = String;
