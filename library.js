@@ -2,6 +2,7 @@ var	NodeBB = require('./lib/nodebb'),
 	Config = require('./lib/config'),
 	Sockets = require('./lib/sockets'),
 	Hooks = require('./lib/hooks'),
+	Utils = require('./lib/utils'),
 	Admin = require('./lib/admin'),
 
 	PluginSockets = NodeBB.pluginSockets,
@@ -24,7 +25,7 @@ Poll.init = {
 		app.get('/api/admin/poll', renderAdmin);
 		PluginSockets.poll = Sockets;
 		AdminSockets.poll = Config.settingSockets;
-		Hooks.tools.app = app;
+		Utils.app = app;
 	},
 	admin: {
 		addNavigation: function(custom_header, callback) {

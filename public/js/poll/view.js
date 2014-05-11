@@ -30,6 +30,11 @@
 		},
 		parsePoll: function(poll, callback) {
 			poll = View.parseResults(poll);
+			//Todo REMOVE BEFORE RELEASE
+			//Development compatibility
+			if (poll.info.title) {
+				poll.settings.title = poll.info.title;
+			}
 			window.templates.parse('poll/view', poll, callback);
 		},
 		insertPoll: function(poll, callback) {
@@ -86,6 +91,7 @@
 				handle: function(pollView) {
 					var voteData = View.parseVote(pollView.find('form'));
 					if (voteData.options.length > 0) {
+						console.log(JSON.stringify(voteData));
 						Poll.sockets.emit.vote(voteData, function(err, result) {
 							if (err) {
 								app.alertError(err.message);
