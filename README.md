@@ -16,7 +16,7 @@ Supported settings:
 
 - Add hooks for a bunch of events that will change the state of a poll. These include the deletion of a post or topic
 - Add the ability for a poll to end on a specific date
-- Add the ability to add a poll by editing the first post of a topic
+- Add the ability to add a poll by editing the first post of a topic (requires refresh after edit now)
 - Add the ability to edit a poll
 - Add the ability to remove a vote, and a setting to disable the removal of votes
 - Overall improvement of the code
