@@ -91,7 +91,6 @@
 				handle: function(pollView) {
 					var voteData = View.parseVote(pollView.find('form'));
 					if (voteData.options.length > 0) {
-						console.log(JSON.stringify(voteData));
 						Poll.sockets.emit.vote(voteData, function(err, result) {
 							if (err) {
 								app.alertError(err.message);
