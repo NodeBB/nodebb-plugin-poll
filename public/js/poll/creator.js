@@ -1,5 +1,19 @@
 (function(Poll) {
-	var S;
+	var S,
+		settings = {
+			max: {
+				id: 'pollInputAmount',
+				test: function(value) {
+					return !isNaN(value);
+				}
+			},
+			title: {
+				id: 'pollInputTitle',
+				test: function(value) {
+					return value.length > 0;
+				}
+			}
+		};
 
 	//Todo: load settings (like option limit) from server
 
@@ -50,6 +64,9 @@
 			if (result.err) {
 				return Poll.creator.error(errorBox, err);
 			} else {
+				if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
+					result.markup = '\n' + result.markup;
+				}
 				textarea.value += result.markup;
 				return true;
 			}
@@ -63,30 +80,32 @@
 
 	var Creator = {
 		parse: function(modal) {
-			var title = modal.find('#pollInputTitle').val(),
-				options = S(modal.find('#pollInputOptions').val()).stripTags().s.split('\n').filter(function(o) {
+			var options = S(modal.find('#pollInputOptions').val()).stripTags().s.split('\n').filter(function(o) {
 					return o.length == 0 ? false : o;
 				}),
-				amount = parseInt(modal.find('#pollInputAmount').val(), 10),
+				settingMarkup = '',
 				result = {
 					err: null,
 					markup: null
 				};
 
-			if (title.length == 0 || options.length == 0 || (isNaN(amount) || amount <= 0)) {
-				if (title.length == 0) {
-					result.err = 'Invalid title';
-				}
+			if (options.length == 0) {
 				if (options.length == 0) {
 					result.err = 'Create at least one option!';
-				}
-				if (isNaN(amount)) {
-					result.err = 'Invalid vote amount input!';
 				}
 				return result;
 			}
 
-			result.markup = '\n[poll]\n';
+			for (var s in settings) {
+				if (settings.hasOwnProperty(s)) {
+					var value = S(modal.find('#' + settings[s].id).val()).stripTags().trim().s;
+					if (settings[s].test(value)) {
+						settingMarkup += ' ' + s + '="' + value + '"';
+					}
+				}
+			}
+
+			result.markup = '[poll' + settingMarkup + ']\n';
 			for (var i = 0, l = options.length; i < l; i++) {
 				result.markup += '- ' + options[i] + '\n';
 			}
