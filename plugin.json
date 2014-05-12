@@ -8,7 +8,11 @@
 		{ "hook": "action:app.load", "method": "init.load" },
 		{ "hook": "filter:admin.header.build", "method": "init.admin.addNavigation" },
 		{ "hook": "filter:post.save", "method": "hooks.filter.postSave" },
-		{ "hook": "filter:post.getPosts", "method": "hooks.filter.getPosts" }
+		{ "hook": "filter:post.getPosts", "method": "hooks.filter.getPosts" },
+		{ "hook": "action:post.delete", "method": "hooks.action.postDelete" },
+		{ "hook": "action:post.restore", "method": "hooks.action.postRestore" },
+		{ "hook": "action:topic.delete", "method": "hooks.action.topicDelete" },
+		{ "hook": "action:topic.restore", "method": "hooks.action.topicRestore" }
 	],
 	"staticDirs": {
 		"public": "./public"
