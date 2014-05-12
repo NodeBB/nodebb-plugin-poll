@@ -26,12 +26,22 @@
                 <label for="maxPollOptions">Maximum number of options per poll</label>
                 <input type="number" class="form-control" id="maxPollOptions" placeholder="10" min="1" max="100" data-key="limits.maxOptions">
             </div>
+            <h3>Defaults</h3>
+            <div class="form-group">
+                <label for="defaultsTitle">Default poll title</label>
+                <input type="text" class="form-control" id="defaultsTitle" placeholder="Poll" data-key="defaults.title">
+            </div>
+            <div class="form-group">
+                <label for="defaultsMaxVotes">Maximum number of votes per poll</label>
+                <input type="number" class="form-control" id="defaultsMaxVotes" placeholder="1" min="1" max="100" data-key="defaults.maxvotes">
+                <p class="help-block">A number greater than 1 will enable multiple choice polls.</p>
+            </div>
         </form>
     </div>
     <div class="col-xs-6 pull-right">
-        <h3>Actions
+        <h2>Actions
             <small>execute admin actions</small>
-        </h3>
+        </h2>
         <hr>
     </div>
 </div>
