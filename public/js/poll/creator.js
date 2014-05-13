@@ -2,15 +2,21 @@
 	var S,
 		settings = {
 			max: {
-				id: 'pollInputAmount',
 				test: function(value) {
 					return !isNaN(value);
 				}
 			},
 			title: {
-				id: 'pollInputTitle',
 				test: function(value) {
 					return value.length > 0;
+				}
+			},
+			end: {
+				test: function(value) {
+					return moment(value).isValid();
+				},
+				parse: function(value) {
+					return moment(value).unix();
 				}
 			}
 		};
@@ -37,18 +43,28 @@
 							label: 'Cancel',
 							className: 'btn-default',
 							callback: function(e) {
-								Poll.creator.cancel(e, textarea);
+								return Poll.creator.cancel(e, textarea);
 							}
 						},
 						save: {
 							label: 'Done',
 							className: 'btn-primary',
 							callback: function(e) {
-								Poll.creator.save(e, textarea);
+								return Poll.creator.save(e, textarea);
 							}
 						}
 					}
-				});
+				}).find('#pollInputEnd').datetimepicker({
+						useSeconds: false,
+						useCurrent: false,
+						minDate: new Date(),
+						icons: {
+							time: "fa fa-clock-o",
+							date: "fa fa-calendar",
+							up: "fa fa-arrow-up",
+							down: "fa fa-arrow-down"
+						}
+					});
 			});
 		},
 		cancel: function(e, textarea) {
@@ -62,7 +78,7 @@
 
 			var result = Creator.parse(modal);
 			if (result.err) {
-				return Poll.creator.error(errorBox, err);
+				return Poll.creator.error(errorBox, result.err);
 			} else {
 				if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
 					result.markup = '\n' + result.markup;
@@ -90,16 +106,17 @@
 				};
 
 			if (options.length == 0) {
-				if (options.length == 0) {
-					result.err = 'Create at least one option!';
-				}
+				result.err = 'Create at least one option!';
 				return result;
 			}
 
 			for (var s in settings) {
 				if (settings.hasOwnProperty(s)) {
-					var value = S(modal.find('#' + settings[s].id).val()).stripTags().trim().s;
-					if (settings[s].test(value)) {
+					var value = S(modal.find('[data-poll-setting="' + s + '"]').val()).stripTags().trim().s;
+					if (value.length > 0 && settings[s].test(value)) {
+						if (typeof settings[s].parse === 'function') {
+							value = settings[s].parse(value);
+						}
 						settingMarkup += ' ' + s + '="' + value + '"';
 					}
 				}

@@ -18,13 +18,16 @@
 		"public": "./public"
 	},
 	"less": [
-		"public/less/style.less"
+		"public/less/style.less",
+		"public/less/vendor/bootstrap-datetimepicker.less"
 	],
 	"scripts": [
 		"public/js/poll/main.js",
 		"public/js/poll/sockets.js",
 		"public/js/poll/view.js",
-		"public/js/poll/creator.js"
+		"public/js/poll/creator.js",
+		"public/js/vendor/moment.min.js",
+		"public/js/vendor/bootstrap-datetimepicker.min.js"
 	],
 	"templates": "./templates",
 	"minver": "0.4.0"
