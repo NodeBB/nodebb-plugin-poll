@@ -1,8 +1,8 @@
 <form role="form">
     <!-- BEGIN options -->
-    <div class="poll-view-option radio">
+    <div class="poll-view-option {optiontype}">
         <label>
-            <input type="radio" name="pollVoteSelection" id="pollOption{options.id}" value="{options.id}">
+            <input type="{optiontype}" name="pollVoteSelection" id="pollOption{options.id}" value="{options.id}">
             {options.title}
         </label>
     </div>

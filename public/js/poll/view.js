@@ -30,11 +30,19 @@
 		},
 		parsePoll: function(poll, callback) {
 			poll = View.parseResults(poll);
+
 			//Todo REMOVE BEFORE RELEASE
 			//Development compatibility
 			if (poll.info.title) {
 				poll.settings.title = poll.info.title;
 			}
+
+			if (parseInt(poll.settings.maxvotes, 10) > 1) {
+				poll.optiontype = 'checkbox';
+			} else {
+				poll.optiontype = 'radio';
+			}
+
 			window.templates.parse('poll/view', poll, callback);
 		},
 		insertPoll: function(poll, callback) {
