@@ -17,6 +17,7 @@ Supported settings:
 - Add the ability to add a poll by editing the first post of a topic (requires refresh after edit now)
 - Add the ability to edit a poll
 - Add the ability to remove a vote, and a setting to disable the removal of votes
+- A lot of the frontend: properly display when a poll is deleted or has ended, able to delete a vote, edit a poll etc
 - Overall improvement of the code
 - A lot more...
 
