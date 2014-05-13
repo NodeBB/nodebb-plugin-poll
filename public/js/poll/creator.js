@@ -16,7 +16,7 @@
 					return moment(value).isValid();
 				},
 				parse: function(value) {
-					return moment(value).unix();
+					return moment(value).valueOf();
 				}
 			}
 		};

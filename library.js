@@ -26,6 +26,7 @@ Poll.init = {
 		PluginSockets.poll = Sockets;
 		AdminSockets.poll = Config.settingSockets;
 		Utils.app = app;
+		Utils.scheduler.init();
 	},
 	admin: {
 		addNavigation: function(custom_header, callback) {

@@ -23,6 +23,7 @@
 	"dependencies": {
 		"async": "~0.2.9",
 		"string": "~1.8.0",
-		"xregexp": "~2.0.0"
+		"xregexp": "~2.0.0",
+		"cron": "~1.0.4"
 	}
 }
