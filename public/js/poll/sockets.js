@@ -3,6 +3,7 @@
 		events: {
 			load: 'plugins.poll.load',
 			vote: 'plugins.poll.vote',
+			details: 'plugins.poll.optionDetails',
 			onvotechange: 'event:poll.votechange'
 		},
 		on: {
@@ -23,6 +24,9 @@
 			},
 			vote: function(voteData, callback) {
 				socket.emit(Sockets.events.vote, voteData, callback);
+			},
+			getDetails: function(data, callback) {
+				socket.emit(Sockets.events.details, data, callback);
 			}
 		}
 	};

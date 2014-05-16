@@ -89,6 +89,11 @@
 			pollView.find('#poll-view-button-results').addClass('hidden');
 			pollView.find('#poll-view-button-voting').removeClass('hidden');
 		},
+		showOptionDetails: function(details) {
+			window.templates.parse('poll/view/details', details, function(html) {
+				bootbox.alert(html);
+			});
+		},
 		actions: {
 			vote: {
 				register: function(pollView) {
@@ -128,6 +133,28 @@
 				},
 				handle: function(pollView) {
 					View.showVotingPanel(pollView);
+				}
+			},
+			optionDetails: {
+				register: function(pollView) {
+					pollView.find('.poll-view-result-votecount').off('click').on('click', this.handle);
+				},
+				handle: function(e) {
+					var option = $(e.currentTarget).parents('[data-poll-result]'),
+						poll = option.parents('[data-pollid]');
+
+					Poll.sockets.emit.getDetails({
+						pollid: poll.data('pollid'),
+						option: option.data('poll-result')
+					}, function(err, result) {
+						if (err) {
+							app.alertError(err.message);
+						} else {
+							View.showOptionDetails(result);
+						}
+					});
+
+					return false;
 				}
 			}
 		}
