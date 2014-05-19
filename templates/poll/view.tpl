@@ -6,6 +6,7 @@
                     <h3 class="panel-title">{settings.title}</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="poll-view-messages hidden"></div>
                     <div class="poll-view-options hidden">
                         <!-- IMPORT poll/view/options.tpl -->
                     </div>

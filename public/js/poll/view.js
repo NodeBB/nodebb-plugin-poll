@@ -1,6 +1,6 @@
 (function(Poll) {
 	var View = {
-		init: function(poll) {
+		init: function(poll, callback) {
 			View.insertPoll(poll, function() {
 				var pollView = $('#poll-id-' + poll.info.pollid);
 
@@ -17,7 +17,14 @@
 						View.actions[a].register(pollView);
 					}
 				}
+
+				if (typeof callback === 'function') {
+					callback(pollView);
+				}
 			});
+		},
+		get: function(pollid) {
+			return $('#poll-id-' + pollid);
 		},
 		parseResults: function(poll) {
 			for (var option in poll.options) {
@@ -75,19 +82,35 @@
 				optionView.find('.poll-view-result-progressbar').css('width', option.percentage + '%');
 			}
 		},
+		//Todo tidy this up, better individual panel and button control
 		showVotingPanel: function(pollView) {
+			View.hideResultPanel(pollView);
 			pollView.find('.poll-view-options').removeClass('hidden');
-			pollView.find('.poll-view-results').addClass('hidden');
 			pollView.find('#poll-view-button-vote').removeClass('hidden');
 			pollView.find('#poll-view-button-results').removeClass('hidden');
-			pollView.find('#poll-view-button-voting').addClass('hidden');
 		},
-		showResultPanel: function(pollView) {
+		hideVotingPanel: function(pollView) {
 			pollView.find('.poll-view-options').addClass('hidden');
-			pollView.find('.poll-view-results').removeClass('hidden');
 			pollView.find('#poll-view-button-vote').addClass('hidden');
 			pollView.find('#poll-view-button-results').addClass('hidden');
+		},
+		showResultPanel: function(pollView) {
+			View.hideVotingPanel(pollView);
+			pollView.find('.poll-view-results').removeClass('hidden');
 			pollView.find('#poll-view-button-voting').removeClass('hidden');
+		},
+		hideResultPanel: function(pollView) {
+			pollView.find('.poll-view-results').addClass('hidden');
+			pollView.find('#poll-view-button-voting').addClass('hidden');
+		},
+		showMessage: function(message, pollView) {
+			View.hideVotingPanel(pollView);
+			window.templates.parse('poll/view/messages', message, function(html) {
+				pollView.find('.poll-view-messages').html(html).removeClass('hidden');
+			});
+		},
+		hideMessage: function(pollView) {
+			pollView.find('.poll-view-messages').addClass('hidden');
 		},
 		showOptionDetails: function(details) {
 			window.templates.parse('poll/view/details', details, function(html) {
@@ -162,7 +185,9 @@
 
 	Poll.view = {
 		init: View.init,
+		get: View.get,
 		update: View.update,
-		updateResults: View.updateResults
+		updateResults: View.updateResults,
+		showMessage: View.showMessage
 	};
 })(window.Poll);
