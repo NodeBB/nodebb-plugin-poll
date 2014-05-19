@@ -25,4 +25,4 @@ If you're willing to help, please make any improvements you want and submit a PR
 
 ## Installation
 
-    Not yet
+    npm install nodebb-plugin-poll
