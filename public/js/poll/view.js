@@ -29,7 +29,7 @@
 		parseResults: function(poll) {
 			for (var option in poll.options) {
 				if (poll.options.hasOwnProperty(option)) {
-					var percentage = (poll.options[option].votecount / poll.info.votecount) * 100;
+					var percentage = ((poll.options[option].votecount / poll.info.votecount) * 100).toFixed(1);
 					poll.options[option].percentage = isNaN(percentage) ? 0 : percentage;
 				}
 			}
