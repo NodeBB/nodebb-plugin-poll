@@ -5,7 +5,7 @@
 	"url": "https://github.com/Schamper/nodebb-plugin-poll",
 	"library": "./library.js",
 	"hooks": [
-		{ "hook": "action:app.load", "method": "init.load" },
+		{ "hook": "static:app.load", "method": "init.load" },
 		{ "hook": "filter:admin.header.build", "method": "init.admin.addNavigation" },
 		{ "hook": "filter:post.save", "method": "hooks.filter.postSave" },
 		{ "hook": "filter:post.getPosts", "method": "hooks.filter.getPosts" },

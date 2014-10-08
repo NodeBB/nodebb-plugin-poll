@@ -13,7 +13,7 @@ var	NodeBB = require('./lib/nodebb'),
 var Poll = {};
 
 Poll.init = {
-	load: function(expressApp, middleware, controllers) {
+	load: function(expressApp, middleware, controllers, callback) {
 		app = expressApp;
 		function renderAdmin(req, res, next) {
 			//Config.api(function(data) {
@@ -27,6 +27,7 @@ Poll.init = {
 		AdminSockets.poll = Config.settingSockets;
 		Utils.app = app;
 		Utils.scheduler.init();
+		callback();
 	},
 	admin: {
 		addNavigation: function(custom_header, callback) {
