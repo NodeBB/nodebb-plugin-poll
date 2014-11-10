@@ -13,7 +13,7 @@ var	NodeBB = require('./lib/nodebb'),
 var Poll = {};
 
 Poll.init = {
-	load: function(expressApp, middleware, controllers, callback) {
+	load: function(data, callback) {
 		app = expressApp;
 		function renderAdmin(req, res, next) {
 			//Config.api(function(data) {
@@ -21,11 +21,11 @@ Poll.init = {
 			//});
 		}
 
-		app.get('/admin/poll', middleware.admin.buildHeader, renderAdmin);
-		app.get('/api/admin/poll', renderAdmin);
+		data.app.get('/admin/poll', data.middleware.admin.buildHeader, renderAdmin);
+		data.app.get('/api/admin/poll', renderAdmin);
 		PluginSockets.poll = Sockets;
 		AdminSockets.poll = Config.settingSockets;
-		Utils.app = app;
+		Utils.app = data.app;
 		Utils.scheduler.init();
 		callback();
 	},
