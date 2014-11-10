@@ -14,18 +14,18 @@ var Poll = {};
 
 Poll.init = {
 	load: function(data, callback) {
-		app = expressApp;
+		app = data.app;
 		function renderAdmin(req, res, next) {
 			//Config.api(function(data) {
 				res.render('poll/admin', {});
 			//});
 		}
 
-		data.app.get('/admin/poll', data.middleware.admin.buildHeader, renderAdmin);
-		data.app.get('/api/admin/poll', renderAdmin);
+		data.router.get('/admin/poll', data.middleware.admin.buildHeader, renderAdmin);
+		data.router.get('/api/admin/poll', renderAdmin);
 		PluginSockets.poll = Sockets;
 		AdminSockets.poll = Config.settingSockets;
-		Utils.app = data.app;
+		Utils.app = data.router;
 		Utils.scheduler.init();
 		callback();
 	},
