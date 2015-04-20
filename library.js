@@ -21,6 +21,8 @@ Poll.init = {
 			//});
 		}
 
+		NodeBB.initTranslator();
+		Utils.loadTranslations();
 		data.router.get('/admin/poll', data.middleware.admin.buildHeader, renderAdmin);
 		data.router.get('/api/admin/poll', renderAdmin);
 		PluginSockets.poll = Sockets;
