@@ -50,7 +50,16 @@
 				poll.optiontype = 'radio';
 			}
 
-			window.templates.parse('poll/view', poll, callback);
+			window.templates.parse('poll/view', poll, function(html){
+				var plugPath = '/plugins/nodebb-plugin-poll/public',
+					relPath = config.relative_path;
+
+				config.relative_path = plugPath;
+				translator.translate(html, config.userLang, function(translatedHtml) {
+					callback(translatedHtml);
+				});
+				config.relative_path = relPath;
+			});
 		},
 		insertPoll: function(poll, callback) {
 			View.parsePoll(poll, function(html) {
@@ -106,7 +115,14 @@
 		showMessage: function(message, pollView) {
 			View.hideVotingPanel(pollView);
 			window.templates.parse('poll/view/messages', message, function(html) {
-				pollView.find('.poll-view-messages').html(html).removeClass('hidden');
+				var plugPath = '/plugins/nodebb-plugin-poll/public',
+					relPath = config.relative_path;
+
+				config.relative_path = plugPath;
+				translator.translate(html, config.userLang, function(translatedHtml) {
+					pollView.find('.poll-view-messages').html(translatedHtml).removeClass('hidden');
+				});
+				config.relative_path = relPath;
 			});
 		},
 		hideMessage: function(pollView) {
