@@ -1,7 +1,7 @@
 (function() {
 	window.Poll = {
-		load: function(data) {
-			Poll.sockets.emit.load(data.pollid, function(err, poll) {
+		load: function(pollid) {
+			Poll.sockets.emit.load(pollid, function(err, poll) {
 				if (!err) {
 					Poll.view.init(poll, function(pollView) {
 						if (parseInt(poll.info.deleted, 10) === 1 || parseInt(poll.info.ended, 10) === 1) {
