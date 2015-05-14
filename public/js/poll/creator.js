@@ -38,6 +38,7 @@
 				bootbox.dialog({
 					title: 'Create a poll',
 					message: html,
+					className: 'poll-creator',
 					buttons: {
 						cancel: {
 							label: 'Cancel',

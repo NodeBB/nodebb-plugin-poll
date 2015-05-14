@@ -63,7 +63,7 @@
 		},
 		insertPoll: function(poll, callback) {
 			View.parsePoll(poll, function(html) {
-				$('#post-container .post-row[data-index="0"] .post-content').prepend(html);
+				$('.clearfix[data-index="0"] .content').append(html);
 				callback();
 			});
 		},
@@ -86,7 +86,7 @@
 			poll = View.parseResults(poll);
 			for (var i = 0, l = poll.options.length; i < l; i++) {
 				var option = poll.options[i],
-					optionView = pollView.find('#pollResult' + option.id);
+					optionView = pollView.find('.poll-view-result[data-poll-result="'+option.id+'"]');
 				optionView.find('.poll-view-result-percentage').text(option.percentage + '%');
 				optionView.find('.poll-view-result-progressbar').css('width', option.percentage + '%');
 			}
