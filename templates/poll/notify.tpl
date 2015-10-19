@@ -1,1 +1,1 @@
-<script>Poll.load({ pollid: {pollid} })</script>
+<script>Poll.load({pollid})</script>
