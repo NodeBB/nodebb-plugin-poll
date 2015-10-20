@@ -55,15 +55,17 @@
 					relPath = config.relative_path;
 
 				config.relative_path = plugPath;
-				translator.translate(html, config.userLang, function(translatedHtml) {
-					callback(translatedHtml);
+				require(['translator'], function(translator) {
+					translator.translate(html, config.userLang, function(translatedHtml) {
+						callback(translatedHtml);
+					});
 				});
 				config.relative_path = relPath;
 			});
 		},
 		insertPoll: function(poll, callback) {
 			View.parsePoll(poll, function(html) {
-				$('.clearfix[data-index="0"] .content').append(html);
+				$('[component="post"][data-index="0"] [component="post/content"]').prepend(html);
 				callback();
 			});
 		},
@@ -121,8 +123,10 @@
 					relPath = config.relative_path;
 
 				config.relative_path = plugPath;
-				translator.translate(html, config.userLang, function(translatedHtml) {
-					pollView.find('.poll-view-messages').html(translatedHtml).removeClass('hidden');
+				require(['translator'], function(translator) {
+					translator.translate(html, config.userLang, function(translatedHtml) {
+						pollView.find('.poll-view-messages').html(translatedHtml).removeClass('hidden');
+					});
 				});
 				config.relative_path = relPath;
 			});
@@ -132,7 +136,11 @@
 		},
 		showOptionDetails: function(details) {
 			window.templates.parse('poll/view/details', details, function(html) {
-				bootbox.alert(html);
+				require(['translator'], function(translator) {
+					translator.translate(html, config.userLang, function(translatedHtml) {
+						bootbox.alert(translatedHtml);
+					});
+				});
 			});
 		},
 		actions: {
