@@ -20,8 +20,6 @@ Poll.init = {
 				res.render('poll/admin', {});
 			//});
 		}
-
-		NodeBB.initTranslator();
 		Utils.loadTranslations();
 		data.router.get('/admin/poll', data.middleware.admin.buildHeader, renderAdmin);
 		data.router.get('/api/admin/poll', renderAdmin);

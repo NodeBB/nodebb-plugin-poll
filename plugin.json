@@ -29,5 +29,6 @@
 		"public/js/vendor/moment.min.js",
 		"public/js/vendor/bootstrap-datetimepicker.min.js"
 	],
-	"templates": "./templates"
+	"templates": "./templates",
+	"languages": "public/language"
 }
