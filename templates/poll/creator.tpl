@@ -22,7 +22,7 @@
 <div class="form-group">
     <label for="pollInputAmount">[[poll:auto_end]]</label>
     <input data-poll-setting="end" type="text" class="form-control" id="pollInputEnd" placeholder="[[poll:date_placeholder]]">
-    <p class="help-block">[[auto_end_help]]</p>
+    <p class="help-block">[[poll:auto_end_help]]</p>
 </div>
 
 <div id="dtBox"></div>

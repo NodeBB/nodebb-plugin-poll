@@ -35,37 +35,41 @@
 	Poll.creator = {
 		show: function(textarea) {
 			window.templates.parse('poll/creator', {}, function(html) {
-				bootbox.dialog({
-					title: 'Create a poll',
-					message: html,
-					className: 'poll-creator',
-					buttons: {
-						cancel: {
-							label: 'Cancel',
-							className: 'btn-default',
-							callback: function(e) {
-								return Poll.creator.cancel(e, textarea);
+				require(['translator'], function(translator) {
+					translator.translate(html, config.userLang, function(html) {
+						bootbox.dialog({
+							title: 'Create a poll',
+							message: html,
+							className: 'poll-creator',
+							buttons: {
+								cancel: {
+									label: 'Cancel',
+									className: 'btn-default',
+									callback: function(e) {
+										return Poll.creator.cancel(e, textarea);
+									}
+								},
+								save: {
+									label: 'Done',
+									className: 'btn-primary',
+									callback: function(e) {
+										return Poll.creator.save(e, textarea);
+									}
+								}
 							}
-						},
-						save: {
-							label: 'Done',
-							className: 'btn-primary',
-							callback: function(e) {
-								return Poll.creator.save(e, textarea);
+						}).find('#pollInputEnd').datetimepicker({
+							useSeconds: false,
+							useCurrent: false,
+							minDate: new Date(),
+							icons: {
+								time: "fa fa-clock-o",
+								date: "fa fa-calendar",
+								up: "fa fa-arrow-up",
+								down: "fa fa-arrow-down"
 							}
-						}
-					}
-				}).find('#pollInputEnd').datetimepicker({
-						useSeconds: false,
-						useCurrent: false,
-						minDate: new Date(),
-						icons: {
-							time: "fa fa-clock-o",
-							date: "fa fa-calendar",
-							up: "fa fa-arrow-up",
-							down: "fa fa-arrow-down"
-						}
+						});
 					});
+				});
 			});
 		},
 		cancel: function(e, textarea) {
