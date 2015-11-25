@@ -16,7 +16,7 @@
     "poll"
   ],
   "author": "Schamper <mrwafflewaffle@aim.com>",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Schamper/nodebb-plugin-poll/issues"
   },
