@@ -1,139 +1,185 @@
+"use strict";
+/* globals $, app, bootbox, define */
+
 (function(Poll) {
-	var S,
-		settings = {
-			max: {
-				test: function(value) {
-					return !isNaN(value);
-				}
-			},
-			title: {
-				test: function(value) {
-					return value.length > 0;
-				}
-			},
-			end: {
-				test: function(value) {
-					return moment(value).isValid();
-				},
-				parse: function(value) {
-					return moment(value).valueOf();
-				}
-			}
-		};
 
-	//Todo: load settings (like option limit) from server
+	var Creator = {};
+	var config;
 
-	function initialise() {
-		require(['composer', 'string'], function(composer, String) {
-			S = String;
-			composer.addButton('fa fa-bar-chart-o', Poll.creator.show);
+	function init() {
+		require(['composer'], function(composer) {
+			composer.addButton('fa fa-bar-chart-o', Creator.show);
 		});
 	}
 
-	initialise();
+	Creator.show = function(textarea) {
+		Poll.sockets.getConfig(null, function(err, c) {
+			config = c;
 
-	Poll.creator = {
-		show: function(textarea) {
-			window.templates.parse('poll/creator', {}, function(html) {
-				require(['translator'], function(translator) {
-					translator.translate(html, config.userLang, function(html) {
-						bootbox.dialog({
-							title: 'Create a poll',
-							message: html,
-							className: 'poll-creator',
-							buttons: {
-								cancel: {
-									label: 'Cancel',
-									className: 'btn-default',
-									callback: function(e) {
-										return Poll.creator.cancel(e, textarea);
-									}
-								},
-								save: {
-									label: 'Done',
-									className: 'btn-primary',
-									callback: function(e) {
-										return Poll.creator.save(e, textarea);
-									}
-								}
-							}
-						}).find('#pollInputEnd').datetimepicker({
-							useSeconds: false,
-							useCurrent: false,
-							minDate: new Date(),
-							icons: {
-								time: "fa fa-clock-o",
-								date: "fa fa-calendar",
-								up: "fa fa-arrow-up",
-								down: "fa fa-arrow-down"
-							}
-						});
-					});
-				});
-			});
-		},
-		cancel: function(e, textarea) {
-			return true;
-		},
-		save: function(e, textarea) {
-			var modal = $(e.currentTarget).parents('.bootbox'),
-				errorBox = modal.find('#pollErrorBox');
+			var poll = {};
 
-			errorBox.addClass('hidden').html('');
+			// If there's already a poll in the post, serialize it for editing
+			if (Poll.serializer.canSerialize(textarea.value)) {
+				poll = Poll.serializer.serialize(textarea.value, config);
 
-			var result = Creator.parse(modal);
-			if (result.err) {
-				return Poll.creator.error(errorBox, result.err);
-			} else {
-				if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
-					result.markup = '\n' + result.markup;
+				if (poll.settings.end === 0) {
+					delete poll.settings.end;
+				} else {
+					poll.settings.end = parseInt(poll.settings.end, 10);
 				}
-				textarea.value += result.markup;
-				return true;
 			}
-		},
-		error: function(errorBox, message) {
-			errorBox.removeClass('hidden');
-			errorBox.append(message + '<br>');
-			return false;
-		}
+
+			showModal(poll, config, textarea);
+		});
 	};
 
-	var Creator = {
-		parse: function(modal) {
-			var options = S(modal.find('#pollInputOptions').val()).stripTags().s.split('\n').filter(function(o) {
-					return o.length == 0 ? false : o;
-				}),
-				settingMarkup = '',
-				result = {
-					err: null,
-					markup: null
-				};
-
-			if (options.length == 0) {
-				result.err = 'Create at least one option!';
-				return result;
-			}
-
-			for (var s in settings) {
-				if (settings.hasOwnProperty(s)) {
-					var value = S(modal.find('[data-poll-setting="' + s + '"]').val()).stripTags().trim().s;
-					if (value.length > 0 && settings[s].test(value)) {
-						if (typeof settings[s].parse === 'function') {
-							value = settings[s].parse(value);
+	function showModal(poll, config, textarea) {
+		app.parseAndTranslate('poll/creator', { poll: poll, config: config }, function(html) {
+			// Initialise modal
+			var modal = bootbox.dialog({
+				title: 'Create a poll',
+				message: html,
+				className: 'poll-creator',
+				buttons: {
+					cancel: {
+						label: 'Cancel',
+						className: 'btn-default',
+						callback: function() {
+							return true
 						}
-						settingMarkup += ' ' + s + '="' + value + '"';
+					},
+					save: {
+						label: 'Done',
+						className: 'btn-primary',
+						callback: function(e) {
+							return save(e, textarea);
+						}
 					}
 				}
-			}
+			});
 
-			result.markup = '[poll' + settingMarkup + ']\n';
-			for (var i = 0, l = options.length; i < l; i++) {
-				result.markup += '- ' + options[i] + '\n';
-			}
-			result.markup += '[/poll]\n';
+			// Add option adder
+			modal.find('#pollAddOption')
+				.off('click')
+				.on('click', function(e) {
+					var el = $(e.currentTarget);
+					var prevOption = el.prev();
 
-			return result;
+					if (config.limits.maxOptions <= el.prevAll('input').length) {
+						clearErrors();
+						return error('You can only create ' + config.limits.maxOptions + ' options.');
+					}
+
+					if (prevOption.val().length != 0) {
+						prevOption.clone().val('').insertBefore(el).focus();
+					}
+				});
+
+			var datetimepicker = modal.find('#pollInputEnd')
+				.datetimepicker({
+					sideBySide: true,
+					showClear: true,
+					useCurrent: true,
+					ignoreReadonly: true,
+					allowInputToggle: true,
+					toolbarPlacement: 'top',
+					minDate: moment().add(5, 'minutes'),
+					icons: {
+						time: "fa fa-clock-o",
+						date: "fa fa-calendar",
+						up: "fa fa-chevron-up",
+						down: "fa fa-chevron-down",
+						previous: 'fa fa-chevron-left',
+						next: 'fa fa-chevron-right',
+						today: 'fa fa-calendar',
+						clear: 'fa fa-trash-o',
+						close: 'fa fa-times'
+					}
+				}).data('DateTimePicker');
+
+			if (poll.settings.end) {
+				datetimepicker.date(moment(poll.settings.end));
+			} else {
+				datetimepicker.clear();
+			}
+		});
+	}
+
+	function save(e, textarea) {
+		clearErrors();
+
+		var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
+		var obj = form.serializeObject();
+
+		// Let's be nice and at least show an error if there are no options
+		obj.options.filter(function(obj) {
+			return obj.length;
+		});
+
+		if (obj.options.length == 0) {
+			return error('Create at least one option.');
 		}
-	};
+
+		if (obj.settings.end && !moment(obj.settings.end).isValid()) {
+			return error('Please enter a valid date.');
+		} else if (obj.settings.end) {
+			obj.settings.end = moment(obj.settings.end).valueOf();
+		}
+
+		// Anything invalid will be discarded by the serializer
+		var markup = Poll.serializer.deserialize(obj, config);
+
+		// Remove any existing poll markup
+		textarea.value = Poll.serializer.removeMarkup(textarea.value);
+
+		// Insert the poll markup at the bottom
+		if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
+			markup = '\n' + markup;
+		}
+
+		textarea.value += markup;
+
+		return true;
+	}
+
+	function error(message) {
+		var errorBox = $('#pollErrorBox');
+
+		errorBox.removeClass('hidden');
+		errorBox.append(message + '<br>');
+
+		return false;
+	}
+
+	function clearErrors() {
+		$('#pollErrorBox').addClass('hidden').html('');
+	}
+
+	function dumbifyObject(obj) {
+		var result = {};
+
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				var val = obj[key];
+
+				if (jQuery.isPlainObject(val)) {
+					var obj1 = dumbifyObject(val);
+					for (var k1 in obj1) {
+						if (obj1.hasOwnProperty(k1)) {
+							result[key + '.' + k1] = obj1[k1];
+						}
+					}
+				} else {
+					result[key] = val;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	Poll.creator = Creator;
+
+	init();
+
 })(window.Poll);

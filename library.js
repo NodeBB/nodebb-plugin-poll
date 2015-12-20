@@ -1,47 +1,41 @@
+"use strict";
+
 var	NodeBB = require('./lib/nodebb'),
 	Config = require('./lib/config'),
 	Sockets = require('./lib/sockets'),
 	Hooks = require('./lib/hooks'),
-	Utils = require('./lib/utils'),
-	Admin = require('./lib/admin'),
+	Scheduler = require('./lib/scheduler'),
+	Utils = require('./lib/utils');
 
-	PluginSockets = NodeBB.pluginSockets,
-	AdminSockets = NodeBB.adminSockets,
+(function(Plugin) {
 
-	app;
+	Plugin.hooks = Hooks;
 
-var Poll = {};
-
-Poll.init = {
-	load: function(data, callback) {
-		app = data.app;
+	Plugin.load = function(params, callback) {
 		function renderAdmin(req, res, next) {
-			//Config.api(function(data) {
-				res.render('poll/admin', {});
-			//});
+			res.render('admin/plugins/' + Config.plugin.id, {});
 		}
-		Utils.loadTranslations();
-		data.router.get('/admin/poll', data.middleware.admin.buildHeader, renderAdmin);
-		data.router.get('/api/admin/poll', renderAdmin);
-		PluginSockets.poll = Sockets;
-		AdminSockets.poll = Config.settingSockets;
-		Utils.app = data.router;
-		Utils.scheduler.init();
-		callback();
-	},
-	admin: {
-		addNavigation: function(custom_header, callback) {
-			custom_header.plugins.push({
-				route: Config.plugin.route,
-				icon: Config.plugin.icon,
-				name: Config.plugin.name
-			});
 
-			callback(null, custom_header);
-		}
-	}
-};
+		params.router.get('/admin/plugins/' + Config.plugin.id, params.middleware.admin.buildHeader, renderAdmin);
+		params.router.get('/api/admin/plugins/' + Config.plugin.id, renderAdmin);
 
-Poll.hooks = Hooks;
+		NodeBB.PluginSockets[Config.plugin.id] = Sockets;
+		NodeBB.AdminSockets[Config.plugin.id] = Config.adminSockets;
 
-module.exports = Poll;
+		Utils.app = params.app;
+		Scheduler.start();
+
+		Config.init(callback);
+	};
+
+	Plugin.addAdminNavigation = function(adminHeader, callback) {
+		adminHeader.plugins.push({
+			route: '/plugins/' + Config.plugin.id,
+			icon: Config.plugin.icon,
+			name: Config.plugin.name
+		});
+
+		callback(null, adminHeader);
+	};
+
+})(exports);

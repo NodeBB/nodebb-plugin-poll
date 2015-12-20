@@ -3,10 +3,11 @@
 	"name": "Poll",
 	"description": "NodeBB Poll Plugin",
 	"url": "https://github.com/Schamper/nodebb-plugin-poll",
-	"library": "./library.js",
+	"library": "library.js",
 	"hooks": [
-		{ "hook": "static:app.load", "method": "init.load" },
-		{ "hook": "filter:admin.header.build", "method": "init.admin.addNavigation" },
+		{ "hook": "static:app.load", "method": "load" },
+		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
+		{ "hook": "filter:parse.raw", "method": "hooks.filter.parseRaw", "priority": 1 },
 		{ "hook": "filter:post.save", "method": "hooks.filter.postSave" },
 		{ "hook": "filter:post.getPosts", "method": "hooks.filter.getPosts" },
 		{ "hook": "action:post.delete", "method": "hooks.action.postDelete" },
@@ -15,20 +16,23 @@
 		{ "hook": "action:topic.restore", "method": "hooks.action.topicRestore" }
 	],
 	"staticDirs": {
-		"public": "./public"
+		"public": "public"
 	},
 	"less": [
 		"public/less/style.less",
 		"public/less/vendor/bootstrap-datetimepicker.less"
 	],
 	"scripts": [
+		"public/js/admin.js",
 		"public/js/poll/main.js",
+		"public/js/poll/serializer.js",
 		"public/js/poll/sockets.js",
-		"public/js/poll/view.js",
 		"public/js/poll/creator.js",
 		"public/js/vendor/moment.min.js",
-		"public/js/vendor/bootstrap-datetimepicker.min.js"
+		"public/js/vendor/bootstrap-datetimepicker.min.js",
+		"public/js/vendor/jquery.deserialize.min.js",
+		"public/js/vendor/jquery.serialize-object.min.js"
 	],
-	"templates": "./templates",
-	"languages": "public/language"
+	"templates": "templates",
+	"languages": "languages"
 }
