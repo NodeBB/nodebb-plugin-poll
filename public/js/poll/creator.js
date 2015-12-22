@@ -97,7 +97,7 @@
 					}
 				}).data('DateTimePicker');
 
-			if (poll.settings.end) {
+			if (poll.settings && poll.settings.end) {
 				datetimepicker.date(moment(poll.settings.end));
 			} else {
 				datetimepicker.clear();
