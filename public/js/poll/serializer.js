@@ -53,6 +53,10 @@
 	Serializer.serialize = function(post, config) {
 		var match = XRegExp.exec(post, pollRegex);
 
+		if (match === null) {
+			return null;
+		}
+
 		return {
 			options: serializeOptions(match.content, config),
 			settings: serializeSettings(match.settings, config)
