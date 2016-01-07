@@ -1,219 +1,230 @@
+"use strict";
+/* globals $, app */
+
 (function(Poll) {
-	var View = {
-		init: function(poll, callback) {
-			View.insertPoll(poll, function() {
-				var pollView = $('#poll-id-' + poll.info.pollid);
 
-				if (poll.hasvoted || app.uid === 0) {
-					View.showResultPanel(pollView);
-					//Lets just remove this for now
-					pollView.find('#poll-view-button-voting').remove();
-				} else {
-					View.showVotingPanel(pollView);
-				}
+	var View = function(pollData) {
+		this.pollData = pollData;
+	};
 
-				for (var a in View.actions) {
-					if (View.actions.hasOwnProperty(a)) {
-						View.actions[a].register(pollView);
-					}
-				}
+	View.prototype.load = function() {
+		var panel = $('[data-poll-id=' + this.pollData.info.pollId + ']');
 
-				if (typeof callback === 'function') {
-					callback(pollView);
-				}
-			});
-		},
-		get: function(pollid) {
-			return $('#poll-id-' + pollid);
-		},
-		parseResults: function(poll) {
-			for (var option in poll.options) {
-				if (poll.options.hasOwnProperty(option)) {
-					var percentage = ((poll.options[option].votecount / poll.info.votecount) * 100).toFixed(1);
-					poll.options[option].percentage = isNaN(percentage) ? 0 : percentage;
-				}
-			}
-			return poll;
-		},
-		parsePoll: function(poll, callback) {
-			poll = View.parseResults(poll);
+		this.dom = {
+			panel: panel,
+			messages: panel.find('.poll-view-messages'),
+			votingPanel: panel.find('.poll-view-voting'),
+			resultsPanel: panel.find('.poll-view-results'),
+			voteButton: panel.find('.poll-button-vote'),
+			votingPanelButton: panel.find('.poll-button-voting'),
+			resultsPanelButton: panel.find('.poll-button-results')
+		};
 
-			//Todo REMOVE BEFORE RELEASE
-			//Development compatibility
-			if (poll.info.title) {
-				poll.settings.title = poll.info.title;
-			}
+		this.hideMessage();
 
-			if (parseInt(poll.settings.maxvotes, 10) > 1) {
-				poll.optiontype = 'checkbox';
-			} else {
-				poll.optiontype = 'radio';
-			}
+		this.pollEndedOrDeleted();
 
-			window.templates.parse('poll/view', poll, function(html){
-				var plugPath = '/plugins/nodebb-plugin-poll/public',
-					relPath = config.relative_path;
+		if (!app.user.uid || this.pollData.hasVoted) {
+			this.showResultsPanel();
+			this.hideVotingPanelButton();
+		}
 
-				config.relative_path = plugPath;
-				require(['translator'], function(translator) {
-					translator.translate(html, config.userLang, function(translatedHtml) {
-						callback(translatedHtml);
-					});
-				});
-				config.relative_path = relPath;
-			});
-		},
-		insertPoll: function(poll, callback) {
-			View.parsePoll(poll, function(html) {
-				$('[component="post"][data-index="0"] [component="post/content"]').prepend(html);
-				callback();
-			});
-		},
-		parseVote: function(form) {
-			var serialized = form.serializeArray(),
-				votes = [];
+		var self = this;
+		Actions.forEach(function(action) {
+			action.register(self);
+		});
+	};
 
-			for (var input in serialized) {
-				if (serialized.hasOwnProperty(input)) {
-					votes.push(serialized[input].value);
-				}
-			}
-
-			return {
-				pollid: form.parents('[data-pollid]').data('pollid'),
-				options: votes
-			}
-		},
-		updateResults: function(poll, pollView) {
-			poll = View.parseResults(poll);
-			for (var i = 0, l = poll.options.length; i < l; i++) {
-				var option = poll.options[i],
-				    optionView = pollView.find('.poll-view-result[data-poll-result="'+option.id+'"]');
-				optionView.find('.poll-view-result-percentage').text(option.percentage + '%');
-				optionView.find('.poll-view-result-progressbar').css('width', option.percentage + '%');
-                		optionView.find('.poll-view-result-votecount').text(option.votecount + ' votes');
-
-			}
-		},
-		//Todo tidy this up, better individual panel and button control
-		showVotingPanel: function(pollView) {
-			View.hideResultPanel(pollView);
-			pollView.find('.poll-view-options').removeClass('hidden');
-			pollView.find('#poll-view-button-vote').removeClass('hidden');
-			pollView.find('#poll-view-button-results').removeClass('hidden');
-		},
-		hideVotingPanel: function(pollView) {
-			pollView.find('.poll-view-options').addClass('hidden');
-			pollView.find('#poll-view-button-vote').addClass('hidden');
-			pollView.find('#poll-view-button-results').addClass('hidden');
-		},
-		showResultPanel: function(pollView) {
-			View.hideVotingPanel(pollView);
-			pollView.find('.poll-view-results').removeClass('hidden');
-			pollView.find('#poll-view-button-voting').removeClass('hidden');
-		},
-		hideResultPanel: function(pollView) {
-			pollView.find('.poll-view-results').addClass('hidden');
-			pollView.find('#poll-view-button-voting').addClass('hidden');
-		},
-		showMessage: function(message, pollView) {
-			View.hideVotingPanel(pollView);
-			window.templates.parse('poll/view/messages', message, function(html) {
-				var plugPath = '/plugins/nodebb-plugin-poll/public',
-					relPath = config.relative_path;
-
-				config.relative_path = plugPath;
-				require(['translator'], function(translator) {
-					translator.translate(html, config.userLang, function(translatedHtml) {
-						pollView.find('.poll-view-messages').html(translatedHtml).removeClass('hidden');
-					});
-				});
-				config.relative_path = relPath;
-			});
-		},
-		hideMessage: function(pollView) {
-			pollView.find('.poll-view-messages').addClass('hidden');
-		},
-		showOptionDetails: function(details) {
-			window.templates.parse('poll/view/details', details, function(html) {
-				require(['translator'], function(translator) {
-					translator.translate(html, config.userLang, function(translatedHtml) {
-						bootbox.alert(translatedHtml);
-					});
-				});
-			});
-		},
-		actions: {
-			vote: {
-				register: function(pollView) {
-					pollView.find('#poll-view-button-vote').off('click').on('click', function(e) {
-						View.actions.vote.handle(pollView);
-					});
-				},
-				handle: function(pollView) {
-					var voteData = View.parseVote(pollView.find('form'));
-					if (voteData.options.length > 0) {
-						Poll.sockets.emit.vote(voteData, function(err, result) {
-							if (err) {
-								app.alertError(err.message);
-							} else {
-								View.showResultPanel(pollView);
-								pollView.find('#poll-view-button-voting').remove();
-							}
-						});
-					}
-				}
-			},
-			results: {
-				register: function(pollView) {
-					pollView.find('#poll-view-button-results').off('click').on('click', function(e) {
-						View.actions.results.handle(pollView);
-					});
-				},
-				handle: function(pollView) {
-					View.showResultPanel(pollView);
-				}
-			},
-			voting: {
-				register: function(pollView) {
-					pollView.find('#poll-view-button-voting').off('click').on('click', function(e) {
-						View.actions.voting.handle(pollView);
-					});
-				},
-				handle: function(pollView) {
-					View.showVotingPanel(pollView);
-				}
-			},
-			optionDetails: {
-				register: function(pollView) {
-					pollView.find('.poll-view-result-votecount').off('click').on('click', this.handle);
-				},
-				handle: function(e) {
-					var option = $(e.currentTarget).parents('[data-poll-result]'),
-						poll = option.parents('[data-pollid]');
-
-					Poll.sockets.emit.getDetails({
-						pollid: poll.data('pollid'),
-						option: option.data('poll-result')
-					}, function(err, result) {
-						if (err) {
-							app.alertError(err.message);
-						} else {
-							View.showOptionDetails(result);
-						}
-					});
-
-					return false;
-				}
-			}
+	View.prototype.pollEndedOrDeleted = function() {
+		if (parseInt(this.pollData.info.ended, 10) === 1 || parseInt(this.pollData.info.deleted, 10) === 1) {
+			this.showResultsPanel();
+			this.hideVotingPanelButton();
+			this.showMessage('Voting unavailable', 'This poll has ended or has been marked as deleted. You can still view the results.');
 		}
 	};
 
+	View.prototype.update = function(pollData) {
+		this.pollData = pollData;
+
+		this.pollEndedOrDeleted();
+
+		this.pollData.options.forEach(function(option) {
+			var el = this.dom.resultsPanel.find('[data-poll-option-id=' + option.id + ']');
+			el.find('.poll-result-votecount span').text(option.voteCount);
+			el.find('.poll-result-progressbar').css('width', option.percentage + '%')
+				.find('span').text(option.percentage);
+		}, this);
+	};
+
+	View.prototype.showMessage = function(title, content) {
+		var self = this;
+
+		app.parseAndTranslate('poll/view/messages', {title: title, content: content}, function(html) {
+			self.dom.messages.html(html).removeClass('hidden');
+		});
+	};
+
+	View.prototype.hideMessage = function() {
+		this.dom.messages.addClass('hidden');
+	};
+
+	View.prototype.showOptionDetails = function(details) {
+		app.parseAndTranslate('poll/view/details', details, function(html) {
+			bootbox.dialog({
+				message: html,
+				buttons: {
+					close: {
+						label: 'Close'
+					}
+				}
+			});
+		})
+	};
+
+	View.prototype.showVotingPanel = function() {
+		this.hideResultsPanel();
+		this.showVoteButton();
+		this.showResultsPanelButton();
+		this.dom.votingPanel.removeClass('hidden');
+	};
+
+	View.prototype.hideVotingPanel = function() {
+		this.hideVoteButton();
+		this.hideResultsPanelButton();
+		this.dom.votingPanel.addClass('hidden');
+	};
+
+	View.prototype.showResultsPanel = function() {
+		this.hideVotingPanel();
+		this.showVotingPanelButton();
+		this.dom.resultsPanel.removeClass('hidden');
+	};
+
+	View.prototype.hideResultsPanel = function() {
+		this.hideVotingPanelButton();
+		this.dom.resultsPanel.addClass('hidden');
+	};
+
+	View.prototype.showVoteButton = function() {
+		this.dom.voteButton.removeClass('hidden');
+	};
+
+	View.prototype.hideVoteButton = function() {
+		this.dom.voteButton.addClass('hidden');
+	};
+
+	View.prototype.showVotingPanelButton = function() {
+		this.dom.votingPanelButton.removeClass('hidden');
+	};
+
+	View.prototype.hideVotingPanelButton = function() {
+		this.dom.votingPanelButton.addClass('hidden');
+	};
+
+	View.prototype.showResultsPanelButton = function() {
+		this.dom.resultsPanelButton.removeClass('hidden');
+	};
+
+	View.prototype.hideResultsPanelButton = function() {
+		this.dom.resultsPanelButton.addClass('hidden');
+	};
+
+	var Actions = [
+		{
+			// Voting
+			register: function(view) {
+				var self = this;
+				view.dom.voteButton.off('click').on('click', function() {
+					self.handle(view);
+				});
+			},
+			handle: function(view) {
+				var form = view.dom.votingPanel.find('form');
+				var votes = form.serializeArray().map(function(option) {
+					return parseInt(option.value, 10);
+				});
+
+				if (votes.length > 0) {
+					var voteData = {
+						pollId: view.pollData.info.pollId,
+						options: votes
+					};
+
+					Poll.sockets.vote(voteData, function(err, result) {
+						if (err) {
+							return app.alertError(err.message);
+						}
+
+						view.showResultsPanel();
+						view.hideVotingPanelButton();
+					});
+				}
+			}
+		},
+		{
+			// Results button
+			register: function(view) {
+				var self = this;
+				view.dom.resultsPanelButton.off('click').on('click', function() {
+					self.handle(view);
+				});
+			},
+			handle: function(view) {
+				view.showResultsPanel();
+			}
+		},
+		{
+			// To Voting button
+			register: function(view) {
+				var self = this;
+				view.dom.votingPanelButton.off('click').on('click', function() {
+					self.handle(view);
+				});
+			},
+			handle: function(view) {
+				view.showVotingPanel()
+			}
+		},
+		{
+			// Option details
+			register: function(view) {
+				var self = this;
+				view.dom.resultsPanel.off('click').on('click', '.poll-result-votecount', function(e) {
+					self.handle(view, e);
+				});
+			},
+			handle: function(view, e) {
+				var optionId = $(e.currentTarget).parents('[data-poll-option-id]').data('poll-option-id');
+
+				Poll.sockets.getOptionDetails({
+					pollId: view.pollData.info.pollId,
+					optionId: optionId
+				}, function(err, details) {
+					if (err) {
+						return app.alertError(err.message);
+					}
+
+					view.showOptionDetails(details);
+				});
+			}
+		}
+	];
+
 	Poll.view = {
-		init: View.init,
-		get: View.get,
-		update: View.update,
-		updateResults: View.updateResults,
-		showMessage: View.showMessage
+		polls: {},
+		load: function(pollData) {
+			var view = new View(pollData);
+			this.polls[pollData.info.pollId] = view;
+
+			$(document).ready(function() {
+				view.load();
+			});
+		},
+		update: function(pollData) {
+			var pollId = pollData.info.pollId;
+			if (this.polls.hasOwnProperty(pollId)) {
+				this.polls[pollId].update(pollData);
+			}
+		}
 	};
 })(window.Poll);

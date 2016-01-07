@@ -7,9 +7,11 @@
 	"hooks": [
 		{ "hook": "static:app.load", "method": "load" },
 		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
+
 		{ "hook": "filter:parse.raw", "method": "hooks.filter.parseRaw", "priority": 1 },
 		{ "hook": "filter:post.save", "method": "hooks.filter.postSave" },
 		{ "hook": "filter:post.getPosts", "method": "hooks.filter.getPosts" },
+
 		{ "hook": "action:post.delete", "method": "hooks.action.postDelete" },
 		{ "hook": "action:post.restore", "method": "hooks.action.postRestore" },
 		{ "hook": "action:topic.delete", "method": "hooks.action.topicDelete" },
@@ -28,6 +30,7 @@
 		"public/js/poll/serializer.js",
 		"public/js/poll/sockets.js",
 		"public/js/poll/creator.js",
+		"public/js/poll/view.js",
 		"public/js/vendor/moment.min.js",
 		"public/js/vendor/bootstrap-datetimepicker.min.js",
 		"public/js/vendor/jquery.deserialize.min.js",

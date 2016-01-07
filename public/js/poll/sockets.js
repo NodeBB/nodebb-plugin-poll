@@ -2,19 +2,29 @@
 /* globals socket */
 
 (function(Poll) {
-	var messages = {
-		load: 'plugins.poll.load',
-		vote: 'plugins.poll.vote',
-		getDetails: 'plugins.poll.getOptionDetails',
-		getConfig: 'plugins.poll.getConfig'
-	};
-
-	var handlers = [{
-		event: 'event:poll.votechange',
-		handle: function(data) {
-			Poll.view.updateResults(data, $('#poll-id-' + data.pollid));
+	var messages = [
+		{
+			method: 'vote',
+			message: 'plugins.poll.vote'
+		},
+		{
+			method: 'getOptionDetails',
+			message: 'plugins.poll.getOptionDetails'
+		},
+		{
+			method: 'getConfig',
+			message: 'plugins.poll.getConfig'
 		}
-	}];
+	];
+
+	var handlers = [
+		{
+			event: 'event:poll.voteChange',
+			handle: function(data) {
+				Poll.view.update(data);
+			}
+		}
+	];
 
 	function init() {
 		handlers.forEach(function(handler) {
@@ -23,13 +33,11 @@
 			}
 		});
 
-		for (var m in messages) {
-			if (messages.hasOwnProperty(m)) {
-				Poll.sockets[m] = function(data, callback) {
-					socket.emit(messages[m], data, callback);
-				};
-			}
-		}
+		messages.forEach(function(message) {
+			Poll.sockets[message.method] = function(data, callback) {
+				socket.emit(message.message, data, callback);
+			};
+		});
 	}
 
 	Poll.sockets = {};
