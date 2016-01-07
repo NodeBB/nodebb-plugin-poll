@@ -4,8 +4,7 @@ var	NodeBB = require('./lib/nodebb'),
 	Config = require('./lib/config'),
 	Sockets = require('./lib/sockets'),
 	Hooks = require('./lib/hooks'),
-	Scheduler = require('./lib/scheduler'),
-	Utils = require('./lib/utils');
+	Scheduler = require('./lib/scheduler');
 
 (function(Plugin) {
 
@@ -22,7 +21,7 @@ var	NodeBB = require('./lib/nodebb'),
 		NodeBB.PluginSockets[Config.plugin.id] = Sockets;
 		NodeBB.AdminSockets[Config.plugin.id] = Config.adminSockets;
 
-		Utils.app = params.app;
+		NodeBB.app = params.app;
 		Scheduler.start();
 
 		Config.init(callback);

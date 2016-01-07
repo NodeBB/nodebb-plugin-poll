@@ -8,6 +8,7 @@
 
 	if ('undefined' === typeof window) {
 		XRegExp = require('xregexp').XRegExp;
+		S = require('string');
 	} else {
 		XRegExp = window.XRegExp;
 		require(['string'], function(string){ S = string });
