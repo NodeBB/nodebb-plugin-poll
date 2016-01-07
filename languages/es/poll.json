@@ -1,0 +1,29 @@
+{
+  "poll": "Encuesta",
+  "toggles": "Activadores",
+  "allow_guests": "Permitir a los invitados ver resultados de la encuesta",
+  "limits": "Limites",
+  "max_options": "Número máximo de opciones por encuesta",
+  "defaults": "Por defecto",
+  "default_title": "Título por defecto",
+  "max_votes": "Número máximo de votos por usuario",
+  "info_choices": "Un numero mayor que 1 habilitará la elección de opciones múltiples.",
+  "settings": "Opciones",
+  "save": "Guardar",
+  "reset": "Restaurar",
+
+  "poll_title": "Título de la encuesta",
+  "enter_poll_title": "Introducir título",
+  "options": "Opciones",
+  "enter_amount": "Escriba la cantidad",
+  "auto_end": "Finalizar encuesta automaticamente",
+  "date_placeholder": "Click para introducir fecha y hora",
+  "auto_end_help": "Dejar esta opción vacia hará que la encuesta no acabe nunca.",
+
+  "vote": "Votar",
+  "to_voting": "To Voting",
+  "to_results": "Resultados",
+
+  "vote_count": "usuarios votaron esta opción",
+  "votes": "votos"
+}
