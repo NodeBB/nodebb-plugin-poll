@@ -14,8 +14,8 @@
             <div class="poll-view-buttons">
                 <!-- IF !hasVoted -->
                 <button type="button" class="btn btn-primary poll-button-vote">[[poll:vote]]</button>
-                <button type="button" class="btn btn-link poll-button-voting hidden">To Voting</button>
-                <button type="button" class="btn btn-link poll-button-results">[[poll:results]]</button>
+                <button type="button" class="btn btn-link poll-button-voting hidden">[[poll:to_voting]]</button>
+                <button type="button" class="btn btn-link poll-button-results">[[poll:to_results]]</button>
                 <!-- ENDIF !hasVoted -->
             </div>
         </div>
