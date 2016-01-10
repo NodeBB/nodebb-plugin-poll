@@ -18,12 +18,12 @@
     "enter_amount": "Anzahl eingeben",
     "auto_end": "Ende der Umfrage",
     "date_placeholder": "Klick um Datum und Zeit einzugeben",
-    "auto_end_help": "Lasse dieses Feld leer, wenn die Umfrage niemals enden soll."
+    "auto_end_help": "Lasse dieses Feld leer, wenn die Umfrage niemals enden soll.",
     
     "vote": "Abstimmung",
     "to_voting": "Die Abstimmung",
     "to_results": "Ergebnisse",
     
     "vote_count": "Nutzer stimmten für diese Option",
-    "votes": "Abstimmungen",
+    "votes": "Abstimmungen"
 }
