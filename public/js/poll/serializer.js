@@ -110,24 +110,31 @@
 	}
 
 	function serializeSettings(raw, config) {
-		return XRegExp.forEach(S(raw).stripTags().s, settingsRegex, function(match) {
+		var settings = {};
+
+		Object.keys(config.defaults).forEach(function(key) {
+			settings[key] = config.defaults[key];
+		});
+
+		XRegExp.forEach(S(raw).stripTags().s, settingsRegex, function(match) {
 			var key = S(match.key).trim().s;
 			var value = S(match.value).trim().s;
 
 			if (key.length && value.length && settingsValidators.hasOwnProperty(key)) {
 				if (settingsValidators[key].test(value)) {
-					this[key] = settingsValidators[key].parse(value);
+					settings[key] = settingsValidators[key].parse(value);
 				}
 			}
-		}, config.defaults);
+		});
+
+		return settings;
 	}
 
 	function deserializeSettings(settings, config) {
-		var pollSettings = config.defaults;
 		var deserialized = '';
 
 		for (var k in settings) {
-			if (settings.hasOwnProperty(k)) {
+			if (settings.hasOwnProperty(k) && config.defaults.hasOwnProperty(k)) {
 				var key = S(k).stripTags().trim().s;
 				var value = S(settings[k]).stripTags().trim().s;
 
