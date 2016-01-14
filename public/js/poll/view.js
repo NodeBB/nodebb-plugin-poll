@@ -33,13 +33,15 @@
 		Actions.forEach(function(action) {
 			action.register(self);
 		});
+
+		this.showMessage('[[poll:voting_unavailable_title]]', '[[poll:voting_unavailable_message]]');
 	};
 
 	View.prototype.pollEndedOrDeleted = function() {
 		if (parseInt(this.pollData.info.ended, 10) === 1 || parseInt(this.pollData.info.deleted, 10) === 1) {
 			this.showResultsPanel();
 			this.hideVotingPanelButton();
-			this.showMessage('Voting unavailable', 'This poll has ended or has been marked as deleted. You can still view the results.');
+			this.showMessage('[[poll:voting_unavailable_title]]', '[[poll:voting_unavailable_message]]');
 		}
 	};
 

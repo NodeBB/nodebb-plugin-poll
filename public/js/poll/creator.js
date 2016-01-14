@@ -1,5 +1,5 @@
 "use strict";
-/* globals $, app, bootbox, define */
+/* globals $, app, templates, translator, bootbox, define */
 
 (function(Poll) {
 
@@ -37,19 +37,19 @@
 		app.parseAndTranslate('poll/creator', { poll: poll, config: config }, function(html) {
 			// Initialise modal
 			var modal = bootbox.dialog({
-				title: 'Create a poll',
+				title: '[[poll:creator_title]]',
 				message: html,
 				className: 'poll-creator',
 				buttons: {
 					cancel: {
-						label: 'Cancel',
+						label: '[[modules:bootbox.cancel]]',
 						className: 'btn-default',
 						callback: function() {
 							return true
 						}
 					},
 					save: {
-						label: 'Done',
+						label: '[[modules:bootbox.confirm]]',
 						className: 'btn-primary',
 						callback: function(e) {
 							return save(e, textarea);
@@ -67,7 +67,10 @@
 
 					if (config.limits.maxOptions <= el.prevAll('input').length) {
 						clearErrors();
-						return error('You can only create ' + config.limits.maxOptions + ' options.');
+						translator.translate('[[poll:error.max_options]]', function(text) {
+							error(text.replace('%d', config.limits.maxOptions));
+						});
+						return false;
 					}
 
 					if (prevOption.val().length != 0) {
@@ -117,11 +120,11 @@
 		});
 
 		if (obj.options.length == 0) {
-			return error('Create at least one option.');
+			return error('[[poll:error.no_options]]');
 		}
 
 		if (obj.settings.end && !moment(obj.settings.end).isValid()) {
-			return error('Please enter a valid date.');
+			return error('[[poll:error.valid_date]]');
 		} else if (obj.settings.end) {
 			obj.settings.end = moment(obj.settings.end).valueOf();
 		}

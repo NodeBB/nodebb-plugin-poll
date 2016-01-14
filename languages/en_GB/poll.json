@@ -12,17 +12,25 @@
   "save": "Save",
   "reset": "Reset",
 
+  "creator_title": "Create a poll",
   "poll_title": "Poll Title",
-  "enter_poll_title": "Enter poll title",
-  "options": "Options",
-  "enter_amount": "Enter amount",
-  "auto_end": "Automatically end poll",
-  "date_placeholder": "Click to enter date and time",
+  "poll_title_placeholder": "Enter poll title",
+  "options_title": "Options",
+  "options_add": "Add option",
+  "max_votes_placeholder": "Enter amount",
+  "auto_end_title": "Automatically end poll",
+  "auto_end_placeholder": "Click to enter date and time",
   "auto_end_help": "Leaving this empty will never end the poll.",
+
+  "error.max_options": "You can only create %d options.",
+  "error.no_options": "Create at least one option.",
+  "error.valid_date": "Please enter a valid date.",
 
   "vote": "Vote",
   "to_voting": "To Voting",
   "to_results": "Results",
+  "voting_unavailable_title": "Voting unavailable",
+  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
 
   "vote_count": "users voted for this option",
   "votes": "votes"

@@ -12,17 +12,25 @@
   "save": "Сохранить",
   "reset": "Сброс",
 
+  "creator_title": "Создать опрос",
   "poll_title": "Опрос Название",
-  "enter_poll_title": "Введите опроса титул",
-  "options": "Опции",
-  "enter_amount": "Введите сумму",
-  "auto_end": "Автоматически закончить опрос",
-  "date_placeholder": "Нажмите, чтобы введите дату и время",
+  "poll_title_placeholder": "Введите опроса титул",
+  "options_title": "Опции",
+  "options_add": "Add option",
+  "max_votes_placeholder": "Введите сумму",
+  "auto_end_title": "Автоматически закончить опрос",
+  "auto_end_placeholder": "Нажмите, чтобы введите дату и время",
   "auto_end_help": "Оставляя этот пустой никогда не закончится опрос.",
+
+  "error.max_options": "You can only create %d options.",
+  "error.no_options": "Create at least one option.",
+  "error.valid_date": "Please enter a valid date.",
 
   "vote": "Голосовать",
   "to_voting": "To Voting",
   "to_results": "Результаты",
+  "voting_unavailable_title": "Voting unavailable",
+  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
 
   "vote_count": "пользователи проголосовали за этот вариант",
   "votes": "голосов"

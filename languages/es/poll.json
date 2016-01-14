@@ -12,17 +12,25 @@
   "save": "Guardar",
   "reset": "Restaurar",
 
+  "creator_title": "Create a poll",
   "poll_title": "Título de la encuesta",
-  "enter_poll_title": "Introducir título",
-  "options": "Opciones",
-  "enter_amount": "Escriba la cantidad",
-  "auto_end": "Finalizar encuesta automaticamente",
-  "date_placeholder": "Click para introducir fecha y hora",
+  "poll_title_placeholder": "Introducir título",
+  "options_title": "Opciones",
+  "options_add": "Add option",
+  "max_votes_placeholder": "Escriba la cantidad",
+  "auto_end_title": "Finalizar encuesta automaticamente",
+  "auto_end_placeholder": "Click para introducir fecha y hora",
   "auto_end_help": "Dejar esta opción vacia hará que la encuesta no acabe nunca.",
+
+  "error.max_options": "You can only create %d options.",
+  "error.no_options": "Create at least one option.",
+  "error.valid_date": "Please enter a valid date.",
 
   "vote": "Votar",
   "to_voting": "To Voting",
   "to_results": "Resultados",
+  "voting_unavailable_title": "Voting unavailable",
+  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
 
   "vote_count": "usuarios votaron esta opción",
   "votes": "votos"
