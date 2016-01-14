@@ -1,5 +1,6 @@
 {
     "poll": "Umfrage",
+    "create_poll": "Umfrage erstellen",
     "toggles": "umschalten",
     "allow_guests": "Gäste dürfen die Ergebnisse sehen",
     "limits": "Einschränkungen",
