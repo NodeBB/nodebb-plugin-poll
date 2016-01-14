@@ -1,5 +1,6 @@
 {
     "poll": "Sondage",
+    "create_poll": "Créer un sondage",
     "allow_guests": "Permettre aux invités de voir les résultats du sondage",
     "settings": "Paramètres",
     "change_settings": "Changer les paramètres",
