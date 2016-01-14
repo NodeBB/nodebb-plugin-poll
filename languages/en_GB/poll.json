@@ -1,5 +1,6 @@
 {
   "poll": "Poll",
+  "create_poll": "Create a poll",
   "toggles": "Toggles",
   "allow_guests": "Allow guests to view poll results",
   "limits": "Limits",
