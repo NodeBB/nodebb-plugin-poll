@@ -37,19 +37,19 @@
 		app.parseAndTranslate('poll/creator', { poll: poll, config: config }, function(html) {
 			// Initialise modal
 			var modal = bootbox.dialog({
-				title: 'Create a poll',
+				title: '[[poll:create_poll]]',
 				message: html,
 				className: 'poll-creator',
 				buttons: {
 					cancel: {
-						label: 'Cancel',
+						label: '[[topic:composer.discard]]',
 						className: 'btn-default',
 						callback: function() {
 							return true
 						}
 					},
 					save: {
-						label: 'Done',
+						label: '[[topic:composer.submit]]',
 						className: 'btn-primary',
 						callback: function(e) {
 							return save(e, textarea);
