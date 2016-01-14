@@ -38,19 +38,19 @@
 				require(['translator'], function(translator) {
 					translator.translate(html, config.userLang, function(html) {
 						bootbox.dialog({
-							title: 'Create a poll',
+							title: '[[poll:create_poll]]',
 							message: html,
 							className: 'poll-creator',
 							buttons: {
 								cancel: {
-									label: 'Cancel',
+									label: '[[topic:composer.discard]]',
 									className: 'btn-default',
 									callback: function(e) {
 										return Poll.creator.cancel(e, textarea);
 									}
 								},
 								save: {
-									label: 'Done',
+									label: '[[topic:composer.submit]]',
 									className: 'btn-primary',
 									callback: function(e) {
 										return Poll.creator.save(e, textarea);
