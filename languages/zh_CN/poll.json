@@ -1,5 +1,6 @@
 {
   "poll": "投票",
+  "create_poll": "创建民意调查",
   "toggles": "开关",
   "allow_guests": "允许游客查看投票结果",
   "limits": "限制",
