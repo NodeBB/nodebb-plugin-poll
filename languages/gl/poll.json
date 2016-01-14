@@ -1,5 +1,6 @@
 {
   "poll": "Enquisa",
+  "create_poll": "Crear unha enquisa",
   "toggles": "Activadores",
   "allow_guests": "Permitir aos convidados ve-lo resultado da enquisa",
   "limits": "Límites",

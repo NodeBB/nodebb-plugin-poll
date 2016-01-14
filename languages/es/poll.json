@@ -1,5 +1,6 @@
 {
   "poll": "Encuesta",
+  "create_poll": "Crear una encuesta",
   "toggles": "Activadores",
   "allow_guests": "Permitir a los invitados ver resultados de la encuesta",
   "limits": "Limites",
