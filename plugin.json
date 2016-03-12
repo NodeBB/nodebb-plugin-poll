@@ -33,7 +33,6 @@
 		"public/js/poll/view.js",
 		"public/js/vendor/moment.min.js",
 		"public/js/vendor/bootstrap-datetimepicker.min.js",
-		"public/js/vendor/jquery.deserialize.min.js",
 		"public/js/vendor/jquery.serialize-object.min.js"
 	],
 	"templates": "templates",
