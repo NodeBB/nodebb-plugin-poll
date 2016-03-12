@@ -13,10 +13,8 @@
 		require(['components'], function(components) {
 			posts = components.get('post');
 			if (posts.length > 0 && parseInt(posts.eq(0).data('pid'), 10) === parseInt(self.pollData.info.pid, 10)) {
-				app.parseAndTranslate('poll/view', {poll: self.pollData}, function(html) {
-					posts.eq(0).find('[component="post/content"]').prepend(html);
-
-					var panel = $('[data-poll-id=' + self.pollData.info.pollId + ']');
+				app.parseAndTranslate('poll/view', {poll: self.pollData}, function(panel) {
+					posts.eq(0).find('[component="post/content"]').prepend(panel);
 
 					self.dom = {
 						panel: panel,
