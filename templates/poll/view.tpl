@@ -21,7 +21,3 @@
         </div>
     </div>
 </div>
-<script>
-    var json = $('<div/>').html('{pollJSON}').text();
-    Poll.view.load(JSON.parse(json));
-</script>

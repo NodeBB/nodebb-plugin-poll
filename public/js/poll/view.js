@@ -8,30 +8,40 @@
 	};
 
 	View.prototype.load = function() {
-		var panel = $('[data-poll-id=' + this.pollData.info.pollId + ']');
-
-		this.dom = {
-			panel: panel,
-			messages: panel.find('.poll-view-messages'),
-			votingPanel: panel.find('.poll-view-voting'),
-			resultsPanel: panel.find('.poll-view-results'),
-			voteButton: panel.find('.poll-button-vote'),
-			votingPanelButton: panel.find('.poll-button-voting'),
-			resultsPanelButton: panel.find('.poll-button-results')
-		};
-
-		this.hideMessage();
-
-		this.pollEndedOrDeleted();
-
-		if (!app.user.uid || this.pollData.hasVoted) {
-			this.showResultsPanel();
-			this.hideVotingPanelButton();
-		}
-
 		var self = this;
-		Actions.forEach(function(action) {
-			action.register(self);
+
+		require(['components'], function(components) {
+			posts = components.get('post');
+			if (posts.length > 0 && parseInt(posts.eq(0).data('pid'), 10) === parseInt(self.pollData.info.pid, 10)) {
+				app.parseAndTranslate('poll/view', {poll: self.pollData}, function(html) {
+					posts.eq(0).find('[component="post/content"]').prepend(html);
+
+					var panel = $('[data-poll-id=' + self.pollData.info.pollId + ']');
+
+					self.dom = {
+						panel: panel,
+						messages: panel.find('.poll-view-messages'),
+						votingPanel: panel.find('.poll-view-voting'),
+						resultsPanel: panel.find('.poll-view-results'),
+						voteButton: panel.find('.poll-button-vote'),
+						votingPanelButton: panel.find('.poll-button-voting'),
+						resultsPanelButton: panel.find('.poll-button-results')
+					};
+
+					self.hideMessage();
+
+					self.pollEndedOrDeleted();
+
+					if (!app.user.uid || self.pollData.hasVoted) {
+						self.showResultsPanel();
+						self.hideVotingPanelButton();
+					}
+
+					Actions.forEach(function(action) {
+						action.register(self);
+					});
+				});
+			}
 		});
 	};
 
@@ -216,9 +226,7 @@
 			var view = new View(pollData);
 			this.polls[pollData.info.pollId] = view;
 
-			$(document).ready(function() {
-				view.load();
-			});
+			view.load();
 		},
 		update: function(pollData) {
 			var pollId = pollData.info.pollId;

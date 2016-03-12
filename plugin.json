@@ -11,7 +11,6 @@
     { "hook": "filter:parse.raw", "method": "hooks.filter.parseRaw", "priority": 1 },
     { "hook": "filter:post.save", "method": "hooks.filter.postSave" },
     { "hook": "filter:post.edit", "method": "hooks.filter.postEdit" },
-    { "hook": "filter:post.getPosts", "method": "hooks.filter.getPosts" },
 
     { "hook": "action:post.delete", "method": "hooks.action.postDelete" },
     { "hook": "action:post.restore", "method": "hooks.action.postRestore" },
