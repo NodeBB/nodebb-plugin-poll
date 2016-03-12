@@ -7,7 +7,7 @@
 	var Serializer = {};
 
 	if ('undefined' === typeof window) {
-		XRegExp = require('xregexp').XRegExp;
+		XRegExp = require('xregexp');
 		S = require('string');
 	} else {
 		XRegExp = window.XRegExp;

@@ -21,10 +21,10 @@
     "url": "https://github.com/Schamper/nodebb-plugin-poll/issues"
   },
   "dependencies": {
-    "async": "~1.5.0",
+    "async": "~1.5.2",
     "string": "~3.3.1",
-    "xregexp": "~3.0.0",
-    "cron": "~1.0.9"
+    "xregexp": "~3.1.0",
+    "cron": "~1.1.0"
   },
   "nbbpm": {
     "compatibility": "^0.7.0 || ^0.8.0 || ^0.9.0"
