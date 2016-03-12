@@ -33,8 +33,6 @@
 		Actions.forEach(function(action) {
 			action.register(self);
 		});
-
-		this.showMessage('[[poll:voting_unavailable_title]]', '[[poll:voting_unavailable_message]]');
 	};
 
 	View.prototype.pollEndedOrDeleted = function() {
