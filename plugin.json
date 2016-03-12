@@ -25,7 +25,6 @@
 		"public/less/vendor/bootstrap-datetimepicker.less"
 	],
 	"scripts": [
-		"public/js/admin.js",
 		"public/js/poll/main.js",
 		"public/js/poll/serializer.js",
 		"public/js/poll/sockets.js",
@@ -34,6 +33,9 @@
 		"public/js/vendor/moment.min.js",
 		"public/js/vendor/bootstrap-datetimepicker.min.js",
 		"public/js/vendor/jquery.serialize-object.min.js"
+	],
+	"acpScripts": [
+		"public/js/admin.js"
 	],
 	"templates": "templates",
 	"languages": "languages"
