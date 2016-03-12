@@ -4,6 +4,10 @@
 (function(Poll) {
 	var messages = [
 		{
+			method: 'getPoll',
+			message: 'plugins.poll.get'
+		},
+		{
 			method: 'vote',
 			message: 'plugins.poll.vote'
 		},
