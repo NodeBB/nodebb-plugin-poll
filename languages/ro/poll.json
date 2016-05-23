@@ -22,7 +22,7 @@
   "auto_end_placeholder": "Introduceți data si ora",
   "auto_end_help": "Lăsați acest câmp liber dacă sondajul nu are termen.",
 
-  "error.max_options": "Puteți introdu un maxim de %d opțiuni.",
+  "error.max_options": "Puteți introduce un maxim de %d opțiuni.",
   "error.no_options": "Introduceți ce-l puțin o opțiune.",
   "error.valid_date": "Vă rog introduceți o dată valabilă.",
 
