@@ -7,7 +7,7 @@
   "defaults": "Valori implicite",
   "default_title": "Titlu ",
   "max_votes": "Voturi maximale per utilizator",
-  "info_choices": "Un număr mai mare de 1 permite multiple selecții.",
+  "info_choices": "Un număr mai mare de 1 permite selecții multiple.",
   "settings": "Setări",
   "save": "Salvează",
   "reset": "Resetare",
