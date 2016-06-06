@@ -7,7 +7,7 @@
   "defaults": "Valori implicite",
   "default_title": "Titlu ",
   "max_votes": "Voturi maximale per utilizator",
-  "info_choices": "Un număr mai mare de 1 permite multiple selecții.",
+  "info_choices": "Un număr mai mare de 1 permite selecții multiple.",
   "settings": "Setări",
   "save": "Salvează",
   "reset": "Resetare",
@@ -26,7 +26,7 @@
   "error.no_options": "Introduceți ce-l puțin o opțiune.",
   "error.valid_date": "Vă rog introduceți o dată valabilă.",
 
-  "vote": "Sondaj",
+  "vote": "Votează",
   "to_voting": "Sondajul",
   "to_results": "Rezultate",
   "voting_unavailable_title": "Sondajul nu este disponibil",
