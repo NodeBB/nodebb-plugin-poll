@@ -51,6 +51,10 @@
 		return XRegExp.replace(content, pollRegex, replace || '');
 	};
 
+	Serializer.hasMarkup = function(content) {
+		return XRegExp.exec(content, pollRegex) !== null;
+	};
+
 	Serializer.serialize = function(post, config) {
 		var match = XRegExp.exec(post, pollRegex);
 

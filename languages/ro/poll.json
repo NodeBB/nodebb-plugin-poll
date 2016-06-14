@@ -26,6 +26,8 @@
   "error.no_options": "Introduceți ce-l puțin o opțiune.",
   "error.valid_date": "Vă rog introduceți o dată valabilă.",
 
+  "error.privilege.create": "You're not allowed to create a poll",
+
   "vote": "Votează",
   "to_voting": "Sondajul",
   "to_results": "Rezultate",

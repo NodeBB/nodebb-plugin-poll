@@ -26,6 +26,8 @@
   "error.no_options": "Create at least one option.",
   "error.valid_date": "Please enter a valid date.",
 
+  "error.privilege.create": "You're not allowed to create a poll",
+
   "vote": "Votar",
   "to_voting": "To Voting",
   "to_results": "Resultados",

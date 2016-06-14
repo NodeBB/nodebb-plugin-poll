@@ -8,6 +8,11 @@
     { "hook": "static:app.load", "method": "load" },
     { "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
 
+  	{ "hook": "filter:privileges.list", "method": "addUserPrivilege" },
+    { "hook": "filter:privileges.groups.list", "method": "addGroupPrivilege" },
+  	{ "hook": "filter:privileges.list_human", "method": "addUserPrivilegeLabel" },
+
+    { "hook": "filter:topic.post", "method": "hooks.filter.topicPost" },
     { "hook": "filter:parse.raw", "method": "hooks.filter.parseRaw", "priority": 1 },
     { "hook": "filter:post.save", "method": "hooks.filter.postSave" },
     { "hook": "filter:post.edit", "method": "hooks.filter.postEdit" },

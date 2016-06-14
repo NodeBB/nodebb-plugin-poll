@@ -37,4 +37,19 @@ var	NodeBB = require('./lib/nodebb'),
 		callback(null, adminHeader);
 	};
 
+	Plugin.addUserPrivilege = function(privileges, callback) {
+		privileges.push('poll:create');
+		callback(null, privileges);
+	};
+
+	Plugin.addUserPrivilegeLabel = function(labels, callback) {
+		labels.push({name: 'Create Poll'});
+		callback(null, labels);
+	};
+
+	Plugin.addGroupPrivilege = function(privileges, callback) {
+		privileges.push('groups:poll:create');
+		callback(null, privileges);
+	};
+
 })(exports);
