@@ -5,31 +5,39 @@
 
 	var Creator = {};
 	var config;
+	var composer;
 
 	function init() {
-		require(['composer'], function(composer) {
-			composer.addButton('fa fa-bar-chart-o', Creator.show);
+		require(['composer'], function(c) {
+			composer = c;
+			c.addButton('fa fa-bar-chart-o', Creator.show);
 		});
 	}
 
 	Creator.show = function(textarea) {
-		Poll.sockets.getConfig(null, function(err, c) {
-			config = c;
-
-			var poll = {};
-
-			// If there's already a poll in the post, serialize it for editing
-			if (Poll.serializer.canSerialize(textarea.value)) {
-				poll = Poll.serializer.serialize(textarea.value, config);
-
-				if (poll.settings.end === 0) {
-					delete poll.settings.end;
-				} else {
-					poll.settings.end = parseInt(poll.settings.end, 10);
-				}
+		Poll.sockets.canCreate({cid: composer.posts[composer.active].cid}, function(err, canCreate) {
+			if (err || !canCreate) {
+				return app.alertError(err.message);
 			}
 
-			showModal(poll, config, textarea);
+			Poll.sockets.getConfig(null, function(err, c) {
+				config = c;
+
+				var poll = {};
+
+				// If there's already a poll in the post, serialize it for editing
+				if (Poll.serializer.canSerialize(textarea.value)) {
+					poll = Poll.serializer.serialize(textarea.value, config);
+
+					if (poll.settings.end === 0) {
+						delete poll.settings.end;
+					} else {
+						poll.settings.end = parseInt(poll.settings.end, 10);
+					}
+				}
+
+				showModal(poll, config, textarea);
+			});
 		});
 	};
 

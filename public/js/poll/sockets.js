@@ -18,6 +18,10 @@
 		{
 			method: 'getConfig',
 			message: 'plugins.poll.getConfig'
+		},
+		{
+			method: 'canCreate',
+			message: 'plugins.poll.canCreate'
 		}
 	];
 
