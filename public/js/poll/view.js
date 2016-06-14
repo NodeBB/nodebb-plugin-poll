@@ -11,7 +11,7 @@
 		var self = this;
 
 		require(['components'], function(components) {
-			posts = components.get('post');
+			var posts = components.get('post');
 			if (posts.length > 0 && parseInt(posts.eq(0).data('pid'), 10) === parseInt(self.pollData.info.pid, 10)) {
 				app.parseAndTranslate('poll/view', {poll: self.pollData}, function(panel) {
 					posts.eq(0).find('[component="post/content"]').prepend(panel);
