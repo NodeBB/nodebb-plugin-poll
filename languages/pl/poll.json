@@ -1,0 +1,39 @@
+{
+  "poll": "Ankieta",
+  "toggles": "Przełączanie",
+  "allow_guests": "Pozwól gościom zobacz wyniki ankiety",
+  "limits": "Limity",
+  "max_options": "Maksymalna liczba opcji w ankiecie",
+  "defaults": "Domyślne",
+  "default_title": "Domyślny tytuł ankiety",
+  "max_votes": "Maksymalna liczba głosów użytkownika",
+  "info_choices": "Pewna liczba większa niż 1 pozwoli wielu ankiet wyboru.",
+  "settings": "Ustawienia",
+  "save": "Zapisz",
+  "reset": "Resetuj",
+
+  "creator_title": "Utwórz ankietę",
+  "poll_title": "Tytuł ankiety",
+  "poll_title_placeholder": "Wprowadź tytuł ankiety",
+  "options_title": "Opcje",
+  "options_add": "Dodaj opcje",
+  "max_votes_placeholder": "Wprowadź ilość",
+  "auto_end_title": "Automatycznie koniec ankiety",
+  "auto_end_placeholder": "Kliknij, aby wprowadzić datę i godzinę",
+  "auto_end_help": "Pozostawienie tego pusta nigdy nie skończy się ankieta.",
+
+  "error.max_options": "Można utworzyć tylko %d Opcje",
+  "error.no_options": "Utwórz co najmniej jedną opcję.",
+  "error.valid_date": "Proszę wprowadź poprawną datę.",
+
+  "error.privilege.create": "Nie wolno nam utworzyć ankiety",
+
+  "vote": "Głosować",
+  "to_voting": "Głosowania",
+  "to_results": "Wyniki",
+  "voting_unavailable_title": "Głosowanie jest niedostępna",
+  "voting_unavailable_message": "Pula ta została zakończona lub zostało oznaczone jako usunięte. Nadal można zobaczyć wyniki.",
+
+  "vote_count": "Użytkowników głosowało za tą opcją",
+  "votes": "Głosy"
+}
