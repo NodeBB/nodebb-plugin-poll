@@ -8,9 +8,11 @@
 	var composer;
 
 	function init() {
-		require(['composer'], function(c) {
-			composer = c;
-			c.addButton('fa fa-bar-chart-o', Creator.show);
+		$(window).on('action:composer.enhanced', function() {
+			require(['composer'], function(c) {
+				composer = c;
+				c.addButton('fa fa-bar-chart-o', Creator.show);
+			});
 		});
 	}
 
