@@ -37,6 +37,16 @@ var	NodeBB = require('./lib/nodebb'),
 		callback(null, adminHeader);
 	};
 
+	Plugin.registerFormatting = function(payload, callback) {
+		payload.options.push({
+			name: 'poll',
+			className: 'fa ' + Config.plugin.icon,
+			title: '[[poll:creator_title]]'
+		});
+
+		callback(null, payload);
+	};
+
 	Plugin.addUserPrivilege = function(privileges, callback) {
 		privileges.push('poll:create');
 		callback(null, privileges);

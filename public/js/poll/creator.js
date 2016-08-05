@@ -4,27 +4,35 @@
 (function(Poll) {
 
 	var Creator = {};
-	var config;
-	var composer;
 
 	function init() {
 		$(window).on('action:composer.enhanced', function() {
-			require(['composer'], function(c) {
-				composer = c;
-				c.addButton('fa fa-bar-chart-o', Creator.show);
-			});
+			initComposer();
 		});
 	}
 
-	Creator.show = function(textarea) {
-		Poll.sockets.canCreate({cid: composer.posts[composer.active].cid}, function(err, canCreate) {
+	function initComposer() {
+		require(['composer', 'composer/formatting', 'composer/controls'], function(composer, formatting, controls) {
+			if (formatting && controls) {
+				formatting.addButtonDispatch('poll', function(textarea) {
+					composerBtnHandle(composer, textarea);
+				});
+			}
+		});
+	}
+
+	function composerBtnHandle(composer, textarea) {
+		var post = composer.posts[composer.active];
+		if (!post || !post.isMain || !post.cid || isNaN(parseInt(post.cid, 10))) {
+			return app.alertError('Can only add poll in main post.');
+		}
+
+		Poll.sockets.canCreate({cid: post.cid}, function(err, canCreate) {
 			if (err || !canCreate) {
 				return app.alertError(err.message);
 			}
 
-			Poll.sockets.getConfig(null, function(err, c) {
-				config = c;
-
+			Poll.sockets.getConfig(null, function(err, config) {
 				var poll = {};
 
 				// If there's already a poll in the post, serialize it for editing
@@ -38,12 +46,29 @@
 					}
 				}
 
-				showModal(poll, config, textarea);
+				Creator.show(poll, config, function(data) {
+					// Anything invalid will be discarded by the serializer
+					var markup = Poll.serializer.deserialize(data, config);
+
+					// Remove any existing poll markup
+					textarea.value = Poll.serializer.removeMarkup(textarea.value);
+
+					// Insert the poll markup at the bottom
+					if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
+						markup = '\n' + markup;
+					}
+
+					textarea.value += markup;
+				});
 			});
 		});
-	};
+	}
 
-	function showModal(poll, config, textarea) {
+	Creator.show = function(poll, config, callback) {
+		if (poll.hasOwnProperty('info')) {
+			return app.alertError('Editing not implemented.');
+		}
+
 		app.parseAndTranslate('poll/creator', { poll: poll, config: config }, function(html) {
 			// Initialise modal
 			var modal = bootbox.dialog({
@@ -62,7 +87,29 @@
 						label: '[[modules:bootbox.confirm]]',
 						className: 'btn-primary',
 						callback: function(e) {
-							return save(e, textarea);
+							clearErrors();
+
+							var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
+							var obj = form.serializeObject();
+
+							// Let's be nice and at least show an error if there are no options
+							obj.options.filter(function(obj) {
+								return obj.length;
+							});
+
+							if (obj.options.length == 0) {
+								return error('[[poll:error.no_options]]');
+							}
+
+							if (obj.settings.end && !moment(obj.settings.end).isValid()) {
+								return error('[[poll:error.valid_date]]');
+							} else if (obj.settings.end) {
+								obj.settings.end = moment(obj.settings.end).valueOf();
+							}
+
+							callback(obj);
+
+							return true;
 						}
 					}
 				}
@@ -116,44 +163,7 @@
 				datetimepicker.clear();
 			}
 		});
-	}
-
-	function save(e, textarea) {
-		clearErrors();
-
-		var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
-		var obj = form.serializeObject();
-
-		// Let's be nice and at least show an error if there are no options
-		obj.options.filter(function(obj) {
-			return obj.length;
-		});
-
-		if (obj.options.length == 0) {
-			return error('[[poll:error.no_options]]');
-		}
-
-		if (obj.settings.end && !moment(obj.settings.end).isValid()) {
-			return error('[[poll:error.valid_date]]');
-		} else if (obj.settings.end) {
-			obj.settings.end = moment(obj.settings.end).valueOf();
-		}
-
-		// Anything invalid will be discarded by the serializer
-		var markup = Poll.serializer.deserialize(obj, config);
-
-		// Remove any existing poll markup
-		textarea.value = Poll.serializer.removeMarkup(textarea.value);
-
-		// Insert the poll markup at the bottom
-		if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
-			markup = '\n' + markup;
-		}
-
-		textarea.value += markup;
-
-		return true;
-	}
+	};
 
 	function error(message) {
 		var errorBox = $('#pollErrorBox');

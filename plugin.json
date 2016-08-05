@@ -7,6 +7,7 @@
   "hooks": [
     { "hook": "static:app.load", "method": "load" },
     { "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
+    { "hook": "filter:composer.formatting", "method": "registerFormatting" },
 
   	{ "hook": "filter:privileges.list", "method": "addUserPrivilege" },
     { "hook": "filter:privileges.groups.list", "method": "addGroupPrivilege" },
