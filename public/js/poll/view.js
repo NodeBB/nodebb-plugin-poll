@@ -23,7 +23,8 @@
 						resultsPanel: panel.find('.poll-view-results'),
 						voteButton: panel.find('.poll-button-vote'),
 						votingPanelButton: panel.find('.poll-button-voting'),
-						resultsPanelButton: panel.find('.poll-button-results')
+						resultsPanelButton: panel.find('.poll-button-results'),
+						editButton: panel.find('.poll-button-edit')
 					};
 
 					self.hideMessage();
@@ -213,6 +214,23 @@
 					}
 
 					view.showOptionDetails(details);
+				});
+			}
+		},
+		{
+			// Editing
+			register: function(view) {
+				var self = this;
+				view.dom.editButton.off('click').on('click', function() {
+					self.handle(view);
+				});
+			},
+			handle: function(view) {
+				console.log(view.pollData);
+				Poll.sockets.getConfig(null, function(err, config) {
+					Poll.creator.show(view.pollData, config, function(data) {
+						console.log(data);
+					});
 				});
 			}
 		}

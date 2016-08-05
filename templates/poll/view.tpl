@@ -2,6 +2,11 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{poll.settings.title}</h3>
+            <div class="btn-group pull-right hidden">
+                <a href="#" class="poll-button-edit">
+                    <span class="fa fa-pencil"></span>
+                </a>
+            </div>
         </div>
         <div class="panel-body">
             <div class="poll-view-messages hidden"></div>
