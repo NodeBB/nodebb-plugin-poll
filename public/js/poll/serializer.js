@@ -15,7 +15,7 @@
 	}
 
 	var pollRegex = XRegExp('(?:(?:\\[poll(?<settings>.*?)\\])\n(?<content>(?:-.+?\n)+)(?:\\[\/poll\\]))', 'g');
-	var settingsRegex = XRegExp('(?<key>.+?)="(?<value>.+?)"', 'g');
+	var settingsRegex = XRegExp('(?<key>.+?)=(?:"|&quot;)(?<value>.+?)(?:"|&quot;)', 'g');
 	var settingsValidators = {
 		title: {
 			test: function (value) {

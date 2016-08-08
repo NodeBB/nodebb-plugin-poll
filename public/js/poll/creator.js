@@ -9,6 +9,43 @@
 		$(window).on('action:composer.enhanced', function() {
 			initComposer();
 		});
+
+		$(window).on('action:composer.loaded', function(ev, data) {
+			if ($.Redactor) {
+				if (data.composerData.isMain) {
+					if ($.Redactor.opts.plugins.indexOf('poll') === -1) $.Redactor.opts.plugins.push('poll');
+				} else {
+					if ($.Redactor.opts.plugins.indexOf('poll') !== -1) $.Redactor.opts.plugins.splice($.Redactor.opts.plugins.indexOf('poll'), 1);
+				}
+			}
+		});
+
+		$(window).on('action:redactor.load', function (ev, composer) {
+			$.Redactor.prototype.poll = function () {
+				return {
+					init: function () {
+						var that = this;
+						translator.translate('[[poll:creator_title]]', function (translated) {
+							var button = that.button.add('poll', translated);
+							that.button.setAwesome('poll', 'fa fa-bar-chart-o');
+							that.button.addCallback(button, that.poll.onClick);
+						});
+					},
+					onClick: function () {
+						var that = this;
+						require(['composer'], function (composer) {
+							var code = that.code.get();
+							composerBtnHandle(composer, {
+								value: code,
+								redactor: function (code) {
+									that.code.set(code);
+								}
+							});
+						});
+					}
+				};
+			};
+		});
 	}
 
 	function initComposer() {
@@ -59,6 +96,8 @@
 					}
 
 					textarea.value += markup;
+
+					if ($.Redactor) textarea.redactor('<p>' + textarea.value + '</p>');
 				});
 			});
 		});
