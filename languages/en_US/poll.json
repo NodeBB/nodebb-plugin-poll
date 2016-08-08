@@ -26,7 +26,10 @@
   "error.no_options": "Create at least one option.",
   "error.valid_date": "Please enter a valid date.",
 
+  "error.not_main": "Can only add poll in main post.",
   "error.privilege.create": "You're not allowed to create a poll",
+
+  "warning.redactor": "You're using Redactor. Do <strong>not</strong> edit the markup manually. Instead, re-open the poll creator.",
 
   "vote": "Vote",
   "to_voting": "To Voting",

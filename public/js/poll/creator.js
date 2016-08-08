@@ -6,45 +6,18 @@
 	var Creator = {};
 
 	function init() {
-		$(window).on('action:composer.enhanced', function() {
-			initComposer();
-		});
+		$(window).on('action:composer.enhanced', initComposer);
+
+		$(window).on('action:redactor.load', initRedactor);
 
 		$(window).on('action:composer.loaded', function(ev, data) {
 			if ($.Redactor) {
-				if (data.composerData.isMain) {
-					if ($.Redactor.opts.plugins.indexOf('poll') === -1) $.Redactor.opts.plugins.push('poll');
-				} else {
-					if ($.Redactor.opts.plugins.indexOf('poll') !== -1) $.Redactor.opts.plugins.splice($.Redactor.opts.plugins.indexOf('poll'), 1);
+				if (data.composerData.isMain && $.Redactor.opts.plugins.indexOf('poll') === -1) {
+					$.Redactor.opts.plugins.push('poll');
+				} else if ($.Redactor.opts.plugins.indexOf('poll') !== -1) {
+					$.Redactor.opts.plugins.splice($.Redactor.opts.plugins.indexOf('poll'), 1);
 				}
 			}
-		});
-
-		$(window).on('action:redactor.load', function (ev, composer) {
-			$.Redactor.prototype.poll = function () {
-				return {
-					init: function () {
-						var that = this;
-						translator.translate('[[poll:creator_title]]', function (translated) {
-							var button = that.button.add('poll', translated);
-							that.button.setAwesome('poll', 'fa fa-bar-chart-o');
-							that.button.addCallback(button, that.poll.onClick);
-						});
-					},
-					onClick: function () {
-						var that = this;
-						require(['composer'], function (composer) {
-							var code = that.code.get();
-							composerBtnHandle(composer, {
-								value: code,
-								redactor: function (code) {
-									that.code.set(code);
-								}
-							});
-						});
-					}
-				};
-			};
 		});
 	}
 
@@ -58,10 +31,37 @@
 		});
 	}
 
+	function initRedactor() {
+		$.Redactor.prototype.poll = function () {
+			return {
+				init: function () {
+					var self = this;
+					translator.translate('[[poll:creator_title]]', function(translated) {
+						var button = self.button.add('poll', translated);
+						self.button.setAwesome('poll', 'fa fa-bar-chart-o');
+						self.button.addCallback(button, self.poll.onClick);
+					});
+				},
+				onClick: function () {
+					var self = this;
+					var code = this.code.get();
+					require(['composer'], function(composer) {
+						composerBtnHandle(composer, {
+							value: code,
+							redactor: function (code) {
+								self.code.set(code);
+							}
+						});
+					});
+				}
+			};
+		};
+	}
+
 	function composerBtnHandle(composer, textarea) {
 		var post = composer.posts[composer.active];
 		if (!post || !post.isMain || !post.cid || isNaN(parseInt(post.cid, 10))) {
-			return app.alertError('Can only add poll in main post.');
+			return app.alertError('[[poll:error.not_main]]');
 		}
 
 		Poll.sockets.canCreate({cid: post.cid}, function(err, canCreate) {
@@ -108,7 +108,7 @@
 			return app.alertError('Editing not implemented.');
 		}
 
-		app.parseAndTranslate('poll/creator', { poll: poll, config: config }, function(html) {
+		app.parseAndTranslate('poll/creator', { poll: poll, config: config, isRedactor: !!$.Redactor }, function(html) {
 			// Initialise modal
 			var modal = bootbox.dialog({
 				title: '[[poll:creator_title]]',

@@ -37,4 +37,10 @@
         </div>
         <p class="help-block">[[poll:auto_end_help]]</p>
     </div>
+
+    <!-- IF isRedactor -->
+    <div class="alert alert-warning" role="alert">
+        [[poll:warning.redactor]]
+    </div>
+    <!-- ENDIF isRedactor -->
 </form>
