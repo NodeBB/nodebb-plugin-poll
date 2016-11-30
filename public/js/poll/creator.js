@@ -36,11 +36,15 @@
 			return {
 				init: function () {
 					var self = this;
-					translator.translate('[[poll:creator_title]]', function(translated) {
-						var button = self.button.add('poll', translated);
-						self.button.setAwesome('poll', 'fa fa-bar-chart-o');
-						self.button.addCallback(button, self.poll.onClick);
-					});
+
+					// require translator as such because it was undefined without it
+					require(['translator'], function (translator) {
+						translator.translate('[[poll:creator_title]]', function(translated) {
+							var button = self.button.add('poll', translated);
+							self.button.setAwesome('poll', 'fa fa-bar-chart-o');
+							self.button.addCallback(button, self.poll.onClick);
+						});
+					})
 				},
 				onClick: function () {
 					var self = this;
@@ -140,10 +144,10 @@
 								return error('[[poll:error.no_options]]');
 							}
 
-							if (obj.settings.end && !moment(obj.settings.end).isValid()) {
+							if (obj.settings.end && !moment(new Date(obj.settings.end)).isValid()) {
 								return error('[[poll:error.valid_date]]');
 							} else if (obj.settings.end) {
-								obj.settings.end = moment(obj.settings.end).valueOf();
+								obj.settings.end = moment(new Date(obj.settings.end)).valueOf();
 							}
 
 							callback(obj);
@@ -174,15 +178,16 @@
 					}
 				});
 
-			var datetimepicker = modal.find('#pollInputEnd')
-				.datetimepicker({
-					sideBySide: true,
-					showClear: true,
-					useCurrent: true,
-					ignoreReadonly: true,
+				var datetimepicker = modal.find('#pollInputEnd')
+
+				// add missing method to patch diff from jquery 2.x and current 3.1
+				Object.getPrototypeOf(datetimepicker).size = function() {
+					return this.length
+				}
+
+				datetimepicker.datetimepicker({
 					allowInputToggle: true,
 					toolbarPlacement: 'top',
-					minDate: moment().add(5, 'minutes'),
 					icons: {
 						time: "fa fa-clock-o",
 						date: "fa fa-calendar",
@@ -194,12 +199,12 @@
 						clear: 'fa fa-trash-o',
 						close: 'fa fa-times'
 					}
-				}).data('DateTimePicker');
+				})
 
 			if (poll.settings && poll.settings.end) {
-				datetimepicker.date(moment(poll.settings.end));
+				datetimepicker.data('DateTimePicker').date(moment(new Date(poll.settings.end)));
 			} else {
-				datetimepicker.clear();
+				datetimepicker.data('DateTimePicker').clear();
 			}
 		});
 	};
