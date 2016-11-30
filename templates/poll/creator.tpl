@@ -30,7 +30,7 @@
         <label for="pollInputEnd">[[poll:auto_end_title]]</label>
 
         <div class='input-group date' id='pollInputEnd'>
-            <input type="text" name="settings[end]" value="{poll.settings.end}" placeholder="[[poll:auto_end_placeholder]]" class="form-control" readonly>
+            <input type="text" name="settings[end]" value="{poll.settings.end}" placeholder="[[poll:auto_end_placeholder]]" class="form-control">
             <span class="input-group-addon">
                 <span class="fa fa-calendar"></span>
             </span>
