@@ -178,34 +178,16 @@
 					}
 				});
 
-				var datetimepicker = modal.find('#pollInputEnd')
+				flatpickr("#pollInputEnd", {
+					enableTime: true,
+					altFormat: "F j, Y h:i K",
+					time_24hr: false,
+					wrap: true
+				});
 
-				// add missing method to patch diff from jquery 2.x and current 3.1
-				Object.getPrototypeOf(datetimepicker).size = function() {
-					return this.length
-				}
-
-				datetimepicker.datetimepicker({
-					allowInputToggle: true,
-					toolbarPlacement: 'top',
-					icons: {
-						time: "fa fa-clock-o",
-						date: "fa fa-calendar",
-						up: "fa fa-chevron-up",
-						down: "fa fa-chevron-down",
-						previous: 'fa fa-chevron-left',
-						next: 'fa fa-chevron-right',
-						today: 'fa fa-calendar',
-						clear: 'fa fa-trash-o',
-						close: 'fa fa-times'
-					}
-				})
-
-			if (poll.settings && poll.settings.end) {
-				datetimepicker.data('DateTimePicker').date(moment(new Date(poll.settings.end)));
-			} else {
-				datetimepicker.data('DateTimePicker').clear();
-			}
+				if (poll.settings && poll.settings.end) {
+					flatpickr.setDate(poll.settings.end)
+				} else flatpickr.clear()
 		});
 	};
 
