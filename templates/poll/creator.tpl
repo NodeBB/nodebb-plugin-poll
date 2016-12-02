@@ -31,9 +31,8 @@
 
         <div class='input-group date'>
           <p id="pollInputEnd">
-            <input placeholder="Pick date" name="settings[end]" value="{poll.settings.end}" data-input>
-
-            <a class="input-button" data-toggle><i class="fa fa-calendar"></i></a>
+            <input placeholder="[[poll:auto_end_placeholder]]" name="settings[end]" class="form-control" value="{poll.settings.end}" data-input>
+            <a class="cal-icon" data-toggle><i class="fa fa-calendar"></i></a>
           </p>
         </div>
         <p class="help-block">[[poll:auto_end_help]]</p>

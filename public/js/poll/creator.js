@@ -187,7 +187,7 @@
 
 				if (poll.settings && poll.settings.end) {
 					flatpickr.setDate(poll.settings.end)
-				} else flatpickr.clear()
+				}
 		});
 	};
 
