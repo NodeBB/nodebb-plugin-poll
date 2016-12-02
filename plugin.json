@@ -1,7 +1,7 @@
 {
   "id": "nodebb-plugin-poll",
   "name": "Poll",
-  "description": "NodeBB Bnet Poll Plugin",
+  "description": "NodeBB Poll Plugin",
   "url": "https://github.com/Schamper/nodebb-plugin-poll",
   "library": "library.js",
   "hooks": [
