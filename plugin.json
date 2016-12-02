@@ -1,8 +1,8 @@
 {
-  "id": "nodebb-plugin-bnet-poll",
-  "name": "Bnet Poll",
+  "id": "nodebb-plugin-poll",
+  "name": "Poll",
   "description": "NodeBB Bnet Poll Plugin",
-  "url": "https://github.com/sam-verys/nodebb-plugin-poll",
+  "url": "https://github.com/Schamper/nodebb-plugin-poll",
   "library": "library.js",
   "hooks": [
     { "hook": "static:app.load", "method": "load" },

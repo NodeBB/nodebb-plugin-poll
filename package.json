@@ -1,5 +1,5 @@
 {
-  "name": "@bnet/nodebb-plugin-poll",
+  "name": "nodebb-plugin-poll",
   "version": "0.2.8",
   "description": "NodeBB Poll Plugin",
   "main": "library.js",
@@ -8,10 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BethesdaNet/npm-packages"
-  },
-  "publishConfig":{
-    "registry":"https://npm-registry.web.amok.systems"
+    "url": "https://github.com/Schamper/nodebb-plugin-poll"
   },
   "keywords": [
     "nodebb",
