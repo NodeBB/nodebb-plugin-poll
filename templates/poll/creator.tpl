@@ -29,11 +29,11 @@
     <div class="form-group">
         <label for="pollInputEnd">[[poll:auto_end_title]]</label>
 
-        <div class='input-group date' id='pollInputEnd'>
-            <input type="text" name="settings[end]" value="{poll.settings.end}" placeholder="[[poll:auto_end_placeholder]]" class="form-control" readonly>
-            <span class="input-group-addon">
-                <span class="fa fa-calendar"></span>
-            </span>
+        <div class='input-group date'>
+          <p id="pollInputEnd">
+            <input placeholder="[[poll:auto_end_placeholder]]" name="settings[end]" class="form-control" value="{poll.settings.end}" data-input>
+            <a class="cal-icon" data-toggle><i class="fa fa-calendar"></i></a>
+          </p>
         </div>
         <p class="help-block">[[poll:auto_end_help]]</p>
     </div>
