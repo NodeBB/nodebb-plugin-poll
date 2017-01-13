@@ -1,0 +1,39 @@
+{
+  "poll": "Sondaj",
+  "toggles": "Comutare",
+  "allow_guests": "Oaspeți au acces la rezultate",
+  "limits": "Limite",
+  "max_options": "Opțiuni maxime",
+  "defaults": "Valori implicite",
+  "default_title": "Titlu ",
+  "max_votes": "Voturi maximale per utilizator",
+  "info_choices": "Un număr mai mare de 1 permite selecții multiple.",
+  "settings": "Setări",
+  "save": "Salvează",
+  "reset": "Resetare",
+
+  "creator_title": "Crează sondajul",
+  "poll_title": "Titlul sondajului",
+  "poll_title_placeholder": "Introduceț titlul sondajului",
+  "options_title": "Opțiuni",
+  "options_add": "Adaugă opțiuni",
+  "max_votes_placeholder": "Introduceți numerele",
+  "auto_end_title": "Sfârșitul sondajului",
+  "auto_end_placeholder": "Introduceți data si ora",
+  "auto_end_help": "Lăsați acest câmp liber dacă sondajul nu are termen.",
+
+  "error.max_options": "Puteți introduce un maxim de %d opțiuni.",
+  "error.no_options": "Introduceți ce-l puțin o opțiune.",
+  "error.valid_date": "Vă rog introduceți o dată valabilă.",
+
+  "error.privilege.create": "You're not allowed to create a poll",
+
+  "vote": "Votează",
+  "to_voting": "Sondajul",
+  "to_results": "Rezultate",
+  "voting_unavailable_title": "Sondajul nu este disponibil",
+  "voting_unavailable_message": "Sondajul a fost încheiat sau anulat. Puteți sa va uitați la rezultate.",
+
+  "vote_count": "Utilizatorii au votat pentru aceste opțiuni",
+  "votes": "Voturi"
+}

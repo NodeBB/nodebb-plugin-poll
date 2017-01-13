@@ -1,0 +1,39 @@
+{
+  "poll": "Sondage",
+  "toggles": "Activateurs",
+  "allow_guests": "Permettre aux invités de voir les résultats du sondage",
+  "limits": "Limites",
+  "max_options": "Nombre maximum d'options par sondage",
+  "defaults": "Défauts",
+  "default_title": "Titre par défaut",
+  "max_votes": "Nombre maximum de votes par utilisateur",
+  "info_choices": "Un nombre supérieur à 1 permet d'activer les questionnaires à choix multiple.",
+  "settings": "Paramètres",
+  "save": "Sauver",
+  "reset": "Remettre à zéro",
+
+  "creator_title": "Créer un sondage",
+  "poll_title": "Titre du sondage",
+  "poll_title_placeholder": "Entrez le titre du sondage",
+  "options_title": "Options",
+  "options_add": "Add option",
+  "max_votes_placeholder": "Entrez le montant",
+  "auto_end_title": "Terminer le sondage automatiquement",
+  "auto_end_placeholder": "Cliquez pour entrer la date et l'heure",
+  "auto_end_help": "Laissez ce champ vide pour que le sondage ne s'arrête jamais",
+
+  "error.max_options": "You can only create %d options.",
+  "error.no_options": "Create at least one option.",
+  "error.valid_date": "Please enter a valid date.",
+
+  "error.privilege.create": "You're not allowed to create a poll",
+
+  "vote": "Voter",
+  "to_voting": "To Voting",
+  "to_results": "Résultats",
+  "voting_unavailable_title": "Voting unavailable",
+  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
+
+  "vote_count": "utilisateurs ont voté en faveur de ce choix",
+  "votes": "votes"
+}

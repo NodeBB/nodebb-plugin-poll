@@ -1,96 +1,234 @@
-(function(Poll) {
-	var S;
+"use strict";
+/* globals $, app, templates, translator, bootbox, define */
 
-	function initialise() {
-		require(['composer', 'string'], function(composer, String) {
-			S = String;
-			composer.addButton('fa fa-bar-chart-o', Poll.creator.show);
+(function(Poll) {
+
+	var Creator = {};
+
+	function init() {
+		$(window).on('action:composer.enhanced', initComposer);
+
+		$(window).on('action:redactor.load', initRedactor);
+
+		$(window).on('action:composer.loaded', function(ev, data) {
+			if ($.Redactor) {
+				if (data.composerData.isMain && $.Redactor.opts.plugins.indexOf('poll') === -1) {
+					$.Redactor.opts.plugins.push('poll');
+				} else if ($.Redactor.opts.plugins.indexOf('poll') !== -1) {
+					$.Redactor.opts.plugins.splice($.Redactor.opts.plugins.indexOf('poll'), 1);
+				}
+			}
 		});
 	}
 
-	initialise();
+	function initComposer() {
+		require(['composer', 'composer/formatting', 'composer/controls'], function(composer, formatting, controls) {
+			if (formatting && controls) {
+				formatting.addButtonDispatch('poll', function(textarea) {
+					composerBtnHandle(composer, textarea);
+				});
+			}
+		});
+	}
 
-	Poll.creator = {
-		show: function(textarea) {
-			window.templates.parse('poll/creator', {}, function(html) {
-				bootbox.dialog({
-					title: 'Create a poll',
-					message: html,
-					buttons: {
-						cancel: {
-							label: 'Cancel',
-							className: 'btn-default',
-							callback: function(e) {
-								Poll.creator.cancel(e, textarea);
+	function initRedactor() {
+		$.Redactor.prototype.poll = function () {
+			return {
+				init: function () {
+					var self = this;
+
+					// require translator as such because it was undefined without it
+					require(['translator'], function (translator) {
+						translator.translate('[[poll:creator_title]]', function(translated) {
+							var button = self.button.add('poll', translated);
+							self.button.setAwesome('poll', 'fa fa-bar-chart-o');
+							self.button.addCallback(button, self.poll.onClick);
+						});
+					})
+				},
+				onClick: function () {
+					var self = this;
+					var code = this.code.get();
+					require(['composer'], function(composer) {
+						composerBtnHandle(composer, {
+							value: code,
+							redactor: function (code) {
+								self.code.set(code);
 							}
-						},
-						save: {
-							label: 'Done',
-							className: 'btn-primary',
-							callback: function(e) {
-								Poll.creator.save(e, textarea);
-							}
-						}
+						});
+					});
+				}
+			};
+		};
+	}
+
+	function composerBtnHandle(composer, textarea) {
+		var post = composer.posts[composer.active];
+		if (!post || !post.isMain || !post.cid || isNaN(parseInt(post.cid, 10))) {
+			return app.alertError('[[poll:error.not_main]]');
+		}
+
+		Poll.sockets.canCreate({cid: post.cid}, function(err, canCreate) {
+			if (err || !canCreate) {
+				return app.alertError(err.message);
+			}
+
+			Poll.sockets.getConfig(null, function(err, config) {
+				var poll = {};
+
+				// If there's already a poll in the post, serialize it for editing
+				if (Poll.serializer.canSerialize(textarea.value)) {
+					poll = Poll.serializer.serialize(textarea.value, config);
+
+					if (poll.settings.end === 0) {
+						delete poll.settings.end;
+					} else {
+						poll.settings.end = parseInt(poll.settings.end, 10);
 					}
+				}
+
+				Creator.show(poll, config, function(data) {
+					// Anything invalid will be discarded by the serializer
+					var markup = Poll.serializer.deserialize(data, config);
+
+					// Remove any existing poll markup
+					textarea.value = Poll.serializer.removeMarkup(textarea.value);
+
+					// Insert the poll markup at the bottom
+					if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
+						markup = '\n' + markup;
+					}
+
+					textarea.value += markup;
+
+					if ($.Redactor) textarea.redactor('<p>' + textarea.value + '</p>');
 				});
 			});
-		},
-		cancel: function(e, textarea) {
-			return true;
-		},
-		save: function(e, textarea) {
-			var modal = $(e.currentTarget).parents('.bootbox'),
-				errorBox = modal.find('#pollErrorBox');
+		});
+	}
 
-			errorBox.addClass('hidden').html('');
-
-			var result = Creator.parse(modal);
-			if (result.err) {
-				return Poll.creator.error(errorBox, err);
-			} else {
-				textarea.value += result.markup;
-				return true;
-			}
-		},
-		error: function(errorBox, message) {
-			errorBox.removeClass('hidden');
-			errorBox.append(message + '<br>');
-			return false;
+	Creator.show = function(poll, config, callback) {
+		if (poll.hasOwnProperty('info')) {
+			return app.alertError('Editing not implemented.');
 		}
+
+		app.parseAndTranslate('poll/creator', { poll: poll, config: config, isRedactor: !!$.Redactor }, function(html) {
+			// Initialise modal
+			var modal = bootbox.dialog({
+				title: '[[poll:creator_title]]',
+				message: html,
+				className: 'poll-creator',
+				buttons: {
+					cancel: {
+						label: '[[modules:bootbox.cancel]]',
+						className: 'btn-default',
+						callback: function() {
+							return true
+						}
+					},
+					save: {
+						label: '[[modules:bootbox.confirm]]',
+						className: 'btn-primary',
+						callback: function(e) {
+							clearErrors();
+
+							var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
+							var obj = form.serializeObject();
+
+							// Let's be nice and at least show an error if there are no options
+							obj.options.filter(function(obj) {
+								return obj.length;
+							});
+
+							if (obj.options.length == 0) {
+								return error('[[poll:error.no_options]]');
+							}
+
+							if (obj.settings.end && !moment(new Date(obj.settings.end)).isValid()) {
+								return error('[[poll:error.valid_date]]');
+							} else if (obj.settings.end) {
+								obj.settings.end = moment(new Date(obj.settings.end)).valueOf();
+							}
+
+							callback(obj);
+
+							return true;
+						}
+					}
+				}
+			});
+
+			// Add option adder
+			modal.find('#pollAddOption')
+				.off('click')
+				.on('click', function(e) {
+					var el = $(e.currentTarget);
+					var prevOption = el.prev();
+
+					if (config.limits.maxOptions <= el.prevAll('input').length) {
+						clearErrors();
+						translator.translate('[[poll:error.max_options]]', function(text) {
+							error(text.replace('%d', config.limits.maxOptions));
+						});
+						return false;
+					}
+
+					if (prevOption.val().length != 0) {
+						prevOption.clone().val('').insertBefore(el).focus();
+					}
+				});
+
+				flatpickr("#pollInputEnd", {
+					enableTime: true,
+					altFormat: "F j, Y h:i K",
+					time_24hr: false,
+					wrap: true
+				});
+
+				if (poll.settings && poll.settings.end) {
+					flatpickr.setDate(poll.settings.end)
+				}
+		});
 	};
 
-	var Creator = {
-		parse: function(modal) {
-			var title = modal.find('#pollInputTitle').val(),
-				options = S(modal.find('#pollInputOptions').val()).stripTags().s.split('\n').filter(function(o) {
-					return o.length == 0 ? false : o;
-				}),
-				amount = parseInt(modal.find('#pollInputAmount').val(), 10),
-				result = {
-					err: null,
-					markup: null
-				};
+	function error(message) {
+		var errorBox = $('#pollErrorBox');
 
-			if (title.length == 0 || options.length == 0 || (isNaN(amount) || amount <= 0)) {
-				if (title.length == 0) {
-					result.err = 'Invalid title';
-				}
-				if (options.length == 0) {
-					result.err = 'Create at least one option!';
-				}
-				if (isNaN(amount)) {
-					result.err = 'Invalid vote amount input!';
-				}
-				return result;
-			}
+		errorBox.removeClass('hidden');
+		errorBox.append(message + '<br>');
 
-			result.markup = '\n[poll]\n';
-			for (var i = 0, l = options.length; i < l; i++) {
-				result.markup += '- ' + options[i] + '\n';
-			}
-			result.markup += '[/poll]\n';
-
-			return result;
-		}
+		return false;
 	}
+
+	function clearErrors() {
+		$('#pollErrorBox').addClass('hidden').html('');
+	}
+
+	function dumbifyObject(obj) {
+		var result = {};
+
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				var val = obj[key];
+
+				if (jQuery.isPlainObject(val)) {
+					var obj1 = dumbifyObject(val);
+					for (var k1 in obj1) {
+						if (obj1.hasOwnProperty(k1)) {
+							result[key + '.' + k1] = obj1[k1];
+						}
+					}
+				} else {
+					result[key] = val;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	Poll.creator = Creator;
+
+	init();
+
 })(window.Poll);

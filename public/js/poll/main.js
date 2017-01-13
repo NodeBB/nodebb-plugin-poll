@@ -1,13 +1,33 @@
+"use strict";
+
+var Poll = {};
+
 (function() {
-	window.Poll = {
-		load: function(data) {
-			Poll.sockets.emit.load(data.pollid, function(err, poll) {
-				if (!err) {
-					Poll.view.init(poll);
-				} else if (err.message != 'Not logged in') {
-					app.alertError('Something went wrong while getting the poll!');
+
+	$(window).on('action:topic.loading', function() {
+		if (ajaxify.data.posts.length > 0 && ajaxify.data.posts[0].hasOwnProperty('pollId')) {
+			getPoll(ajaxify.data.posts[0].pollId);
+		}
+	});
+
+	$(window).on('action:posts.edited', function(ev, data) {
+		if (data.post.hasOwnProperty('pollId')) {
+			getPoll(data.post.pollId);
+		}
+	});
+
+	function getPoll(pollId) {
+		pollId = parseInt(pollId, 10);
+
+		if (!isNaN(pollId)) {
+			Poll.sockets.getPoll({pollId: pollId}, function(err, pollData) {
+				if (err && app.user.uid) {
+					return app.alertError(err.message);
 				}
+
+				Poll.view.load(pollData);
 			});
 		}
-	};
+	}
+
 })();

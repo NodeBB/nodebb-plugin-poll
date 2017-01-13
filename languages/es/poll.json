@@ -1,0 +1,39 @@
+{
+  "poll": "Encuesta",
+  "toggles": "Activadores",
+  "allow_guests": "Permitir a los invitados ver resultados de la encuesta",
+  "limits": "Limites",
+  "max_options": "Número máximo de opciones por encuesta",
+  "defaults": "Por defecto",
+  "default_title": "Título por defecto",
+  "max_votes": "Número máximo de votos por usuario",
+  "info_choices": "Un numero mayor que 1 habilitará la elección de opciones múltiples.",
+  "settings": "Opciones",
+  "save": "Guardar",
+  "reset": "Restaurar",
+
+  "creator_title": "Crear una encuesta",
+  "poll_title": "Título de la encuesta",
+  "poll_title_placeholder": "Introducir título",
+  "options_title": "Opciones",
+  "options_add": "Añadir opción",
+  "max_votes_placeholder": "Escriba la cantidad",
+  "auto_end_title": "Finalizar encuesta automaticamente",
+  "auto_end_placeholder": "Click para introducir fecha y hora",
+  "auto_end_help": "Dejar esta opción vacia hará que la encuesta no acabe nunca.",
+
+  "error.max_options": "Solo puedes crear %d opciones.",
+  "error.no_options": "Crea una opción al menos.",
+  "error.valid_date": "Por favor introduce una fecha valida.",
+
+  "error.privilege.create": "No tienes permiso para crear una encuesta",
+
+  "vote": "Votar",
+  "to_voting": "Ir a votar",
+  "to_results": "Resultados",
+  "voting_unavailable_title": "Votacion no disponible",
+  "voting_unavailable_message": "Esta encuesta ha acabado. Puedes ver los resultados.",
+
+  "vote_count": "usuarios votaron esta opción",
+  "votes": "votos"
+}

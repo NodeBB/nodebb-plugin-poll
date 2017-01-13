@@ -1,28 +1,32 @@
 {
-	"name": "nodebb-plugin-poll",
-	"version": "0.0.1",
-	"description": "NodeBB Poll Plugin",
-	"main": "library.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Schamper/nodebb-plugin-poll"
-	},
-	"keywords": [
-		"nodebb",
-		"plugin",
-		"poll"
-	],
-	"author": "Schamper <mrwafflewaffle@aim.com>",
-	"license": "BSD-2-Clause",
-	"bugs": {
-		"url": "https://github.com/Schamper/nodebb-plugin-poll/issues"
-	},
-	"dependencies": {
-		"async": "~0.2.9",
-		"string": "~1.8.0",
-		"xregexp": "~2.0.0"
-	}
+  "name": "nodebb-plugin-poll",
+  "version": "0.2.9",
+  "description": "NodeBB Poll Plugin",
+  "main": "library.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Schamper/nodebb-plugin-poll"
+  },
+  "keywords": [
+    "nodebb",
+    "plugin",
+    "poll"
+  ],
+  "author": "Schamper <mrwafflewaffle@aim.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Schamper/nodebb-plugin-poll/issues"
+  },
+  "dependencies": {
+    "async": "~1.5.2",
+    "string": "~3.3.1",
+    "xregexp": "~3.1.0",
+    "cron": "~1.1.0"
+  },
+  "nbbpm": {
+    "compatibility": "^1.0.0"
+  }
 }

@@ -1,11 +1,15 @@
-<h3>Results</h3>
-<!-- BEGIN options -->
-<div class="poll-view-result" id="pollResult{options.id}">
-    <strong>{options.title}</strong><span class="pull-right poll-view-result-percentage">{options.percentage}%</span>
+<!-- BEGIN poll.options -->
+<div class="poll-result" data-poll-option-id="{poll.options.id}">
+    <strong>{poll.options.title}</strong>
+    <small class="pull-right">
+        <a class="poll-result-votecount" href="#">
+            <span>{poll.options.voteCount}</span> [[poll:votes]]
+        </a>
+    </small>
     <div class="progress">
-        <div class="progress-bar poll-view-result-progressbar" role="progressbar" aria-valuenow="{options.percentage}" aria-valuemin="0" aria-valuemax="100" style="width: {options.percentage}%; content:'{options.percentage}'">
-            <span class="sr-only poll-view-result-percentage">{options.percentage}%</span>
+        <div class="progress-bar poll-result-progressbar" role="progressbar" aria-valuenow="{poll.options.percentage}" aria-valuemin="0" aria-valuemax="100" style="width: {poll.options.percentage}%;">
+            <span>{poll.options.percentage}</span>%
         </div>
     </div>
 </div>
-<!-- END options -->
+<!-- END poll.options -->

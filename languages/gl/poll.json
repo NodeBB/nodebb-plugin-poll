@@ -1,0 +1,39 @@
+{
+  "poll": "Enquisa",
+  "toggles": "Activadores",
+  "allow_guests": "Permitir aos convidados ve-lo resultado da enquisa",
+  "limits": "Límites",
+  "max_options": "Número máximo de opcións por enquisa",
+  "defaults": "Por defecto",
+  "default_title": "Título por defecto",
+  "max_votes": "Número máximo de votos por usuario",
+  "info_choices": "Un número maior que 1 habilitará a elección de opcións múltiples.",
+  "settings": "Opcións",
+  "save": "Gardar",
+  "reset": "Restaurar",
+
+  "creator_title": "Create a poll",
+  "poll_title": "Título da enquisa",
+  "poll_title_placeholder": "Introduce o título",
+  "options_title": "Opcións",
+  "options_add": "Add option",
+  "max_votes_placeholder": "Escriba a cantidade",
+  "auto_end_title": "Finalizar enquisa automaticamente",
+  "auto_end_placeholder": "Fai clic aquí para introduci-la data e a hora",
+  "auto_end_help": "Deixar esta opción baleira fará que a enquisa non remate nunca.",
+
+  "error.max_options": "You can only create %d options.",
+  "error.no_options": "Create at least one option.",
+  "error.valid_date": "Please enter a valid date.",
+
+  "error.privilege.create": "You're not allowed to create a poll",
+
+  "vote": "Votar",
+  "to_voting": "To Voting",
+  "to_results": "Resultados",
+  "voting_unavailable_title": "Voting unavailable",
+  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
+
+  "vote_count": "usuarios votaron esta opción",
+  "votes": "votos"
+}

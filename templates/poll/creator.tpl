@@ -1,17 +1,46 @@
-<div id="pollErrorBox" class="alert alert-danger hidden"></div>
+<form class="form" id="pollCreator">
+    <div id="pollErrorBox" class="alert alert-danger hidden"></div>
 
-<div class="form-group">
-    <label for="pollInputTitle">Poll title</label>
-    <input type="text" class="form-control" id="pollInputTitle" placeholder="Enter poll title">
-</div>
+    <div class="form-group">
+        <label for="pollInputTitle">[[poll:poll_title]]</label>
+        <input type="text" name="settings[title]" id="pollInputTitle" value="{poll.settings.title}" placeholder="[[poll:poll_title_placeholder]]" class="form-control">
+    </div>
 
-<div class="form-group">
-    <label for="pollInputOptions">Options</label>
-    <textarea id="pollInputOptions" class="form-control" rows="5" placeholder="Place each option on a new line"></textarea>
-</div>
+    <div class="form-group">
+        <label for="pollInputOptions">[[poll:options_title]]</label>
+        <!-- IF poll.options.length -->
+        <!-- BEGIN poll.options -->
+        <input type="text" name="options[]" id="pollInputOptions" value="@value" class="form-control"/>
+        <!-- END poll.options -->
+        <!-- ELSE -->
+        <input type="text" name="options[]" id="pollInputOptions" class="form-control"/>
+        <!-- ENDIF poll.options.length -->
+        <button type="button" id="pollAddOption" class="btn btn-primary btn-sm btn-block">[[poll:options_add]]</button>
+    </div>
 
-<div class="form-group">
-    <label for="pollInputAmount">Votes per user</label>
-    <input type="number" min="1" max="10" step="1" value="1" class="form-control" id="pollInputAmount" placeholder="Enter amount">
-    <p class="help-block">A value greater than 1 creates a multiple choice poll.</p>
-</div>
+    <hr>
+
+    <div class="form-group">
+        <label for="pollInputAmount">[[poll:max_votes]]</label>
+        <input type="number" name="settings[maxvotes]" id="pollInputAmount" value="{poll.settings.maxvotes}"
+               min="1" max="10" step="1" placeholder="[[poll:max_votes_placeholder]]" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="pollInputEnd">[[poll:auto_end_title]]</label>
+
+        <div class='input-group date'>
+          <p id="pollInputEnd">
+            <input placeholder="[[poll:auto_end_placeholder]]" name="settings[end]" class="form-control" value="{poll.settings.end}" data-input>
+            <a class="cal-icon" data-toggle><i class="fa fa-calendar"></i></a>
+          </p>
+        </div>
+        <p class="help-block">[[poll:auto_end_help]]</p>
+    </div>
+
+    <!-- IF isRedactor -->
+    <div class="alert alert-warning" role="alert">
+        [[poll:warning.redactor]]
+    </div>
+    <!-- ENDIF isRedactor -->
+</form>

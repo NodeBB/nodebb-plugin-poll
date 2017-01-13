@@ -1,43 +1,55 @@
-(function(Poll) {
-	var Sockets = {
-		events: {
-			load: 'plugins.poll.load',
-			vote: 'plugins.poll.vote',
-			onvotechange: 'event:poll.votechange'
-		},
-		on: {
-			votechange: {
-				register: function() {
-					if (socket.listeners(Sockets.events.onvotechange).length === 0) {
-						socket.on(Sockets.events.onvotechange, this.handle);
-					}
-				},
-				handle: function(data) {
-					Poll.view.updateResults(data, $('#poll-id-' + data.pollid));
-				}
-			}
-		},
-		emit: {
-			load: function(pollid, callback) {
-				socket.emit(Sockets.events.load, { pollid: pollid }, callback);
-			},
-			vote: function(voteData, callback) {
-				socket.emit(Sockets.events.vote, voteData, callback);
-			}
-		}
-	};
+"use strict";
+/* globals socket */
 
-	function initialise() {
-		for (var e in Sockets.on) {
-			if (Sockets.on.hasOwnProperty(e)) {
-				Sockets.on[e].register();
+(function(Poll) {
+	var messages = [
+		{
+			method: 'getPoll',
+			message: 'plugins.poll.get'
+		},
+		{
+			method: 'vote',
+			message: 'plugins.poll.vote'
+		},
+		{
+			method: 'getOptionDetails',
+			message: 'plugins.poll.getOptionDetails'
+		},
+		{
+			method: 'getConfig',
+			message: 'plugins.poll.getConfig'
+		},
+		{
+			method: 'canCreate',
+			message: 'plugins.poll.canCreate'
+		}
+	];
+
+	var handlers = [
+		{
+			event: 'event:poll.voteChange',
+			handle: function(data) {
+				Poll.view.update(data);
 			}
 		}
+	];
+
+	function init() {
+		handlers.forEach(function(handler) {
+			if (socket.listeners(handler.event).length === 0) {
+				socket.on(handler.event, handler.handle);
+			}
+		});
+
+		messages.forEach(function(message) {
+			Poll.sockets[message.method] = function(data, callback) {
+				socket.emit(message.message, data, callback);
+			};
+		});
 	}
 
-	initialise();
+	Poll.sockets = {};
 
-	Poll.sockets = {
-		emit: Sockets.emit
-	};
+	init();
+
 })(window.Poll);

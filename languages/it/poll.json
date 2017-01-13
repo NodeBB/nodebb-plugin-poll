@@ -1,0 +1,40 @@
+{
+  "poll": "Sondaggio",
+  "toggles": "Interruttori",
+  "allow_guests": "permetti ai visitatori non registrati di vedere i risultati del sondaggio",
+  "limits": "Limiti",
+  "max_options": "Numero massimo di opzioni per il Sondaggio",
+  "defaults": "Predefinito",
+  "default_title": "Titolo predefinito del sondaggio",
+  "max_votes": "Numero massimo di voti per utente",
+  "info_choices": "Un numero maggiore di 1 abiliterà le scelte multiple nel sondaggio.",
+  "settings": "Impostazioni",
+  "save": "Salva",
+  "reset": "Reset",
+
+  "creator_title": "Crea un sondaggio",
+  "poll_title": "Titolo del sondaggio",
+  "poll_title_placeholder": "Inserisci il titolo del sondaggio",
+  "options_title": "Opzioni",
+  "options_add": "Aggiungi opzione",
+  "max_votes_placeholder": "Inserisci la quantità",
+  "auto_end_title": "Termina automaticamente il sondaggio",
+  "auto_end_placeholder": "Clicca per inserire data e ora",
+  "auto_end_help": "Lasciare vuoto per non far terminare il sondaggio",
+
+  "error.max_options": "Puoi creare al massimo %d opzioni.",
+  "error.no_options": "Crea almeno una opzione.",
+  "error.valid_date": "Inserisci una data valida.",
+
+  "error.privilege.create": "You're not allowed to create a poll",
+
+  "vote": "Vota",
+  "to_voting": "Votazione",
+  "to_results": "Risultati",
+  "voting_unavailable_title": "Votazione non disponibile",
+  "voting_unavailable_message": "Questo sondaggio è terminato o è stato segnato come cancellato. Puoi ancora vedere i risultati.",
+
+  "vote_count": "Gli utenti hanno votato questa opzione",
+  "votes": "voti"
+}
+

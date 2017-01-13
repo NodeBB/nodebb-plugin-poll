@@ -7,12 +7,25 @@ This NodeBB plugin will allow you to add polls to the first post of a topic with
     - Another option
     [/poll]
 
-Currently settings aren't implemented.
+Currently supported settings:
+
+    maxvotes="1" //Max number of votes per user. If larger than 1, a multiple choice poll will be created
+    title="Poll title" //Poll title
+
+There's also a helpful modal available that will allow you to easily create a poll:
+![](https://i.imgur.com/2fPnWLb.png)
 
 ## Todo
 
-A lot. If you're willing to help, please make any improvements you want and submit a PR.
+- Add the ability to edit a poll
+- Add the ability to remove a vote, and a setting to disable the removal of votes
+- Anonymous voting
+- A lot more...
+
+If you're willing to help, please make any improvements you want and submit a PR.
 
 ## Installation
 
-    Not yet
+Either through the NodeBB ACP or:
+
+    npm install nodebb-plugin-poll

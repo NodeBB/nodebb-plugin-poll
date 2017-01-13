@@ -1,0 +1,42 @@
+{
+  "poll": "Poll",
+  "toggles": "Toggles",
+  "allow_guests": "Allow guests to view poll results",
+  "limits": "Limits",
+  "max_options": "Maximum number of options per poll",
+  "defaults": "Defaults",
+  "default_title": "Default poll title",
+  "max_votes": "Maximum number of votes per user",
+  "info_choices": "A number greater than 1 will enable multiple choice polls.",
+  "settings": "Settings",
+  "save": "Save",
+  "reset": "Reset",
+
+  "creator_title": "Create a poll",
+  "poll_title": "Poll Title",
+  "poll_title_placeholder": "Enter poll title",
+  "options_title": "Options",
+  "options_add": "Add option",
+  "max_votes_placeholder": "Enter amount",
+  "auto_end_title": "Automatically end poll",
+  "auto_end_placeholder": "Click to enter date and time",
+  "auto_end_help": "Leaving this empty will never end the poll.",
+
+  "error.max_options": "You can only create %d options.",
+  "error.no_options": "Create at least one option.",
+  "error.valid_date": "Please enter a valid date.",
+
+  "error.not_main": "Can only add poll in main post.",
+  "error.privilege.create": "You're not allowed to create a poll",
+
+  "warning.redactor": "You're using Redactor. Do <strong>not</strong> edit the markup manually. Instead, re-open the poll creator.",
+
+  "vote": "Vote",
+  "to_voting": "To Voting",
+  "to_results": "Results",
+  "voting_unavailable_title": "Voting unavailable",
+  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
+
+  "vote_count": "users voted for this option",
+  "votes": "votes"
+}
