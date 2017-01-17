@@ -62,4 +62,10 @@ var	NodeBB = require('./lib/nodebb'),
 		callback(null, privileges);
 	};
 
+	Plugin.copyPrivilegesFrom = function (data, callback) {
+		data.privileges.push('poll:create');
+		data.privileges.push('groups:poll:create');
+		callback(null, data);
+	};
+
 })(exports);
