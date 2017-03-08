@@ -1,5 +1,5 @@
 "use strict";
-/* globals $, app, templates, translator, bootbox, define */
+/* globals $, app, templates, bootbox, define */
 
 (function(Poll) {
 
@@ -14,7 +14,7 @@
 			if ($.Redactor) {
 				if (data.composerData.isMain && $.Redactor.opts.plugins.indexOf('poll') === -1) {
 					$.Redactor.opts.plugins.push('poll');
-				} else if ($.Redactor.opts.plugins.indexOf('poll') !== -1) {
+				} else if (!data.composerData.isMain && $.Redactor.opts.plugins.indexOf('poll') !== -1) {
 					$.Redactor.opts.plugins.splice($.Redactor.opts.plugins.indexOf('poll'), 1);
 				}
 			}
@@ -41,7 +41,7 @@
 					require(['translator'], function (translator) {
 						translator.translate('[[poll:creator_title]]', function(translated) {
 							var button = self.button.add('poll', translated);
-							self.button.setAwesome('poll', 'fa fa-bar-chart-o');
+							self.button.setIcon(button, '<i class="fa fa-bar-chart-o"></i>');
 							self.button.addCallback(button, self.poll.onClick);
 						});
 					})
