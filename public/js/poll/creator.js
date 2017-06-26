@@ -99,9 +99,8 @@
 						markup = '\n' + markup;
 					}
 
-					textarea.value += markup;
-
-					if ($.Redactor) textarea.redactor('<p>' + textarea.value + '</p>');
+					if ($.Redactor) textarea.redactor(textarea.value + '<p>' + markup + '</p>');
+					else textarea.value += markup
 				});
 			});
 		});
