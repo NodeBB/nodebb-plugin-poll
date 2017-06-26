@@ -16,7 +16,7 @@
 
     { "hook": "filter:topic.post", "method": "hooks.filter.topicPost" },
     { "hook": "filter:parse.raw", "method": "hooks.filter.parseRaw", "priority": 1 },
-    { "hook": "filter:post.save", "method": "hooks.filter.postSave" },
+    { "hook": "filter:post.create", "method": "hooks.filter.postCreate" },
     { "hook": "filter:post.edit", "method": "hooks.filter.postEdit" },
 
     { "hook": "action:post.delete", "method": "hooks.action.postDelete" },
