@@ -12,27 +12,27 @@
   "save": "保存",
   "reset": "重置",
 
-  "creator_title": "Create a poll",
+  "creator_title": "创建投票",
   "poll_title": "标题",
   "poll_title_placeholder": "输入投票标题",
   "options_title": "候选项",
-  "options_add": "Add option",
+  "options_add": "添加候选项",
   "max_votes_placeholder": "输入数目",
   "auto_end_title": "截止日期",
   "auto_end_placeholder": "点此输入投票截止的日期和时间",
   "auto_end_help": "把这里留空则不限制投票的截止时间",
 
-  "error.max_options": "You can only create %d options.",
-  "error.no_options": "Create at least one option.",
-  "error.valid_date": "Please enter a valid date.",
+  "error.max_options": "你只能创建 %d 个候选项。",
+  "error.no_options": "请创建至少一个候选项。",
+  "error.valid_date": "请输入有效的截止日期。",
 
-  "error.privilege.create": "You're not allowed to create a poll",
+  "error.privilege.create": "你不被允许创建投票",
 
   "vote": "投票",
-  "to_voting": "To Voting",
+  "to_voting": "去投票",
   "to_results": "结果",
-  "voting_unavailable_title": "Voting unavailable",
-  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
+  "voting_unavailable_title": "投票无效",
+  "voting_unavailable_message": "此投票已结束或已删除。 你还可以查看投票结果。",
 
   "vote_count": "名用户投了此票",
   "votes": "票"
