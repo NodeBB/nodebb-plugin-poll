@@ -1,17 +1,17 @@
 "use strict";
-/* globals require */
+/* globals require, utils */
 
 (function(module) {
 
-	var XRegExp, S;
+	var XRegExp, utils;
 	var Serializer = {};
 
 	if ('undefined' === typeof window) {
-		XRegExp = require('xregexp');
-		S = require('string');
+		XRegExp = require('xregexp')
+		utils 	= require.main.require('./src/utils');
 	} else {
 		XRegExp = window.XRegExp;
-		require(['string'], function(string){ S = string });
+		utils = window.utils;
 	}
 
 	var pollRegex = XRegExp('(?:(?:\\[poll(?<settings>.*?)\\])\n(?<content>(?:-.+?\n)+)(?:\\[\/poll\\]))', 'g');
@@ -22,7 +22,7 @@
 				return value.length > 0;
 			},
 			parse: function(value) {
-				return S(value).stripTags().trim().s;
+				return utils.stripHTMLTags(value).trim();
 			}
 		},
 		maxvotes: {
@@ -77,12 +77,12 @@
 
 	function serializeOptions(raw, config) {
 		var pollOptions = [];
-		var rawOptions = S(raw).stripTags().s.split('\n');
+		var rawOptions = utils.stripHTMLTags(raw).split('\n');
 		var maxOptions = parseInt(config.limits.maxOptions, 10);
 
 		rawOptions.forEach(function(option) {
 			if (option.length) {
-				option = S(option.split('-')[1]).trim().s;
+				option = option.split('-')[1].trim();
 
 				if (option.length) {
 					pollOptions.push(option);
@@ -101,7 +101,7 @@
 		var maxOptions = config.limits.maxOptions;
 
 		options = options.map(function (option) {
-			return S(option).stripTags().trim().s;
+			return utils.stripHTMLTags(option).trim();
 		}).filter(function (option) {
 			return option.length;
 		});
@@ -120,9 +120,9 @@
 			settings[key] = config.defaults[key];
 		});
 
-		XRegExp.forEach(S(raw).stripTags().s, settingsRegex, function(match) {
-			var key = S(match.key).trim().s;
-			var value = S(match.value).trim().s;
+		XRegExp.forEach(utils.stripHTMLTags(raw), settingsRegex, function(match) {
+			var key = match.key.trim();
+			var value = match.value.trim();
 
 			if (key.length && value.length && settingsValidators.hasOwnProperty(key)) {
 				if (settingsValidators[key].test(value)) {
@@ -139,8 +139,8 @@
 
 		for (var k in settings) {
 			if (settings.hasOwnProperty(k) && config.defaults.hasOwnProperty(k)) {
-				var key = S(k).stripTags().trim().s;
-				var value = S(settings[k]).stripTags().trim().s;
+				var key = utils.stripHTMLTags(k).trim();
+				var value = utils.stripHTMLTags(settings[k]).trim();
 
 				if (key.length && value.length && settingsValidators.hasOwnProperty(key)) {
 					if (settingsValidators[key].test(value)) {
