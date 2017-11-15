@@ -64,11 +64,11 @@
 
 	function composerBtnHandle(composer, textarea) {
 		var post = composer.posts[composer.active];
-		if (!post || !post.isMain || !post.cid || isNaN(parseInt(post.cid, 10))) {
+		if (!post || !post.isMain || (isNaN(parseInt(post.cid, 10)) && isNaN(parseInt(post.pid, 10)))) {
 			return app.alertError('[[poll:error.not_main]]');
 		}
 
-		Poll.sockets.canCreate({cid: post.cid}, function(err, canCreate) {
+		Poll.sockets.canCreate({cid: post.cid, pid: post.pid}, function(err, canCreate) {
 			if (err || !canCreate) {
 				return app.alertError(err.message);
 			}
