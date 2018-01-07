@@ -67,6 +67,9 @@
 		if (!post || !post.isMain || (isNaN(parseInt(post.cid, 10)) && isNaN(parseInt(post.pid, 10)))) {
 			return app.alertError('[[poll:error.not_main]]');
 		}
+		if (parseInt(post.cid, 10) === 0) {
+			return app.alertError("[[error:category-not-selected]]");
+		}
 
 		Poll.sockets.canCreate({cid: post.cid, pid: post.pid}, function(err, canCreate) {
 			if (err || !canCreate) {
