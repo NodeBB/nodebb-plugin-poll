@@ -63,8 +63,13 @@ var	NodeBB = require('./lib/nodebb'),
 	};
 
 	Plugin.copyPrivilegesFrom = function (data, callback) {
-		data.privileges.push('poll:create');
-		data.privileges.push('groups:poll:create');
+		if (data.privileges.indexOf('poll:create') == -1) {
+			data.privileges.push('poll:create');
+		}
+		
+		if (data.privileges.indexOf('groups:poll:create') == -1) {
+			data.privileges.push('groups:poll:create');
+		}
 		callback(null, data);
 	};
 
