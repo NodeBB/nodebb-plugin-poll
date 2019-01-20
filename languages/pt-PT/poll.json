@@ -1,0 +1,42 @@
+{
+  "poll": "Votação",
+  "toggles": "Opções",
+  "allow_guests": "Permitir aos convidados ver os resultados das votações",
+  "limits": "Limites",
+  "max_options": "Número máximo de opções por votação",
+  "defaults": "Predefinições",
+  "default_title": "Título predefinido para a votação",
+  "max_votes": "Número máximo de votos por utilizador",
+  "info_choices": "Um número maior que 1 irá permitir múltipla escolha nas votações.",
+  "settings": "Definições",
+  "save": "Guardar",
+  "reset": "Redefinir",
+
+  "creator_title": "Criar Votação",
+  "poll_title": "Título da votação",
+  "poll_title_placeholder": "Introduz um título para a votação",
+  "options_title": "Opções de voto",
+  "options_add": "Adicionar opção",
+  "max_votes_placeholder": "Introduz a quantidade",
+  "auto_end_title": "Encerrar automaticamente a votação",
+  "auto_end_placeholder": "Clica para escolheres uma data e uma hora",
+  "auto_end_help": "Deixar este campo vazio irá fazer com que a votação nunca encerre.",
+
+  "error.max_options": "Apenas podes criar %d opções.",
+  "error.no_options": "Primeiro tens de criar pelo menos uma opção.",
+  "error.valid_date": "Por favor introduz uma data válida.",
+
+  "error.not_main": "Só podes adicionar uma votação na publicação principal do tópico.",
+  "error.privilege.create": "Não tens permissão para criar uma votação",
+
+  "warning.redactor": "Estás a usar Redactor. <strong>Não</strong> edites a marcação manualmente. Em vez disso, abre novamente o criador da votação.",
+
+  "vote": "Votar",
+  "to_voting": "Votação",
+  "to_results": "Resultados",
+  "voting_unavailable_title": "Votação indisponível",
+  "voting_unavailable_message": "Esta votação já encerrou ou foi apagada. Mesmo assim, ainda podes ver os resultados.",
+
+  "vote_count": "utilizadores votaram nesta opção",
+  "votes": "votos"
+}
