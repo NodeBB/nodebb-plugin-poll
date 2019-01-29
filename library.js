@@ -52,7 +52,7 @@ var	NodeBB = require('./lib/nodebb'),
 		callback(null, privileges);
 	};
 
-	Plugin.addUserPrivilegeLabel = function(labels, callback) {
+	Plugin.addPrivilegeLabels = function(labels, callback) {
 		labels.push({name: 'Create Poll'});
 		callback(null, labels);
 	};
@@ -66,7 +66,7 @@ var	NodeBB = require('./lib/nodebb'),
 		if (data.privileges.indexOf('poll:create') == -1) {
 			data.privileges.push('poll:create');
 		}
-		
+
 		if (data.privileges.indexOf('groups:poll:create') == -1) {
 			data.privileges.push('groups:poll:create');
 		}

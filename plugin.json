@@ -11,7 +11,8 @@
 
     { "hook": "filter:privileges.list", "method": "addUserPrivilege" },
     { "hook": "filter:privileges.groups.list", "method": "addGroupPrivilege" },
-    { "hook": "filter:privileges.list_human", "method": "addUserPrivilegeLabel" },
+    { "hook": "filter:privileges.list_human", "method": "addPrivilegeLabels" },
+    { "hook": "filter:privileges.groups.list_human", "method": "addPrivilegeLabels" },
     { "hook": "filter:categories.copyPrivilegesFrom", "method": "copyPrivilegesFrom" },
 
     { "hook": "filter:topic.post", "method": "hooks.filter.topicPost" },
