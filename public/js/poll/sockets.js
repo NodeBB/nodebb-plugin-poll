@@ -12,6 +12,10 @@
 			message: 'plugins.poll.vote'
 		},
 		{
+			method: 'updateVote',
+			message: 'plugins.poll.updateVote'
+		},
+		{
 			method: 'getOptionDetails',
 			message: 'plugins.poll.getOptionDetails'
 		},

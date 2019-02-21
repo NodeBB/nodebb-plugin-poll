@@ -32,6 +32,7 @@
   "warning.redactor": "You're using Redactor. Do <strong>not</strong> edit the markup manually. Instead, re-open the poll creator.",
 
   "vote": "Vote",
+  "edit_vote": "Edit vote",
   "to_voting": "To Voting",
   "to_results": "Results",
   "voting_unavailable_title": "Voting unavailable",

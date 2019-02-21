@@ -10,18 +10,21 @@
         </div>
         <div class="panel-body">
             <div class="poll-view-messages hidden"></div>
-            <div class="poll-view-voting <!-- IF hasVoted -->hidden<!-- ENDIF hasVoted -->">
+            <div class="poll-view-voting <!-- IF poll.hasVoted -->hidden<!-- ENDIF poll.hasVoted -->">
                 <!-- IMPORT poll/view/voting.tpl -->
             </div>
-            <div class="poll-view-results <!-- IF !hasVoted -->hidden<!-- ENDIF !hasVoted -->">
+            <div class="poll-view-results <!-- IF !poll.hasVoted -->hidden<!-- ENDIF !poll.hasVoted -->">
                 <!-- IMPORT poll/view/results.tpl -->
             </div>
             <div class="poll-view-buttons">
-                <!-- IF !hasVoted -->
+                <!-- IF !poll.hasVoted -->
                 <button type="button" class="btn btn-primary poll-button-vote">[[poll:vote]]</button>
                 <button type="button" class="btn btn-link poll-button-voting hidden">[[poll:to_voting]]</button>
                 <button type="button" class="btn btn-link poll-button-results">[[poll:to_results]]</button>
-                <!-- ENDIF !hasVoted -->
+                <!-- ENDIF !poll.hasVoted -->
+                <!-- IF poll.hasVoted -->
+                <button type="button" class="btn btn-link poll-button-voting">[[poll:to_voting]]</button>
+                <!-- ENDIF poll.hasVoted -->
             </div>
         </div>
     </div>

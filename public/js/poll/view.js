@@ -13,7 +13,8 @@
 		require(['components'], function(components) {
 			var posts = components.get('post');
 			if (posts.length > 0 && parseInt(posts.eq(0).data('pid'), 10) === parseInt(self.pollData.info.pid, 10)) {
-				app.parseAndTranslate('poll/view', {poll: self.pollData}, function(panel) {
+				debugger
+				app.parseAndTranslate('poll/view', { poll: self.pollData }, function(panel) {
 					posts.eq(0).find('[component="post/content"]').prepend(panel);
 
 					self.dom = {
@@ -22,6 +23,7 @@
 						votingPanel: panel.find('.poll-view-voting'),
 						resultsPanel: panel.find('.poll-view-results'),
 						voteButton: panel.find('.poll-button-vote'),
+						editVoteButton: panel.find('.poll-button-edit-vote'),
 						votingPanelButton: panel.find('.poll-button-voting'),
 						resultsPanelButton: panel.find('.poll-button-results'),
 						editButton: panel.find('.poll-button-edit')
@@ -94,12 +96,14 @@
 		this.hideResultsPanel();
 		this.showVoteButton();
 		this.showResultsPanelButton();
+		this.hideEditVoteButton();
 		this.dom.votingPanel.removeClass('hidden');
 	};
 
 	View.prototype.hideVotingPanel = function() {
 		this.hideVoteButton();
 		this.hideResultsPanelButton();
+		this.showEditVoteButton();
 		this.dom.votingPanel.addClass('hidden');
 	};
 
@@ -120,6 +124,14 @@
 
 	View.prototype.hideVoteButton = function() {
 		this.dom.voteButton.addClass('hidden');
+	};
+
+	View.prototype.showEditVoteButton = function() {
+		this.dom.editVoteButton.removeClass('hidden');
+	};
+
+	View.prototype.hideEditVoteButton = function() {
+		this.dom.editVoteButton.addClass('hidden');
 	};
 
 	View.prototype.showVotingPanelButton = function() {
@@ -164,6 +176,36 @@
 							return app.alertError(err.message);
 						}
 
+						view.showResultsPanel();
+						view.hideVotingPanelButton();
+					});
+				}
+			}
+		},
+		{
+			// Voting
+			register: function(view) {
+				var self = this;
+				view.dom.editVoteButton.off('click').on('click', function() {
+					self.handle(view);
+				});
+			},
+			handle: function(view) {
+				var form = view.dom.votingPanel.find('form');
+				var votes = form.serializeArray().map(function(option) {
+					return parseInt(option.value, 10);
+				});
+
+				if (votes.length > 0) {
+					var voteData = {
+						pollId: view.pollData.info.pollId,
+						options: votes
+					};
+
+					Poll.sockets.updateVote(voteData, function(err, result) {
+						if (err) {
+							return app.alertError(err.message);
+						}
 						view.showResultsPanel();
 						view.hideVotingPanelButton();
 					});
