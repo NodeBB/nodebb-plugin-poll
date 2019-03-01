@@ -45,5 +45,8 @@
     "public/js/admin.js"
   ],
   "templates": "templates",
-  "languages": "languages"
+  "languages": "languages",
+  "upgrades": [
+    "upgrades/convert_poll_id_voters_and_options_votes_to_sorted_sets.js"
+  ]
 }
