@@ -16,15 +16,13 @@
             <div class="poll-view-results <!-- IF !poll.hasVoted -->hidden<!-- ENDIF !poll.hasVoted -->">
                 <!-- IMPORT poll/view/results.tpl -->
             </div>
+
             <div class="poll-view-buttons">
-                <!-- IF !poll.hasVoted -->
-                <button type="button" class="btn btn-primary poll-button-vote">[[poll:vote]]</button>
+                <button type="button" class="btn btn-primary poll-button-vote hidden">[[poll:vote]]</button>
+                <button type="button" class="btn btn-primary poll-button-update-vote hidden">[[poll:update_vote]]</button>
+                <button type="button" class="btn btn-danger poll-button-remove-vote hidden">[[poll:remove_vote]]</button>
+                <button type="button" class="btn btn-link poll-button-results hidden">[[poll:to_results]]</button>
                 <button type="button" class="btn btn-link poll-button-voting hidden">[[poll:to_voting]]</button>
-                <button type="button" class="btn btn-link poll-button-results">[[poll:to_results]]</button>
-                <!-- ENDIF !poll.hasVoted -->
-                <!-- IF poll.hasVoted -->
-                <button type="button" class="btn btn-link poll-button-voting">[[poll:to_voting]]</button>
-                <!-- ENDIF poll.hasVoted -->
             </div>
         </div>
     </div>

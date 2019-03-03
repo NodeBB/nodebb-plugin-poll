@@ -16,6 +16,10 @@
 			message: 'plugins.poll.updateVote'
 		},
 		{
+			method: 'removeVote',
+			message: 'plugins.poll.removeVote'
+		},
+		{
 			method: 'getOptionDetails',
 			message: 'plugins.poll.getOptionDetails'
 		},

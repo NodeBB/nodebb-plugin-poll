@@ -26,6 +26,7 @@ module.exports = {
 							},
 							function (next) {
 								NodeBB.db.getSetMembers(pollVotersSetKey, function(err, votersUids) {
+									console.log("getSetMembers", pollVotersSetKey, err, votersUids);
 									if (err) {
 										return next(err);
 									}
@@ -46,11 +47,8 @@ module.exports = {
 							},
 							function (next) {
 								async.each(options, function (option, next) {
-									console.log("option");
-									console.log(option);
-
-									var pollOptionsVotesSetKey = 'poll:' + pollId + ':options:' + option + ':votes';
-									var pollOptionsSetKey = 'poll:' + pollId + ':options:' + option;
+									var pollOptionsVotesSetKey = 'poll:' + pollId + ':options:' + option.id + ':votes';
+									var pollOptionsSetKey = 'poll:' + pollId + ':options:' + option.id;
 
 									async.parallel([
 										function (next) {

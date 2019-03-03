@@ -1,4 +1,4 @@
-<form role="form">
+<form role="form" class="poll-voting-form">
     <!-- BEGIN poll.options -->
     <div class="poll-view-option {poll.optionType}" data-poll-option-id="{poll.options.id}">
         <label>

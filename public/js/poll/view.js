@@ -13,17 +13,18 @@
 		require(['components'], function(components) {
 			var posts = components.get('post');
 			if (posts.length > 0 && parseInt(posts.eq(0).data('pid'), 10) === parseInt(self.pollData.info.pid, 10)) {
-				debugger
 				app.parseAndTranslate('poll/view', { poll: self.pollData }, function(panel) {
 					posts.eq(0).find('[component="post/content"]').prepend(panel);
 
 					self.dom = {
 						panel: panel,
+						votingForm: panel.find('.poll-voting-form'),
 						messages: panel.find('.poll-view-messages'),
 						votingPanel: panel.find('.poll-view-voting'),
 						resultsPanel: panel.find('.poll-view-results'),
 						voteButton: panel.find('.poll-button-vote'),
-						editVoteButton: panel.find('.poll-button-edit-vote'),
+						updateVoteButton: panel.find('.poll-button-update-vote'),
+						removeVoteButton: panel.find('.poll-button-remove-vote'),
 						votingPanelButton: panel.find('.poll-button-voting'),
 						resultsPanelButton: panel.find('.poll-button-results'),
 						editButton: panel.find('.poll-button-edit')
@@ -32,10 +33,12 @@
 					self.hideMessage();
 
 					self.pollEndedOrDeleted();
+					self.hasVotedAndVotingUpdateDisallowed();
 
 					if (!app.user.uid || self.pollData.hasVoted) {
 						self.showResultsPanel();
-						self.hideVotingPanelButton();
+					} else {
+						self.showVotingPanel();
 					}
 
 					Actions.forEach(function(action) {
@@ -46,11 +49,27 @@
 		});
 	};
 
+	View.prototype.hasPollEndedOrDeleted = function() {
+		return (parseInt(this.pollData.info.ended, 10) === 1 || parseInt(this.pollData.info.deleted, 10) === 1);
+	};
+
+	View.prototype.voteUpdateAllowed = function() {
+		return parseInt(this.pollData.settings.disallowVoteUpdate, 10) !== 1;
+	};
+
 	View.prototype.pollEndedOrDeleted = function() {
-		if (parseInt(this.pollData.info.ended, 10) === 1 || parseInt(this.pollData.info.deleted, 10) === 1) {
+		if (this.hasPollEndedOrDeleted()) {
 			this.showResultsPanel();
 			this.hideVotingPanelButton();
 			this.showMessage('[[poll:voting_unavailable_title]]', '[[poll:voting_unavailable_message]]');
+		}
+	};
+
+	View.prototype.hasVotedAndVotingUpdateDisallowed = function() {
+		if (this.pollData.hasVoted && !this.voteUpdateAllowed()) {
+			this.showResultsPanel();
+			this.hideVotingPanelButton();
+			this.showMessage('[[poll:voting_unavailable_title]]', '[[poll:voting_update_disallowed_message]]');
 		}
 	};
 
@@ -92,24 +111,53 @@
 		})
 	};
 
+	View.prototype.fillVotingForm = function() {
+		var self = this;
+		this.resetVotingForm();
+		if (this.pollData.vote && this.pollData.vote.options) {
+			this.pollData.vote.options.forEach(function (id) {
+				self.dom.votingForm
+					.find('[data-poll-option-id="' + id + '"].poll-view-option input')
+					.prop('checked', true);
+			});
+		}
+	};
+
+	View.prototype.resetVotingForm = function() {
+		this.dom.votingForm.get(0).reset();
+	};
+
 	View.prototype.showVotingPanel = function() {
 		this.hideResultsPanel();
-		this.showVoteButton();
 		this.showResultsPanelButton();
-		this.hideEditVoteButton();
+		if (this.pollData.hasVoted) {
+			if (this.voteUpdateAllowed() && !this.hasPollEndedOrDeleted()) {
+				this.showUpdateVoteButton();
+				this.showRemoveVoteButton();
+				this.fillVotingForm();
+			}
+		} else {
+			this.showVoteButton();
+		}
 		this.dom.votingPanel.removeClass('hidden');
 	};
 
 	View.prototype.hideVotingPanel = function() {
-		this.hideVoteButton();
 		this.hideResultsPanelButton();
-		this.showEditVoteButton();
+		this.hideUpdateVoteButton();
+		this.hideRemoveVoteButton();
+		this.resetVotingForm();
+		this.hideVoteButton();
 		this.dom.votingPanel.addClass('hidden');
 	};
 
 	View.prototype.showResultsPanel = function() {
 		this.hideVotingPanel();
-		this.showVotingPanelButton();
+		if (this.voteUpdateAllowed() && !this.hasPollEndedOrDeleted()) {
+			this.showVotingPanelButton();
+		} else {
+			this.hideVotingPanelButton();
+		}
 		this.dom.resultsPanel.removeClass('hidden');
 	};
 
@@ -126,12 +174,20 @@
 		this.dom.voteButton.addClass('hidden');
 	};
 
-	View.prototype.showEditVoteButton = function() {
-		this.dom.editVoteButton.removeClass('hidden');
+	View.prototype.showUpdateVoteButton = function() {
+		this.dom.updateVoteButton.removeClass('hidden');
 	};
 
-	View.prototype.hideEditVoteButton = function() {
-		this.dom.editVoteButton.addClass('hidden');
+	View.prototype.hideUpdateVoteButton = function() {
+		this.dom.updateVoteButton.addClass('hidden');
+	};
+
+	View.prototype.showRemoveVoteButton = function() {
+		this.dom.removeVoteButton.removeClass('hidden');
+	};
+
+	View.prototype.hideRemoveVoteButton = function() {
+		this.dom.removeVoteButton.addClass('hidden');
 	};
 
 	View.prototype.showVotingPanelButton = function() {
@@ -177,7 +233,6 @@
 						}
 
 						view.showResultsPanel();
-						view.hideVotingPanelButton();
 					});
 				}
 			}
@@ -186,7 +241,7 @@
 			// Voting
 			register: function(view) {
 				var self = this;
-				view.dom.editVoteButton.off('click').on('click', function() {
+				view.dom.updateVoteButton.off('click').on('click', function() {
 					self.handle(view);
 				});
 			},
@@ -207,9 +262,27 @@
 							return app.alertError(err.message);
 						}
 						view.showResultsPanel();
-						view.hideVotingPanelButton();
 					});
 				}
+			}
+		},
+		{
+			// Remove vote
+			register: function(view) {
+				var self = this;
+				view.dom.removeVoteButton.off('click').on('click', function() {
+					self.handle(view);
+				});
+			},
+			handle: function(view) {
+				var voteData = { pollId: view.pollData.info.pollId };
+
+				Poll.sockets.removeVote(voteData, function(err, result) {
+					if (err) {
+						return app.alertError(err.message);
+					}
+					view.showResultsPanel();
+				});
 			}
 		},
 		{
@@ -233,7 +306,7 @@
 				});
 			},
 			handle: function(view) {
-				view.showVotingPanel()
+				view.showVotingPanel();
 			}
 		},
 		{
