@@ -133,14 +133,8 @@
 						className: 'btn-primary',
 						callback: function(e) {
 							clearErrors();
-
 							var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
-
-							var $checkboxes = form.find('[type="checkbox"]').clone();
-							debugger;
-
 							var obj = form.serializeObject();
-							debugger;
 
 							// Let's be nice and at least show an error if there are no options
 							obj.options.filter(function(obj) {
@@ -157,10 +151,7 @@
 								obj.settings.end = moment(new Date(obj.settings.end)).valueOf();
 							}
 
-							debugger;
-
 							callback(obj);
-
 							return true;
 						}
 					}

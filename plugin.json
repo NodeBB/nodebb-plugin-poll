@@ -47,6 +47,7 @@
   "templates": "templates",
   "languages": "languages",
   "upgrades": [
+    "upgrades/give_categories_poll_create_privs_to_reg_users.js",
     "upgrades/convert_poll_id_voters_and_options_votes_to_sorted_sets.js"
   ]
 }
