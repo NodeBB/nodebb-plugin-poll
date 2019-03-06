@@ -8,3 +8,9 @@
     </div>
     <!-- END poll.options -->
 </form>
+
+<!-- IF poll.settings.disallowVoteUpdate -->
+<div class="alert alert-warning" role="alert">
+    [[poll:vote_is_final]]
+</div>
+<!-- ENDIF poll.settings.disallowVoteUpdate -->

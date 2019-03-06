@@ -39,7 +39,8 @@
   "to_results": "Results",
   "voting_unavailable_title": "Voting unavailable",
   "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
-  "voting_update_disallowed_message": "You already voted and voting update has been disallowed for this poll",
+  "voting_update_disallowed_message": "You have already voted and changing your vote is not allowed for this poll",
+  "vote_is_final": "Changing your vote is not allowed for this poll so your vote is final",
 
   "vote_count": "users voted for this option",
   "votes": "votes"
