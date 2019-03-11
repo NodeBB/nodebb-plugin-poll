@@ -7,7 +7,7 @@
 	var Serializer = {};
 
 	if ('undefined' === typeof window) {
-		XRegExp = require('xregexp')
+		XRegExp = require('xregexp');
 		utils 	= require.main.require('./src/utils');
 	} else {
 		XRegExp = window.XRegExp;
@@ -31,6 +31,14 @@
 			},
 			parse: function(value) {
 				return parseInt(value, 10);
+			}
+		},
+		disallowVoteUpdate: {
+			test: function (value) {
+				return /true|false/.test(value);
+			},
+			parse: function(value) {
+				return value === "true" || value === true ? 1 : 0;
 			}
 		},
 		end: {

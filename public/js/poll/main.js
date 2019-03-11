@@ -21,10 +21,9 @@ var Poll = {};
 
 		if (!isNaN(pollId)) {
 			Poll.sockets.getPoll({pollId: pollId}, function(err, pollData) {
-				if (err && app.user.uid) {
+				if (err) {
 					return app.alertError(err.message);
 				}
-
 				Poll.view.load(pollData);
 			});
 		}

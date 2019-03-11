@@ -27,6 +27,13 @@
     </div>
 
     <div class="form-group">
+        <label for="pollDisallowVoteUpdate">
+            <input type="checkbox" name="settings[disallowVoteUpdate]" id="pollDisallowVoteUpdate">
+            [[poll:disallow_vote_update]]
+        </label>
+    </div>
+
+    <div class="form-group">
         <label for="pollInputEnd">[[poll:auto_end_title]]</label>
 
         <div class='input-group date'>

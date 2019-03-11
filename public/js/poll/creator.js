@@ -133,7 +133,6 @@
 						className: 'btn-primary',
 						callback: function(e) {
 							clearErrors();
-
 							var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
 							var obj = form.serializeObject();
 
@@ -153,7 +152,6 @@
 							}
 
 							callback(obj);
-
 							return true;
 						}
 					}

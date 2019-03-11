@@ -1,4 +1,4 @@
-<form role="form">
+<form role="form" class="poll-voting-form">
     <!-- BEGIN poll.options -->
     <div class="poll-view-option {poll.optionType}" data-poll-option-id="{poll.options.id}">
         <label>
@@ -8,3 +8,9 @@
     </div>
     <!-- END poll.options -->
 </form>
+
+<!-- IF poll.settings.disallowVoteUpdate -->
+<div class="alert alert-warning" role="alert">
+    [[poll:vote_is_final]]
+</div>
+<!-- ENDIF poll.settings.disallowVoteUpdate -->
