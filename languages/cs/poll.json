@@ -1,0 +1,47 @@
+{
+  "poll": "Hlasování",
+  "toggles": "Možnosti",
+  "allow_guests": "Zobrazit výsledky hlasování hostům",
+  "limits": "Limity",
+  "max_options": "Maximální počet možností na hlasování",
+  "defaults": "Výchozí nastavení",
+  "default_title": "Název hlasování",
+  "max_votes": "Maximální počet hlasů na uživatele",
+  "disallow_vote_update": "Zakázat uživatelům dodatečně změnit hlas",
+  "info_choices": "Hodnota vyšší než 1 umožní volbu více možností v rámci jednoho hlasování",
+  "settings": "Nastavení",
+  "save": "Uložit",
+  "reset": "Resetovat",
+
+  "creator_title": "Vytvořit hlasování",
+  "poll_title": "Název hlasování",
+  "poll_title_placeholder": "Zadejte název hlasování",
+  "options_title": "Možnosti",
+  "options_add": "Přidat možnost",
+  "max_votes_placeholder": "Zadejte počet",
+  "auto_end_title": "Automaticky ukončit hlasování",
+  "auto_end_placeholder": "Kliknutím vyberete datum a čas",
+  "auto_end_help": "Není-li vyplňeno, hlasování nebude ukončeno nikdy",
+
+  "error.max_options": "Hlasování může obsahovat maximálně %d možností.",
+  "error.no_options": "Přidejte alespoň jednu možnost.",
+  "error.valid_date": "Vyplňte prosím platné datum.",
+
+  "error.not_main": "Hlasování lze přidat pouze do nového tématu.",
+  "error.privilege.create": "Nemáte oprávnění vytvořit hlasování",
+
+  "warning.redactor": "<strong>Neupravujte</strong> zdrojový text ručně. Znovu použijte tlačítko \"Vytvořit hlasování\".",
+
+  "vote": "Hlasovat",
+  "update_vote": "Změnit hlas",
+  "remove_vote": "Odebrat hlas",
+  "to_voting": "Upravit hlas",
+  "to_results": "Výsledky",
+  "voting_unavailable_title": "Hlasování nedostupné",
+  "voting_unavailable_message": "Hlasování skončilo nebo bylo smazáno. Můžete si ale zobrazit výsledky.",
+  "voting_update_disallowed_message": "Váš hlas byl již započítán a změna není v tomto hlasování povolena",
+  "vote_is_final": "Změna hlasu není v tomto hlasování povolena, váš hlas je konečný",
+
+  "vote_count": "uživatelů hlasovalo pro tuto možnost",
+  "votes": "hlasů"
+}
