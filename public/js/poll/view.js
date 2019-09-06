@@ -23,6 +23,7 @@
 						votingPanel: panel.find('.poll-view-voting'),
 						resultsPanel: panel.find('.poll-view-results'),
 						voteButton: panel.find('.poll-button-vote'),
+						voteAnonymousButton: panel.find('.poll-button-vote-anonymous'),
 						updateVoteButton: panel.find('.poll-button-update-vote'),
 						removeVoteButton: panel.find('.poll-button-remove-vote'),
 						votingPanelButton: panel.find('.poll-button-voting'),
@@ -211,59 +212,42 @@
 			// Voting
 			register: function(view) {
 				var self = this;
+				var preferences = {
+					anonymous: false
+				}
+
 				view.dom.voteButton.off('click').on('click', function() {
-					self.handle(view);
+					preferences.anonymous = false
+					self.handle(view, preferences)
 				});
+
+				view.dom.voteAnonymousButton.off('click').on('click', function() {
+					preferences.anonymous = true
+					self.handle(view, preferences)
+				})
 			},
-			handle: function(view) {
+			handle: function(view, preferences) {
 				var form = view.dom.votingPanel.find('form');
 				var votes = form.serializeArray().map(function(option) {
 					return parseInt(option.value, 10);
 				});
 
-				if (votes.length > 0) {
+				// if (votes.length > 0) {
 					var voteData = {
 						pollId: view.pollData.info.pollId,
-						options: votes
+						options: votes,
+						preferences: preferences
 					};
 
 					Poll.sockets.vote(voteData, function(err, result) {
+						console.log('vote:', voteData)
 						if (err) {
 							return app.alertError(err.message);
 						}
 
 						view.showResultsPanel();
 					});
-				}
-			}
-		},
-		{
-			// Voting
-			register: function(view) {
-				var self = this;
-				view.dom.updateVoteButton.off('click').on('click', function() {
-					self.handle(view);
-				});
-			},
-			handle: function(view) {
-				var form = view.dom.votingPanel.find('form');
-				var votes = form.serializeArray().map(function(option) {
-					return parseInt(option.value, 10);
-				});
-
-				if (votes.length > 0) {
-					var voteData = {
-						pollId: view.pollData.info.pollId,
-						options: votes
-					};
-
-					Poll.sockets.updateVote(voteData, function(err, result) {
-						if (err) {
-							return app.alertError(err.message);
-						}
-						view.showResultsPanel();
-					});
-				}
+				// }
 			}
 		},
 		{
