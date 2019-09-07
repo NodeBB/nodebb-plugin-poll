@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /* globals socket */
 
 (function(Poll) {
@@ -59,5 +59,4 @@
 	Poll.sockets = {};
 
 	init();
-
 })(window.Poll);

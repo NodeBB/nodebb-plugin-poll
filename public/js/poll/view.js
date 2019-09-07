@@ -11,70 +11,49 @@
 
 		require(['components'], function(components) {
 			var posts = components.get('post');
-			if (
-				posts.length > 0 &&
-				parseInt(posts.eq(0).data('pid'), 10) ===
-					parseInt(self.pollData.info.pid, 10)
-			) {
-				app.parseAndTranslate(
-					'poll/view',
-					{ poll: self.pollData },
-					function(panel) {
-						posts
-							.eq(0)
-							.find('[component="post/content"]')
-							.prepend(panel);
+			if (posts.length > 0 && parseInt(posts.eq(0).data('pid'), 10) === parseInt(self.pollData.info.pid, 10)) {
+				app.parseAndTranslate('poll/view', { poll: self.pollData }, function(panel) {
+					posts
+						.eq(0)
+						.find('[component="post/content"]')
+						.prepend(panel);
 
-						self.dom = {
-							panel: panel,
-							votingForm: panel.find('.poll-voting-form'),
-							messages: panel.find('.poll-view-messages'),
-							votingPanel: panel.find('.poll-view-voting'),
-							resultsPanel: panel.find('.poll-view-results'),
-							voteButton: panel.find('.poll-button-vote'),
-							voteAnonymousButton: panel.find(
-								'.poll-button-vote-anonymous'
-							),
-							updateVoteButton: panel.find(
-								'.poll-button-update-vote'
-							),
-							removeVoteButton: panel.find(
-								'.poll-button-remove-vote'
-							),
-							votingPanelButton: panel.find(
-								'.poll-button-voting'
-							),
-							resultsPanelButton: panel.find(
-								'.poll-button-results'
-							),
-							editButton: panel.find('.poll-button-edit')
-						};
+					self.dom = {
+						panel: panel,
+						votingForm: panel.find('.poll-voting-form'),
+						messages: panel.find('.poll-view-messages'),
+						votingPanel: panel.find('.poll-view-voting'),
+						resultsPanel: panel.find('.poll-view-results'),
+						voteButton: panel.find('.poll-button-vote'),
+						voteAnonymousButton: panel.find('.poll-button-vote-anonymous'),
+						updateVoteButton: panel.find('.poll-button-update-vote'),
+						removeVoteButton: panel.find('.poll-button-remove-vote'),
+						votingPanelButton: panel.find('.poll-button-voting'),
+						resultsPanelButton: panel.find('.poll-button-results'),
+						editButton: panel.find('.poll-button-edit')
+					};
 
-						self.hideMessage();
+					self.hideMessage();
 
-						self.pollEndedOrDeleted();
-						self.hasVotedAndVotingUpdateDisallowed();
+					self.pollEndedOrDeleted();
+					self.hasVotedAndVotingUpdateDisallowed();
 
-						if (!app.user.uid || self.pollData.hasVoted) {
-							self.showResultsPanel();
-						} else {
-							self.showVotingPanel();
-						}
-
-						Actions.forEach(function(action) {
-							action.register(self);
-						});
+					if (!app.user.uid || self.pollData.hasVoted) {
+						self.showResultsPanel();
+					} else {
+						self.showVotingPanel();
 					}
-				);
+
+					Actions.forEach(function(action) {
+						action.register(self);
+					});
+				});
 			}
 		});
 	};
 
 	View.prototype.hasPollEndedOrDeleted = function() {
-		return (
-			parseInt(this.pollData.info.ended, 10) === 1 ||
-			parseInt(this.pollData.info.deleted, 10) === 1
-		);
+		return parseInt(this.pollData.info.ended, 10) === 1 || parseInt(this.pollData.info.deleted, 10) === 1;
 	};
 
 	View.prototype.voteUpdateAllowed = function() {
@@ -85,10 +64,7 @@
 		if (this.hasPollEndedOrDeleted()) {
 			this.showResultsPanel();
 			this.hideVotingPanelButton();
-			this.showMessage(
-				'[[poll:voting_unavailable_title]]',
-				'[[poll:voting_unavailable_message]]'
-			);
+			this.showMessage('[[poll:voting_unavailable_title]]', '[[poll:voting_unavailable_message]]');
 		}
 	};
 
@@ -96,10 +72,7 @@
 		if (this.pollData.hasVoted && !this.voteUpdateAllowed()) {
 			this.showResultsPanel();
 			this.hideVotingPanelButton();
-			this.showMessage(
-				'[[poll:voting_unavailable_title]]',
-				'[[poll:voting_update_disallowed_message]]'
-			);
+			this.showMessage('[[poll:voting_unavailable_title]]', '[[poll:voting_update_disallowed_message]]');
 		}
 	};
 
@@ -109,9 +82,7 @@
 		this.pollEndedOrDeleted();
 
 		this.pollData.options.forEach(function(option) {
-			var el = this.dom.resultsPanel.find(
-				'[data-poll-option-id=' + option.id + ']'
-			);
+			var el = this.dom.resultsPanel.find('[data-poll-option-id=' + option.id + ']');
 			el.find('.poll-result-votecount span').text(option.voteCount);
 			el.find('.poll-result-progressbar')
 				.css('width', option.percentage + '%')
@@ -123,13 +94,9 @@
 	View.prototype.showMessage = function(title, content) {
 		var self = this;
 
-		app.parseAndTranslate(
-			'poll/view/messages',
-			{ title: title, content: content },
-			function(html) {
-				self.dom.messages.html(html).removeClass('hidden');
-			}
-		);
+		app.parseAndTranslate('poll/view/messages', { title: title, content: content }, function(html) {
+			self.dom.messages.html(html).removeClass('hidden');
+		});
 	};
 
 	View.prototype.hideMessage = function() {
@@ -154,13 +121,7 @@
 		this.resetVotingForm();
 		if (this.pollData.vote && this.pollData.vote.options) {
 			this.pollData.vote.options.forEach(function(id) {
-				self.dom.votingForm
-					.find(
-						'[data-poll-option-id="' +
-							id +
-							'"].poll-view-option input'
-					)
-					.prop('checked', true);
+				self.dom.votingForm.find('[data-poll-option-id="' + id + '"].poll-view-option input').prop('checked', true);
 			});
 		}
 	};
@@ -270,12 +231,10 @@
 					self.handle(view, preferences);
 				});
 
-				view.dom.voteAnonymousButton
-					.off('click')
-					.on('click', function() {
-						preferences.anonymous = true;
-						self.handle(view, preferences);
-					});
+				view.dom.voteAnonymousButton.off('click').on('click', function() {
+					preferences.anonymous = true;
+					self.handle(view, preferences);
+				});
 			},
 			handle: function(view, preferences) {
 				var form = view.dom.votingPanel.find('form');
@@ -323,11 +282,9 @@
 			// Results button
 			register: function(view) {
 				var self = this;
-				view.dom.resultsPanelButton
-					.off('click')
-					.on('click', function() {
-						self.handle(view);
-					});
+				view.dom.resultsPanelButton.off('click').on('click', function() {
+					self.handle(view);
+				});
 			},
 			handle: function(view) {
 				view.showResultsPanel();
@@ -349,11 +306,9 @@
 			// Option details
 			register: function(view) {
 				var self = this;
-				view.dom.resultsPanel
-					.off('click')
-					.on('click', '.poll-result-votecount', function(e) {
-						self.handle(view, e);
-					});
+				view.dom.resultsPanel.off('click').on('click', '.poll-result-votecount', function(e) {
+					self.handle(view, e);
+				});
 			},
 			handle: function(view, e) {
 				var optionId = $(e.currentTarget)
