@@ -249,7 +249,7 @@
 						preferences: preferences
 					};
 
-					Poll.sockets.vote(voteData, function(err, result) {
+					Poll.sockets.updateVote(voteData, function(err, result) {
 						if (err) {
 							return app.alertError(err.message);
 						}

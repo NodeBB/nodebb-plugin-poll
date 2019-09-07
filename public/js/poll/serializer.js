@@ -1,24 +1,23 @@
-"use strict";
+'use strict';
 /* globals require, utils */
 
 (function(module) {
-
 	var XRegExp, utils;
 	var Serializer = {};
 
 	if ('undefined' === typeof window) {
 		XRegExp = require('xregexp');
-		utils 	= require.main.require('./src/utils');
+		utils = require.main.require('./src/utils');
 	} else {
 		XRegExp = window.XRegExp;
 		utils = window.utils;
 	}
 
-	var pollRegex = XRegExp('(?:(?:\\[poll(?<settings>.*?)\\])\n(?<content>(?:-.+?\n)+)(?:\\[\/poll\\]))', 'g');
+	var pollRegex = XRegExp('(?:(?:\\[poll(?<settings>.*?)\\])\n(?<content>(?:-.+?\n)+)(?:\\[/poll\\]))', 'g');
 	var settingsRegex = XRegExp('(?<key>.+?)=(?:"|&quot;)(?<value>.+?)(?:"|&quot;)', 'g');
 	var settingsValidators = {
 		title: {
-			test: function (value) {
+			test: function(value) {
 				return value.length > 0;
 			},
 			parse: function(value) {
@@ -26,7 +25,7 @@
 			}
 		},
 		maxvotes: {
-			test: function (value) {
+			test: function(value) {
 				return !isNaN(value);
 			},
 			parse: function(value) {
@@ -34,16 +33,16 @@
 			}
 		},
 		disallowVoteUpdate: {
-			test: function (value) {
+			test: function(value) {
 				return /true|false/.test(value);
 			},
 			parse: function(value) {
-				return value === "true" || value === true ? 1 : 0;
+				return value === 'true' || value === true ? 1 : 0;
 			}
 		},
 		end: {
-			test: function (value) {
-				return (!isNaN(value) && parseInt(value, 10) > Date.now());
+			test: function(value) {
+				return !isNaN(value) && parseInt(value, 10) > Date.now();
 			},
 			parse: function(value) {
 				return parseInt(value, 10);
@@ -80,7 +79,7 @@
 		var options = deserializeOptions(poll.options, config);
 		var settings = deserializeSettings(poll.settings, config);
 
-		return '[poll' + settings +']\n' + options + '\n[/poll]';
+		return '[poll' + settings + ']\n' + options + '\n[/poll]';
 	};
 
 	function serializeOptions(raw, config) {
@@ -108,11 +107,13 @@
 	function deserializeOptions(options, config) {
 		var maxOptions = config.limits.maxOptions;
 
-		options = options.map(function (option) {
-			return utils.stripHTMLTags(option).trim();
-		}).filter(function (option) {
-			return option.length;
-		});
+		options = options
+			.map(function(option) {
+				return utils.stripHTMLTags(option).trim();
+			})
+			.filter(function(option) {
+				return option.length;
+			});
 
 		if (options.length > maxOptions) {
 			options = options.slice(0, maxOptions - 1);
@@ -166,9 +167,12 @@
 	if ('undefined' !== typeof window) {
 		Poll.serializer = module.exports;
 	}
-
-})('undefined' === typeof module ? {
-	module: {
-		exports: {}
-	}
-} : module);
+})(
+	'undefined' === typeof module
+		? {
+				module: {
+					exports: {}
+				}
+		  }
+		: module
+);
