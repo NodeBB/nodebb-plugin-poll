@@ -138,7 +138,8 @@
 				this.fillVotingForm();
 			}
 		} else {
-			this.showVoteButton();
+            this.showVoteButton();
+            this.showVoteAnonymousButton()
 		}
 		this.dom.votingPanel.removeClass('hidden');
 	};
@@ -148,7 +149,8 @@
 		this.hideUpdateVoteButton();
 		this.hideRemoveVoteButton();
 		this.resetVotingForm();
-		this.hideVoteButton();
+        this.hideVoteButton();
+        this.hideVoteAnonymousButton()
 		this.dom.votingPanel.addClass('hidden');
 	};
 
@@ -169,11 +171,19 @@
 
 	View.prototype.showVoteButton = function() {
 		this.dom.voteButton.removeClass('hidden');
-	};
+    };
+    
+    View.prototype.showVoteAnonymousButton = function() {
+		this.dom.voteAnonymousButton.removeClass('hidden')
+	}
 
 	View.prototype.hideVoteButton = function() {
 		this.dom.voteButton.addClass('hidden');
-	};
+    };
+    
+    View.prototype.hideVoteAnonymousButton = function() {
+		this.dom.voteAnonymousButton.addClass('hidden')
+	}
 
 	View.prototype.showUpdateVoteButton = function() {
 		this.dom.updateVoteButton.removeClass('hidden');
@@ -211,10 +221,8 @@
 		{
 			// Voting
 			register: function(view) {
-				var self = this;
-				var preferences = {
-					anonymous: false
-				}
+				var self = this,
+				    preferences = {};
 
 				view.dom.voteButton.off('click').on('click', function() {
 					preferences.anonymous = false
@@ -232,7 +240,7 @@
 					return parseInt(option.value, 10);
 				});
 
-				// if (votes.length > 0) {
+				if (votes.length > 0) {
 					var voteData = {
 						pollId: view.pollData.info.pollId,
 						options: votes,
@@ -240,14 +248,13 @@
 					};
 
 					Poll.sockets.vote(voteData, function(err, result) {
-						console.log('vote:', voteData)
 						if (err) {
 							return app.alertError(err.message);
 						}
 
 						view.showResultsPanel();
 					});
-				// }
+				}
 			}
 		},
 		{

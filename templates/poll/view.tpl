@@ -19,7 +19,7 @@
 
             <div class="poll-view-buttons">
                 <button type="button" class="btn btn-primary poll-button-vote hidden">[[poll:vote]]</button>
-                <button type="button" class="btn btn-default poll-button-vote-anonymous">Vote anonymously</button>
+                <button type="button" class="btn btn-default poll-button-vote-anonymous hidden">Vote anonymously</button>
 
                 <button type="button" class="btn btn-primary poll-button-update-vote hidden">[[poll:update_vote]]</button>
                 <button type="button" class="btn btn-danger poll-button-remove-vote hidden">[[poll:remove_vote]]</button>
