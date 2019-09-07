@@ -138,8 +138,8 @@
 				this.fillVotingForm();
 			}
 		} else {
-            this.showVoteButton();
-            this.showVoteAnonymousButton()
+			this.showVoteButton();
+			this.showVoteAnonymousButton()
 		}
 		this.dom.votingPanel.removeClass('hidden');
 	};
@@ -149,8 +149,8 @@
 		this.hideUpdateVoteButton();
 		this.hideRemoveVoteButton();
 		this.resetVotingForm();
-        this.hideVoteButton();
-        this.hideVoteAnonymousButton()
+		this.hideVoteButton();
+		this.hideVoteAnonymousButton()
 		this.dom.votingPanel.addClass('hidden');
 	};
 
@@ -179,9 +179,9 @@
 
 	View.prototype.hideVoteButton = function() {
 		this.dom.voteButton.addClass('hidden');
-    };
-    
-    View.prototype.hideVoteAnonymousButton = function() {
+	};
+
+	View.prototype.hideVoteAnonymousButton = function() {
 		this.dom.voteAnonymousButton.addClass('hidden')
 	}
 
