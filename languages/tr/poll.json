@@ -1,0 +1,47 @@
+{
+  "poll": "Anket",
+  "toggles": "Değişiklikler",
+  "allow_guests": "Ziyaretçilerin anket sonucunu görmelerine izin ver",
+  "limits": "Sınırlamalar",
+  "max_options": "Anketlerdeki maksimum seçenek sayısı",
+  "defaults": "Varsayılanlar",
+  "default_title": "Varsayılan Anket Başlığı",
+  "max_votes": "Kişi başı maksimum oy sayısı",
+  "disallow_vote_update": "Kişilerin oylarını değiştirmelerine izin verme",
+  "info_choices": "1'den büyük bir sayı çoktan seçmeli anket oluşturacak.",
+  "settings": "Ayarlar",
+  "save": "Kaydet",
+  "reset": "Sıfırla",
+
+  "creator_title": "Anket Oluştur",
+  "poll_title": "Anket Başlığı",
+  "poll_title_placeholder": "Anket başlığını buraya girin",
+  "options_title": "Seçenekler",
+  "options_add": "Seçenek ekle",
+  "max_votes_placeholder": "Bir sayı girin",
+  "auto_end_title": "Anketi otomatik olarak bitir",
+  "auto_end_placeholder": "Tarih ve saat bilgisini buraya girin",
+  "auto_end_help": "Burayı boş bırakırsanız anket hiç sonlanmayacak.",
+
+  "error.max_options": "Sadece %d seçenek oluşturabilirsiniz.",
+  "error.no_options": "En az bir seçenek oluşturmalısınız",
+  "error.valid_date": "Lütfen geçerli bir tarih girin",
+
+  "error.not_main": "Anketi sadece ilk iletiye ekleyebilirsiniz.",
+  "error.privilege.create": "Anket oluşturmaya yetkiniz yok",
+
+  "warning.redactor": "Redactor kullanıyorsunuz. Markup'ı manuel olarak <strong>değiştirmeyin</strong>. Bunun yerine anket oluşturucuyu yeniden açın.",
+
+  "vote": "Oy ver",
+  "update_vote": "Oyu güncelle",
+  "remove_vote": "Oyu kaldır",
+  "to_voting": "Seçeneklere geri dön",
+  "to_results": "Sonuçlar",
+  "voting_unavailable_title": "Oy vermek artık mümkün değil",
+  "voting_unavailable_message": "Bu anket bitti veya silindi. Sonuçları hala görmeniz mümkün",
+  "voting_update_disallowed_message": "Daha önce oy verdiniz. Bu anket için oyunuzu değiştiremezsiniz",
+  "vote_is_final": "Bu ankette oy değiştirmeniz mümkün değildir, o nedenle seçiminiz son karardır",
+
+  "vote_count": "kişi bu seçenek için oy kullandı",
+  "votes": "oy"
+}
