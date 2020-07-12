@@ -16,23 +16,23 @@
   "poll_title": "Опрос Название",
   "poll_title_placeholder": "Введите опроса титул",
   "options_title": "Опции",
-  "options_add": "Add option",
+  "options_add": "Добавить опцию",
   "max_votes_placeholder": "Введите сумму",
   "auto_end_title": "Автоматически закончить опрос",
   "auto_end_placeholder": "Нажмите, чтобы введите дату и время",
   "auto_end_help": "Оставляя этот пустой никогда не закончится опрос.",
 
-  "error.max_options": "You can only create %d options.",
-  "error.no_options": "Create at least one option.",
-  "error.valid_date": "Please enter a valid date.",
+  "error.max_options": "Вы можете создать только %d опций.",
+  "error.no_options": "Добавьте хотя бы один вариант.",
+  "error.valid_date": "Введите корректную дату.",
 
-  "error.privilege.create": "You're not allowed to create a poll",
+  "error.privilege.create": "Вам не разрешено создавать опросы.",
 
   "vote": "Голосовать",
-  "to_voting": "To Voting",
+  "to_voting": "Для голосования",
   "to_results": "Результаты",
-  "voting_unavailable_title": "Voting unavailable",
-  "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
+  "voting_unavailable_title": "Голосование недоступно",
+  "voting_unavailable_message": "Этот опрос завершен или был помечен как удаленный. Вы все еще можете просмотреть результат.",
 
   "vote_count": "пользователи проголосовали за этот вариант",
   "votes": "голосов"
