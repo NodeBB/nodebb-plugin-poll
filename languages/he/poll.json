@@ -1,0 +1,47 @@
+{
+  "poll": "סקר",
+  "toggles": "מתג",
+  "allow_guests": "אפשר לאורחים לצפות בתוצאות הסקר",
+  "limits": "גבולות",
+  "max_options": "המספר המרבי של אפשרויות בחירה לכל סקר",
+  "defaults": "בחירת מחדל",
+  "default_title": "שם בחירת מחדל",
+  "max_votes": "כמה פעמים כל משתמש יכול להצביע?",
+  "disallow_vote_update": "אל תאפשר למשתמשים לשנות את ההצבעה שלהם",
+  "info_choices": "מספר גדול מ1 יאפשר סקרים עם בחירות מרובות.",
+  "settings": "הגדרות",
+  "save": "שמור",
+  "reset": "איפוס",
+
+  "creator_title": "צור סקר",
+  "poll_title": "שם הסקר",
+  "poll_title_placeholder": "הקלד נושא סקר",
+  "options_title": "אפשרות בחירה",
+  "options_add": "הוסף אפשרות",
+  "max_votes_placeholder": "הקש כמות הצבעות מרבית",
+  "auto_end_title": "סיום אוטומטית של הסקר",
+  "auto_end_placeholder": "הקש להגדיר תאריך ושעה",
+  "auto_end_help": "באם לא נבחר תאריך הסקר לא יפוג לעולם",
+
+  "error.max_options": "אתה יכול ליצור רק %d אפשרויות בחירה",
+  "error.no_options": "צור אפשרות אחת לפחות",
+  "error.valid_date": "נא להזין תאריך חוקי",
+
+  "error.not_main": "סקר יכול להיות רק בתחילת נושא.",
+  "error.privilege.create": "אין לך הרשאה ליצור סקרים",
+
+  "warning.redactor": "אתה משתמש ברדקורי, תעשה <strong>not</strong> ערוך את הסימון ידנית.  במקום זאת, פתח מחדש את יוצר הסקרים.",
+
+  "vote": "הצבעה",
+  "update_vote": "עדכן הצבעה",
+  "remove_vote": "הסר הצבעה",
+  "to_voting": "הצבעה",
+  "to_results": "בטל",
+  "voting_unavailable_title": "כבר לא ניתן להצביע",
+  "voting_unavailable_message": "סקר זה הסתיים או סומן כנמחק.  אתה עדיין יכול להציג את התוצאות",
+  "voting_update_disallowed_message": "כבר הצבעת לסקר זה ואי אפשר לשנות את ההצבעה שלך",
+  "vote_is_final": "שים לב! בסקר זה לא ניתן לשנות את הבחירה אחרי ההצבעה, לכן ההצבעה שלך סופית",
+
+  "vote_count": "משתמשים הצבעו לאפשרות זו",
+  "votes": "הצבעות"
+}
