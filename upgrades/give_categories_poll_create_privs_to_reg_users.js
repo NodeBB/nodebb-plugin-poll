@@ -17,6 +17,9 @@ module.exports = {
 					return next(null, !!privileges['poll:create']);
 				});
 			}, function (err, result) {
+				if (err) {
+					return callback(err);
+				}
 				// if true, then skip
 				if (result) {
 					return callback();
