@@ -25,7 +25,7 @@ module.exports = {
 					return callback();
 				}
 				async.each(cids, function(cid, next) {
-					NodeBB.Privileges.categories.give(['poll:create'], cid, 'registered-users', next);
+					NodeBB.Privileges.categories.give(['groups:poll:create'], cid, 'registered-users', next);
 				}, callback);
 			});
 
