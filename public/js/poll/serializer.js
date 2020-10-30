@@ -3,19 +3,17 @@
 
 (function(module) {
 
-	var XRegExp, utils;
+	var utils;
 	var Serializer = {};
 
 	if ('undefined' === typeof window) {
-		XRegExp = require('xregexp');
 		utils 	= require.main.require('./src/utils');
 	} else {
-		XRegExp = window.XRegExp;
 		utils = window.utils;
 	}
 
-	var pollRegex = XRegExp('(?:(?:\\[poll(?<settings>.*?)\\])(?:\n|<br \/>)(?<content>(?:-.+?(?:\n|<br \/>))+)(?:\\[\/poll\\]))', 'g');
-	var settingsRegex = XRegExp('(?<key>.+?)=(?:"|&quot;)(?<value>.+?)(?:"|&quot;)', 'g');
+	var pollRegex = /(?:(?:\[poll(?<settings>.*?)\])(?:\\n|\n|<br \/>)(?<content>(?:-.+?(?:\\n|\n|<br \/>))+)(?:\[\/poll\]))/g;
+	var settingsRegex = /(?<key>.+?)=(?:"|&quot;)(?<value>.+?)(?:"|&quot;)/g;
 	var settingsValidators = {
 		title: {
 			test: function (value) {
@@ -52,28 +50,29 @@
 	};
 
 	Serializer.canSerialize = function(post) {
-		return XRegExp.exec(post, pollRegex) !== null;
+		return pollRegex.test(post) !== null;
 	};
 
 	Serializer.removeMarkup = function(content, replace) {
-		return XRegExp.replace(content, pollRegex, replace || '');
+		return content.replace(pollRegex, replace || '');
 	};
 
 	Serializer.hasMarkup = function(content) {
-		const has = XRegExp.exec(content, pollRegex) !== null;
+		const has = pollRegex.test(content) !== null;
 		return has;
 	};
 
 	Serializer.serialize = function(post, config) {
-		var match = XRegExp.exec(post, pollRegex);
+		pollRegex.lastIndex = 0;
+		var match = pollRegex.exec(post);
 
 		if (match === null) {
 			return null;
 		}
 
 		return {
-			options: serializeOptions(match.content, config),
-			settings: serializeSettings(match.settings, config)
+			options: serializeOptions(match.groups.content, config),
+			settings: serializeSettings(match.groups.settings, config)
 		};
 	};
 
@@ -87,7 +86,7 @@
 	function serializeOptions(raw, config) {
 		// Depending on composer, the line breaks can either be \n or <br /> so handle both
 		var pollOptions = [];
-		var rawOptions = raw.split(/(?:\n|<br \/>)/);
+		var rawOptions = raw.split(/(?:\\n|\n|<br \/>)/);
 		rawOptions.map(raw => utils.stripHTMLTags(raw));
 		var maxOptions = parseInt(config.limits.maxOptions, 10);
 
@@ -131,7 +130,9 @@
 			settings[key] = config.defaults[key];
 		});
 
-		XRegExp.forEach(utils.stripHTMLTags(raw), settingsRegex, function(match) {
+		const stripped = utils.stripHTMLTags(raw);
+		let match;
+		while ((match = settingsRegex.exec(stripped)) !== null) {
 			var key = match.key.trim();
 			var value = match.value.trim();
 
@@ -140,7 +141,7 @@
 					settings[key] = settingsValidators[key].parse(value);
 				}
 			}
-		});
+		}
 
 		return settings;
 	}
