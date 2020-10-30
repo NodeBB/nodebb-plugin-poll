@@ -14,7 +14,7 @@
 		utils = window.utils;
 	}
 
-	var pollRegex = XRegExp('(?:(?:\\[poll(?<settings>.*?)\\])\n(?<content>(?:-.+?\n)+)(?:\\[\/poll\\]))', 'g');
+	var pollRegex = XRegExp('(?:(?:\\[poll(?<settings>.*?)\\])(?:\n|<br \/>)(?<content>(?:-.+?(?:\n|<br \/>))+)(?:\\[\/poll\\]))', 'g');
 	var settingsRegex = XRegExp('(?<key>.+?)=(?:"|&quot;)(?<value>.+?)(?:"|&quot;)', 'g');
 	var settingsValidators = {
 		title: {
@@ -60,7 +60,8 @@
 	};
 
 	Serializer.hasMarkup = function(content) {
-		return XRegExp.exec(content, pollRegex) !== null;
+		const has = XRegExp.exec(content, pollRegex) !== null;
+		return has;
 	};
 
 	Serializer.serialize = function(post, config) {
@@ -84,8 +85,10 @@
 	};
 
 	function serializeOptions(raw, config) {
+		// Depending on composer, the line breaks can either be \n or <br /> so handle both
 		var pollOptions = [];
-		var rawOptions = utils.stripHTMLTags(raw).split('\n');
+		var rawOptions = raw.split(/(?:\n|<br \/>)/);
+		rawOptions.map(raw => utils.stripHTMLTags(raw));
 		var maxOptions = parseInt(config.limits.maxOptions, 10);
 
 		rawOptions.forEach(function(option) {

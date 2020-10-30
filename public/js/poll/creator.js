@@ -63,47 +63,52 @@
 	}
 
 	function composerBtnHandle(composer, textarea) {
-		var post = composer.posts[composer.active];
-		if (!post || !post.isMain || (isNaN(parseInt(post.cid, 10)) && isNaN(parseInt(post.pid, 10)))) {
-			return app.alertError('[[poll:error.not_main]]');
-		}
-		if (parseInt(post.cid, 10) === 0) {
-			return app.alertError("[[error:category-not-selected]]");
-		}
-
-		Poll.sockets.canCreate({cid: post.cid, pid: post.pid}, function(err, canCreate) {
-			if (err || !canCreate) {
-				return app.alertError(err.message);
+		require(['composer/controls'], function(controls) {
+			var post = composer.posts[composer.active];
+			if (!post || !post.isMain || (isNaN(parseInt(post.cid, 10)) && isNaN(parseInt(post.pid, 10)))) {
+				return app.alertError('[[poll:error.not_main]]');
+			}
+			if (parseInt(post.cid, 10) === 0) {
+				return app.alertError("[[error:category-not-selected]]");
 			}
 
-			Poll.sockets.getConfig(null, function(err, config) {
-				var poll = {};
-
-				// If there's already a poll in the post, serialize it for editing
-				if (Poll.serializer.canSerialize(textarea.value)) {
-					poll = Poll.serializer.serialize(textarea.value, config);
-
-					if (poll.settings.end === 0) {
-						delete poll.settings.end;
-					} else {
-						poll.settings.end = parseInt(poll.settings.end, 10);
-					}
+			Poll.sockets.canCreate({cid: post.cid, pid: post.pid}, function(err, canCreate) {
+				if (err || !canCreate) {
+					return app.alertError(err.message);
 				}
 
-				Creator.show(poll, config, function(data) {
-					// Anything invalid will be discarded by the serializer
-					var markup = Poll.serializer.deserialize(data, config);
+				Poll.sockets.getConfig(null, function(err, config) {
+					var poll = {};
 
-					// Remove any existing poll markup
-					textarea.value = Poll.serializer.removeMarkup(textarea.value);
+					// If there's already a poll in the post, serialize it for editing
+					if (Poll.serializer.canSerialize(textarea.value)) {
+						poll = Poll.serializer.serialize(textarea.value, config);
 
-					// Insert the poll markup at the bottom
-					if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
-						markup = '\n' + markup;
+						if (poll.settings.end === 0) {
+							delete poll.settings.end;
+						} else {
+							poll.settings.end = parseInt(poll.settings.end, 10);
+						}
 					}
 
-					if ($.Redactor) textarea.redactor(textarea.value + '<p>' + markup + '</p>');
-					else textarea.value += markup
+					Creator.show(poll, config, function(data) {
+						// Anything invalid will be discarded by the serializer
+						var markup = Poll.serializer.deserialize(data, config);
+
+						// Remove any existing poll markup
+						textarea.value = Poll.serializer.removeMarkup(textarea.value);
+
+						// Insert the poll markup at the bottom
+						if (textarea.value.charAt(textarea.value.length - 1) !== '\n') {
+							markup = '\n' + markup;
+						}
+
+						if ($.Redactor) {
+							textarea.redactor(textarea.value + '<p>' + markup + '</p>');
+						} else {
+							controls.insertIntoTextarea(textarea, markup);
+						}
+					});
 				});
 			});
 		});
