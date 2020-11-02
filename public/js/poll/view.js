@@ -341,10 +341,8 @@
 				});
 			},
 			handle: function(view) {
-				console.log(view.pollData);
 				Poll.sockets.getConfig(null, function(err, config) {
 					Poll.creator.show(view.pollData, config, function(data) {
-						console.log(data);
 					});
 				});
 			}
