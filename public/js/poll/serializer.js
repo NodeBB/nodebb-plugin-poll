@@ -50,7 +50,8 @@
 	};
 
 	Serializer.canSerialize = function(post) {
-		return pollRegex.test(post) !== null;
+		pollRegex.lastIndex = 0;
+		return pollRegex.test(post);
 	};
 
 	Serializer.removeMarkup = function(content, replace) {
@@ -58,7 +59,8 @@
 	};
 
 	Serializer.hasMarkup = function(content) {
-		const has = pollRegex.test(content) !== null;
+		pollRegex.lastIndex = 0;
+		const has = pollRegex.test(content);
 		return has;
 	};
 
