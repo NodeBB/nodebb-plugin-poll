@@ -135,8 +135,8 @@
 		const stripped = utils.stripHTMLTags(raw);
 		let match;
 		while ((match = settingsRegex.exec(stripped)) !== null) {
-			var key = match.key.trim();
-			var value = match.value.trim();
+			var key = match.groups.key.trim();
+			var value = match.groups.value.trim();
 
 			if (key.length && value.length && settingsValidators.hasOwnProperty(key)) {
 				if (settingsValidators[key].test(value)) {
