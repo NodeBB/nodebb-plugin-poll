@@ -10,7 +10,7 @@
         <label for="pollInputOptions">[[poll:options_title]]</label>
         <!-- IF poll.options.length -->
         <!-- BEGIN poll.options -->
-        <input type="text" name="options[]" id="pollInputOptions" value="@value" class="form-control"/>
+        <input type="text" name="options[]" id="pollInputOptions" value="{@value}" class="form-control"/>
         <!-- END poll.options -->
         <!-- ELSE -->
         <input type="text" name="options[]" id="pollInputOptions" class="form-control"/>
