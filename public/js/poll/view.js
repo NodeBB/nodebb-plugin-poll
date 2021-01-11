@@ -1,5 +1,5 @@
 "use strict";
-/* globals $, app */
+/* globals $, app,config  */
 
 (function(Poll) {
 
@@ -228,6 +228,12 @@
 					};
 
 					Poll.sockets.vote(voteData, function(err, result) {
+						
+						if(!config.loggedIn)
+						{
+							$(window).trigger('action:poll.vote.notloggedin');
+						}
+
 						if (err) {
 							return app.alertError(err.message);
 						}
