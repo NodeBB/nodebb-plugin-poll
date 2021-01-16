@@ -1,5 +1,5 @@
 "use strict";
-/* globals $, app, templates, bootbox, define */
+/* globals $, app, templates, define */
 
 (function(Poll) {
 
@@ -119,80 +119,90 @@
 			return app.alertError('Editing not implemented.');
 		}
 
-		app.parseAndTranslate('poll/creator', { poll: poll, config: config, isRedactor: !!$.Redactor }, function(html) {
-			// Initialise modal
-			var modal = bootbox.dialog({
-				title: '[[poll:creator_title]]',
-				message: html,
-				className: 'poll-creator',
-				buttons: {
-					cancel: {
-						label: '[[modules:bootbox.cancel]]',
-						className: 'btn-default',
-						callback: function() {
-							return true
-						}
-					},
-					save: {
-						label: '[[modules:bootbox.confirm]]',
-						className: 'btn-primary',
-						callback: function(e) {
-							clearErrors();
-							var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
-							var obj = form.serializeObject();
-
-							// Let's be nice and at least show an error if there are no options
-							obj.options.filter(function(obj) {
-								return obj.length;
-							});
-
-							if (obj.options.length == 0) {
-								return error('[[poll:error.no_options]]');
+		require(['flatpickr', 'flatpickr.i10n', 'bootbox', 'dayjs', 'translator'], function (flatpickr, flatpickrI10N, bootbox, dayjs, Translator) {
+			app.parseAndTranslate('poll/creator', { poll: poll, config: config, isRedactor: !!$.Redactor }, function(html) {
+				// Initialise modal
+				var modal = bootbox.dialog({
+					title: '[[poll:creator_title]]',
+					message: html,
+					className: 'poll-creator',
+					buttons: {
+						cancel: {
+							label: '[[modules:bootbox.cancel]]',
+							className: 'btn-default',
+							callback: function() {
+								return true
 							}
+						},
+						save: {
+							label: '[[modules:bootbox.confirm]]',
+							className: 'btn-primary',
+							callback: function(e) {
+								clearErrors();
+								var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
+								var obj = form.serializeObject();
 
-							if (obj.settings.end && !moment(new Date(obj.settings.end)).isValid()) {
-								return error('[[poll:error.valid_date]]');
-							} else if (obj.settings.end) {
-								obj.settings.end = moment(new Date(obj.settings.end)).valueOf();
+								// Let's be nice and at least show an error if there are no options
+								obj.options.filter(function(obj) {
+									return obj.length;
+								});
+
+								if (obj.options.length == 0) {
+									return error('[[poll:error.no_options]]');
+								}
+
+								if (obj.settings.end && !dayjs(new Date(obj.settings.end)).isValid()) {
+									return error('[[poll:error.valid_date]]');
+								} else if (obj.settings.end) {
+									obj.settings.end = dayjs(new Date(obj.settings.end)).valueOf();
+								}
+
+								callback(obj);
+								return true;
 							}
-
-							callback(obj);
-							return true;
 						}
-					}
-				}
-			});
-
-			// Add option adder
-			modal.find('#pollAddOption')
-				.off('click')
-				.on('click', function(e) {
-					var el = $(e.currentTarget);
-					var prevOption = el.prev();
-
-					if (config.limits.maxOptions <= el.prevAll('input').length) {
-						clearErrors();
-						translator.translate('[[poll:error.max_options]]', function(text) {
-							error(text.replace('%d', config.limits.maxOptions));
-						});
-						return false;
-					}
-
-					if (prevOption.val().length != 0) {
-						prevOption.clone().val('').insertBefore(el).focus();
 					}
 				});
 
-				flatpickr("#pollInputEnd", {
+				// Add option adder
+				modal.find('#pollAddOption')
+					.off('click')
+					.on('click', function(e) {
+						var el = $(e.currentTarget);
+						var prevOption = el.prev();
+
+						if (config.limits.maxOptions <= el.prevAll('input').length) {
+							clearErrors();
+							translator.translate('[[poll:error.max_options]]', function(text) {
+								error(text.replace('%d', config.limits.maxOptions));
+							});
+							return false;
+						}
+
+						if (prevOption.val().length != 0) {
+							prevOption.clone().val('').insertBefore(el).focus();
+						}
+					});
+
+				var currentLocale = Translator.getLanguage();
+				flatpickr(".flatpickr", {
 					enableTime: true,
 					altFormat: "F j, Y h:i K",
 					time_24hr: false,
-					wrap: true
+					wrap: true,
+					locale: getFlatpickrLocale(currentLocale, flatpickrI10N.default),
+					onOpen: function() {
+						modal.removeAttr('tabindex');
+					},
+					onClose: function() {
+						modal.attr('tabindex', -1);
+					}
 				});
 
 				if (poll.settings && poll.settings.end) {
 					flatpickr.setDate(poll.settings.end)
 				}
+			});
 		});
 	};
 
@@ -209,27 +219,11 @@
 		$('#pollErrorBox').addClass('hidden').html('');
 	}
 
-	function dumbifyObject(obj) {
-		var result = {};
-
-		for (var key in obj) {
-			if (obj.hasOwnProperty(key)) {
-				var val = obj[key];
-
-				if (jQuery.isPlainObject(val)) {
-					var obj1 = dumbifyObject(val);
-					for (var k1 in obj1) {
-						if (obj1.hasOwnProperty(k1)) {
-							result[key + '.' + k1] = obj1[k1];
-						}
-					}
-				} else {
-					result[key] = val;
-				}
-			}
+	function getFlatpickrLocale(nodebbLocale, flatpickrLocales = {}) {
+		if (Object.keys(flatpickrLocales).includes(nodebbLocale.toLowerCase())) {
+			return flatpickrLocales[nodebbLocale];
 		}
-
-		return result;
+		return flatpickrLocales['default'];
 	}
 
 	Poll.creator = Creator;
