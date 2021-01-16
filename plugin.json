@@ -37,12 +37,18 @@
     "public/js/poll/sockets.js",
     "public/js/poll/creator.js",
     "public/js/poll/view.js",
-    "public/js/vendor/moment.min.js",
-    "public/js/vendor/flatpickr.min.js",
     "public/js/vendor/jquery.serialize-object.min.js"
   ],
   "acpScripts": [
     "public/js/admin.js"
+  ],
+  "modules": {
+    "dayjs.js": "node_modules/dayjs/dayjs.min.js",
+    "flatpickr.js": "node_modules/flatpickr/dist/flatpickr.min.js",
+    "flatpickr.i10n.js": "node_modules/flatpickr/dist/l10n/index.js"
+  },
+  "css": [
+    "node_modules/flatpickr/dist/flatpickr.min.css"
   ],
   "templates": "templates",
   "languages": "languages",
