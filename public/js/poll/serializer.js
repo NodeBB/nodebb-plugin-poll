@@ -13,7 +13,7 @@
 	}
 
 	var pollRegex = /(?:(?:\[poll(?<settings>.*?)\])(?:\\n|\n|<br \/>)(?<content>(?:-.+?(?:\\n|\n|<br \/>))+)(?:\[\/poll\]))/g;
-	var settingsRegex = /(?<key>.+?)=(?:"|&quot;)(?<value>.+?)(?:"|&quot;)/g;
+	var settingsRegex = /(?<key>.+?)=(?:"|&quot;|&#92;)(?<value>.+?)(?:"|&quot;|&#92;)/g;
 	var settingsValidators = {
 		title: {
 			test: function (value) {
@@ -132,7 +132,7 @@
 			settings[key] = config.defaults[key];
 		});
 
-		const stripped = utils.stripHTMLTags(raw);
+		const stripped = utils.stripHTMLTags(raw).replace(/\\/g, '&#92;');
 		let match;
 		while ((match = settingsRegex.exec(stripped)) !== null) {
 			var key = match.groups.key.trim();
