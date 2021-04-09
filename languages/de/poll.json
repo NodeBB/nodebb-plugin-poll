@@ -4,8 +4,8 @@
   "allow_guests": "Gäste dürfen die Ergebnisse sehen",
   "limits": "Einschränkungen",
   "max_options": "max. Abstimmungsoptionen",
-  "defaults": "Standartwerte",
-  "default_title": "Standart Titel",
+  "defaults": "Standardwerte",
+  "default_title": "Standard Titel",
   "max_votes": "max. Abstimmungen per User",
   "info_choices": "Eine Nummer größer 1 erlaubt Mehrfachauswahl.",
   "settings": "Einstellungen",
@@ -26,13 +26,15 @@
   "error.no_options": "Erstelle mindestens eine Option.",
   "error.valid_date": "Bitte gib ein gültiges Datum an.",
 
-  "error.privilege.create": "You're not allowed to create a poll",
+  "error.privilege.create": "Du bist nicht berechtigt abzustimmen",
 
   "vote": "Abstimmung",
   "to_voting": "Die Abstimmung",
   "to_results": "Ergebnisse",
   "voting_unavailable_title": "Abstimmung ist nicht verfügbar",
   "voting_unavailable_message": "Die Abstimmung wurde beendet oder abgebrochen. Du kannst dir das Umfrageergebnis ansehen.",
+  "voting_update_disallowed_message": "Du hast bereits abgestimmt und nachträgliche Änderungen sind in dieser Abstimmung nicht erlaubt.",
+  "vote_is_final": "Änderungen sind in dieser Abstimmung nicht erlaubt. Deine Abstimmung ist endgültig!",
 
   "vote_count": "Nutzer stimmten für diese Option",
   "votes": "Abstimmungen"
