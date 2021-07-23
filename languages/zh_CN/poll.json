@@ -6,7 +6,8 @@
   "max_options": "每次投票的最大候选项数目",
   "defaults": "默认设置",
   "default_title": "默认投票标题",
-  "max_votes": "每个用户能投的最大票数",
+  "max_votes": "每个用户最多选几项",
+  "disallow_vote_update": "不允许用户更改投票",
   "info_choices": "如果数字大于1,那么就是多选投票",
   "settings": "设置",
   "save": "保存",
@@ -26,13 +27,20 @@
   "error.no_options": "请创建至少一个候选项。",
   "error.valid_date": "请输入有效的截止日期。",
 
+  "error.not_main": "只能在帖子主体中添加投票",
   "error.privilege.create": "你不被允许创建投票",
 
+  "warning.redactor": "你正在使用编辑器。<strong>请不要</strong>手动编辑投票模块。 可以重新使用投票创建工具。",
+
   "vote": "投票",
+  "update_vote": "更改投票",
+  "remove_vote": "删除投票",
   "to_voting": "去投票",
   "to_results": "结果",
   "voting_unavailable_title": "投票无效",
   "voting_unavailable_message": "此投票已结束或已删除。 你还可以查看投票结果。",
+  "voting_update_disallowed_message": "你已经投过票，不允许再更改。",
+  "vote_is_final": "投票已结束，无法更改",
 
   "vote_count": "名用户投了此票",
   "votes": "票"
