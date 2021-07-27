@@ -28,7 +28,7 @@
 
     <div class="form-group">
         <label for="pollDisallowVoteUpdate">
-            <input type="checkbox" name="settings.disallowVoteUpdate" id="pollDisallowVoteUpdate">
+            <input type="checkbox" name="settings.disallowVoteUpdate" id="pollDisallowVoteUpdate" {{{if poll.settings.disallowVoteUpdate}}}checked{{{end}}}>
             [[poll:disallow_vote_update]]
         </label>
     </div>
