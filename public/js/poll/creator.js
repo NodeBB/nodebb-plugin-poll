@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
+
 /* globals $, app, templates, define */
 
-(function(Poll) {
-
+(function (Poll) {
 	var Creator = {};
 
 	function init() {
@@ -10,7 +10,7 @@
 
 		$(window).on('action:redactor.load', initRedactor);
 
-		$(window).on('action:composer.loaded', function(ev, data) {
+		$(window).on('action:composer.loaded', function (ev, data) {
 			if ($.Redactor) {
 				if (data.composerData.isMain && $.Redactor.opts.plugins.indexOf('poll') === -1) {
 					$.Redactor.opts.plugins.push('poll');
@@ -22,9 +22,9 @@
 	}
 
 	function initComposer() {
-		require(['composer', 'composer/formatting', 'composer/controls'], function(composer, formatting, controls) {
+		require(['composer', 'composer/formatting', 'composer/controls'], function (composer, formatting, controls) {
 			if (formatting && controls) {
-				formatting.addButtonDispatch('poll', function(textarea) {
+				formatting.addButtonDispatch('poll', function (textarea) {
 					composerBtnHandle(composer, textarea);
 				});
 			}
@@ -39,45 +39,45 @@
 
 					// require translator as such because it was undefined without it
 					require(['translator'], function (translator) {
-						translator.translate('[[poll:creator_title]]', function(translated) {
+						translator.translate('[[poll:creator_title]]', function (translated) {
 							var button = self.button.add('poll', translated);
 							self.button.setIcon(button, '<i class="fa fa-bar-chart-o"></i>');
 							self.button.addCallback(button, self.poll.onClick);
 						});
-					})
+					});
 				},
 				onClick: function () {
 					var self = this;
 					var code = this.code.get();
-					require(['composer'], function(composer) {
+					require(['composer'], function (composer) {
 						composerBtnHandle(composer, {
 							value: code,
 							redactor: function (code) {
 								self.code.set(code);
-							}
+							},
 						});
 					});
-				}
+				},
 			};
 		};
 	}
 
 	function composerBtnHandle(composer, textarea) {
-		require(['composer/controls'], function(controls) {
+		require(['composer/controls'], function (controls) {
 			var post = composer.posts[composer.active];
 			if (!post || !post.isMain || (isNaN(parseInt(post.cid, 10)) && isNaN(parseInt(post.pid, 10)))) {
 				return app.alertError('[[poll:error.not_main]]');
 			}
 			if (parseInt(post.cid, 10) === 0) {
-				return app.alertError("[[error:category-not-selected]]");
+				return app.alertError('[[error:category-not-selected]]');
 			}
 
-			Poll.sockets.canCreate({cid: post.cid, pid: post.pid}, function(err, canCreate) {
+			Poll.sockets.canCreate({ cid: post.cid, pid: post.pid }, function (err, canCreate) {
 				if (err || !canCreate) {
 					return app.alertError(err.message);
 				}
 
-				Poll.sockets.getConfig(null, function(err, config) {
+				Poll.sockets.getConfig(null, function (err, config) {
 					var poll = {};
 
 					// If there's already a poll in the post, serialize it for editing
@@ -91,7 +91,7 @@
 						}
 					}
 
-					Creator.show(poll, config, function(data) {
+					Creator.show(poll, config, function (data) {
 						// Anything invalid will be discarded by the serializer
 						var markup = Poll.serializer.deserialize(data, config);
 
@@ -114,13 +114,13 @@
 		});
 	}
 
-	Creator.show = function(poll, config, callback) {
+	Creator.show = function (poll, config, callback) {
 		if (poll.hasOwnProperty('info')) {
 			return app.alertError('Editing not implemented.');
 		}
 
 		require(['flatpickr', 'flatpickr.i10n', 'bootbox', 'dayjs', 'translator'], function (flatpickr, flatpickrI10N, bootbox, dayjs, Translator) {
-			app.parseAndTranslate('poll/creator', { poll: poll, config: config, isRedactor: !!$.Redactor }, function(html) {
+			app.parseAndTranslate('poll/creator', { poll: poll, config: config, isRedactor: !!$.Redactor }, function (html) {
 				// Initialise modal
 				var modal = bootbox.dialog({
 					title: '[[poll:creator_title]]',
@@ -130,20 +130,20 @@
 						cancel: {
 							label: '[[modules:bootbox.cancel]]',
 							className: 'btn-default',
-							callback: function() {
-								return true
-							}
+							callback: function () {
+								return true;
+							},
 						},
 						save: {
 							label: '[[modules:bootbox.confirm]]',
 							className: 'btn-primary',
-							callback: function(e) {
+							callback: function (e) {
 								clearErrors();
 								var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
 								var obj = serializeObjectFromForm(form);
 
 								// Let's be nice and at least show an error if there are no options
-								obj.options.filter(function(obj) {
+								obj.options.filter(function (obj) {
 									return obj.length;
 								});
 
@@ -159,21 +159,21 @@
 
 								callback(obj);
 								return true;
-							}
-						}
-					}
+							},
+						},
+					},
 				});
 
 				// Add option adder
 				modal.find('#pollAddOption')
 					.off('click')
-					.on('click', function(e) {
+					.on('click', function (e) {
 						var el = $(e.currentTarget);
 						var prevOption = el.prev();
 
 						if (config.limits.maxOptions <= el.prevAll('input').length) {
 							clearErrors();
-							translator.translate('[[poll:error.max_options]]', function(text) {
+							translator.translate('[[poll:error.max_options]]', function (text) {
 								error(text.replace('%d', config.limits.maxOptions));
 							});
 							return false;
@@ -185,22 +185,22 @@
 					});
 
 				var currentLocale = Translator.getLanguage();
-				var flatpickrInstance = flatpickr(".flatpickr", {
+				var flatpickrInstance = flatpickr('.flatpickr', {
 					enableTime: true,
-					altFormat: "F j, Y h:i K",
+					altFormat: 'F j, Y h:i K',
 					time_24hr: false,
 					wrap: true,
 					locale: getFlatpickrLocale(currentLocale, flatpickrI10N.default),
-					onOpen: function() {
+					onOpen: function () {
 						modal.removeAttr('tabindex');
 					},
-					onClose: function() {
+					onClose: function () {
 						modal.attr('tabindex', -1);
-					}
+					},
 				});
 
 				if (poll.settings && poll.settings.end) {
-					flatpickrInstance.setDate(poll.settings.end)
+					flatpickrInstance.setDate(poll.settings.end);
 				}
 			});
 		});
@@ -239,11 +239,10 @@
 		if (Object.keys(flatpickrLocales).includes(nodebbLocale.toLowerCase())) {
 			return flatpickrLocales[nodebbLocale];
 		}
-		return flatpickrLocales['default'];
+		return flatpickrLocales.default;
 	}
 
 	Poll.creator = Creator;
 
 	init();
-
-})(window.Poll);
+}(window.Poll));
