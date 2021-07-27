@@ -37,8 +37,7 @@
     "public/js/poll/serializer.js",
     "public/js/poll/sockets.js",
     "public/js/poll/creator.js",
-    "public/js/poll/view.js",
-    "vendor/jquery.serialize-object.min.js"
+    "public/js/poll/view.js"
   ],
   "acpScripts": [
     "public/js/admin.js"

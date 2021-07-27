@@ -140,7 +140,7 @@
 							callback: function(e) {
 								clearErrors();
 								var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
-								var obj = form.serializeObject();
+								var obj = serializeObjectFromForm(form);
 
 								// Let's be nice and at least show an error if there are no options
 								obj.options.filter(function(obj) {
@@ -185,7 +185,7 @@
 					});
 
 				var currentLocale = Translator.getLanguage();
-				flatpickr(".flatpickr", {
+				var flatpickrInstance = flatpickr(".flatpickr", {
 					enableTime: true,
 					altFormat: "F j, Y h:i K",
 					time_24hr: false,
@@ -200,7 +200,7 @@
 				});
 
 				if (poll.settings && poll.settings.end) {
-					flatpickr.setDate(poll.settings.end)
+					flatpickrInstance.setDate(poll.settings.end)
 				}
 			});
 		});
@@ -217,6 +217,22 @@
 
 	function clearErrors() {
 		$('#pollErrorBox').addClass('hidden').html('');
+	}
+
+	function serializeObjectFromForm(form) {
+
+		var obj = form.serializeObject();
+		var result = {
+			options: obj.options,
+			settings: {
+				title: obj['settings.title'],
+				maxvotes: obj['settings.maxvotes'],
+				disallowVoteUpdate: obj['settings.disallowVoteUpdate'] === "on" ? "true" : "false",
+				end: obj['settings.end'],
+			}
+		};
+
+		return result;
 	}
 
 	function getFlatpickrLocale(nodebbLocale, flatpickrLocales = {}) {
