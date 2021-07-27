@@ -1,7 +1,5 @@
 'use strict';
 
-/* globals $, app, templates, define */
-
 (function (Poll) {
 	var Creator = {};
 
@@ -78,6 +76,10 @@
 				}
 
 				Poll.sockets.getConfig(null, function (err, config) {
+					if (err) {
+						console.error(err);
+					}
+
 					var poll = {};
 
 					// If there's already a poll in the post, serialize it for editing
@@ -147,7 +149,7 @@
 									return obj.length;
 								});
 
-								if (obj.options.length == 0) {
+								if (obj.options.length === 0) {
 									return error('[[poll:error.no_options]]');
 								}
 
@@ -173,13 +175,15 @@
 
 						if (config.limits.maxOptions <= el.prevAll('input').length) {
 							clearErrors();
-							translator.translate('[[poll:error.max_options]]', function (text) {
-								error(text.replace('%d', config.limits.maxOptions));
+							require(['translator'], function (translator) {
+								translator.translate('[[poll:error.max_options]]', function (text) {
+									error(text.replace('%d', config.limits.maxOptions));
+								});
 							});
 							return false;
 						}
 
-						if (prevOption.val().length != 0) {
+						if (prevOption.val().length !== 0) {
 							prevOption.clone().val('').insertBefore(el).focus();
 						}
 					});
@@ -220,16 +224,15 @@
 	}
 
 	function serializeObjectFromForm(form) {
-
 		var obj = form.serializeObject();
 		var result = {
 			options: obj.options,
 			settings: {
 				title: obj['settings.title'],
 				maxvotes: obj['settings.maxvotes'],
-				disallowVoteUpdate: obj['settings.disallowVoteUpdate'] === "on" ? "true" : "false",
+				disallowVoteUpdate: obj['settings.disallowVoteUpdate'] === 'on' ? 'true' : 'false',
 				end: obj['settings.end'],
-			}
+			},
 		};
 
 		return result;

@@ -10,7 +10,7 @@ const Scheduler = require('./lib/scheduler');
 	Plugin.hooks = Hooks;
 
 	Plugin.load = function (params, callback) {
-		function renderAdmin(req, res, next) {
+		function renderAdmin(req, res) {
 			res.render(`admin/plugins/${Config.plugin.id}`, {});
 		}
 
@@ -62,11 +62,11 @@ const Scheduler = require('./lib/scheduler');
 	};
 
 	Plugin.copyPrivilegesFrom = function (data, callback) {
-		if (data.privileges.indexOf('poll:create') == -1) {
+		if (data.privileges.indexOf('poll:create') === -1) {
 			data.privileges.push('poll:create');
 		}
 
-		if (data.privileges.indexOf('groups:poll:create') == -1) {
+		if (data.privileges.indexOf('groups:poll:create') === -1) {
 			data.privileges.push('groups:poll:create');
 		}
 		callback(null, data);

@@ -1,7 +1,5 @@
 'use strict';
 
-/* globals require, utils */
-
 (function (module) {
 	var utils;
 	var Serializer = {};
@@ -134,7 +132,7 @@
 
 		const stripped = utils.stripHTMLTags(raw).replace(/\\/g, '&#92;');
 		let match;
-		while ((match = settingsRegex.exec(stripped)) !== null) {
+		while ((match = settingsRegex.exec(stripped)) !== null) { // eslint-disable-line no-cond-assign
 			var key = match.groups.key.trim();
 			var value = match.groups.value.trim();
 
@@ -170,7 +168,7 @@
 	module.exports = Serializer;
 
 	if (typeof window !== 'undefined') {
-		Poll.serializer = module.exports;
+		window.Poll.serializer = module.exports;
 	}
 }(typeof module === 'undefined' ? {
 	module: {

@@ -1,7 +1,5 @@
 'use strict';
 
-/* globals socket */
-
 (function (Poll) {
 	var messages = [
 		{
