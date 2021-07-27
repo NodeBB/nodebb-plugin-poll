@@ -1,22 +1,23 @@
+'use strict';
 
-var async = require.main.require('async');
-var NodeBB = require('../lib/nodebb');
-var Poll = require('../lib/poll');
-var timestamp = Date.UTC(2019, 3, 1);
+const async = require.main.require('async');
+const NodeBB = require('../lib/nodebb');
+
+const timestamp = Date.UTC(2019, 3, 1);
 
 module.exports = {
 	name: 'Convert all poll id votes and options votes to sorted sets',
 	timestamp: timestamp,
 	method: function (callback) {
-		NodeBB.db.getListRange('polls', 0, -1, function (err, pollIds) {
+		NodeBB.db.getListRange('polls', 0, -1, (err, pollIds) => {
 			if (err) {
 				return callback(err);
 			}
-			async.eachLimit(pollIds, 10, function (pollId, next) {
-				var pollKey = 'poll:' + pollId;
-				var pollVotersSetKey = 'poll:' + pollId + ':voters';
+			async.eachLimit(pollIds, 10, (pollId, next) => {
+				const pollKey = `poll:${pollId}`;
+				const pollVotersSetKey = `poll:${pollId}:voters`;
 
-				NodeBB.db.getObjectField(pollKey, 'voteCount', function (err, value) {
+				NodeBB.db.getObjectField(pollKey, 'voteCount', (err, value) => {
 					if (err) {
 						return next(err);
 					}
@@ -24,7 +25,7 @@ module.exports = {
 						return next();
 					}
 
-					getOptions(pollId, function (err, options) {
+					getOptions(pollId, (err, options) => {
 						if (err) {
 							return next(err);
 						}
@@ -33,7 +34,7 @@ module.exports = {
 								NodeBB.db.deleteObjectField(pollKey, 'voteCount', next);
 							},
 							function (next) {
-								var votersUids;
+								let votersUids;
 								async.waterfall([
 									function (_next) {
 										NodeBB.db.type(pollVotersSetKey, _next);
@@ -58,17 +59,17 @@ module.exports = {
 											votersUids,
 											_next
 										);
-									}
+									},
 								], next);
 							},
 							function (next) {
-								async.each(options, function (option, next) {
-									var pollOptionsVotesSetKey = 'poll:' + pollId + ':options:' + option.id + ':votes';
-									var pollOptionsSetKey = 'poll:' + pollId + ':options:' + option.id;
+								async.each(options, (option, next) => {
+									const pollOptionsVotesSetKey = `poll:${pollId}:options:${option.id}:votes`;
+									const pollOptionsSetKey = `poll:${pollId}:options:${option.id}`;
 
 									async.parallel([
 										function (next) {
-											var optionVotesUids;
+											let optionVotesUids;
 											async.waterfall([
 												function (_next) {
 													NodeBB.db.type(pollOptionsVotesSetKey, _next);
@@ -101,23 +102,23 @@ module.exports = {
 										},
 									], next);
 								}, next);
-							}
+							},
 						], next);
 					});
 				});
 			},
 			callback);
 		});
-	}
+	},
 };
 
 function getOptions(pollId, callback) {
-	NodeBB.db.getSetMembers('poll:' + pollId + ':options', function(err, options) {
+	NodeBB.db.getSetMembers(`poll:${pollId}:options`, (err, options) => {
 		if (err) {
 			return callback(err);
 		}
-		async.map(options, function(option, next) {
-			NodeBB.db.getObject('poll:' + pollId + ':options:' + option, next);
+		async.map(options, (option, next) => {
+			NodeBB.db.getObject(`poll:${pollId}:options:${option}`, next);
 		}, callback);
 	});
 }
