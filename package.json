@@ -26,7 +26,7 @@
     "cron": "^1.8.2"
   },
   "nbbpm": {
-    "compatibility": "^1.15.0"
+    "compatibility": "^1.17.0"
   },
   "devDependencies": {
     "eslint": "^7.31.0",
