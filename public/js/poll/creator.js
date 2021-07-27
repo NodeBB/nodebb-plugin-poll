@@ -185,7 +185,7 @@
 					});
 
 				var currentLocale = Translator.getLanguage();
-				flatpickr(".flatpickr", {
+				var flatpickrInstance = flatpickr(".flatpickr", {
 					enableTime: true,
 					altFormat: "F j, Y h:i K",
 					time_24hr: false,
@@ -200,7 +200,7 @@
 				});
 
 				if (poll.settings && poll.settings.end) {
-					flatpickr.setDate(poll.settings.end)
+					flatpickrInstance.setDate(poll.settings.end)
 				}
 			});
 		});
