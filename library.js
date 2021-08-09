@@ -1,6 +1,6 @@
 'use strict';
 
-const	NodeBB = require('./lib/nodebb');
+const NodeBB = require('./lib/nodebb');
 const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
 const Hooks = require('./lib/hooks');
@@ -9,7 +9,7 @@ const Scheduler = require('./lib/scheduler');
 (function (Plugin) {
 	Plugin.hooks = Hooks;
 
-	Plugin.load = function (params, callback) {
+	Plugin.load = async function (params) {
 		function renderAdmin(req, res) {
 			res.render(`admin/plugins/${Config.plugin.id}`, {});
 		}
@@ -21,54 +21,51 @@ const Scheduler = require('./lib/scheduler');
 		NodeBB.AdminSockets[Config.plugin.id] = Config.adminSockets;
 
 		NodeBB.app = params.app;
-		Scheduler.start();
 
-		Config.init(callback);
+		Scheduler.start();
+		await Config.init();
 	};
 
-	Plugin.addAdminNavigation = function (adminHeader, callback) {
+	Plugin.addAdminNavigation = async function (adminHeader) {
 		adminHeader.plugins.push({
 			route: `/plugins/${Config.plugin.id}`,
 			icon: Config.plugin.icon,
 			name: Config.plugin.name,
 		});
-
-		callback(null, adminHeader);
+		return adminHeader;
 	};
 
-	Plugin.registerFormatting = function (payload, callback) {
+	Plugin.registerFormatting = async function (payload) {
 		payload.options.push({
 			name: 'poll',
 			className: `fa ${Config.plugin.icon}`,
 			title: '[[poll:creator_title]]',
 		});
-
-		callback(null, payload);
+		return payload;
 	};
 
-	Plugin.addUserPrivilege = function (privileges, callback) {
+	Plugin.addUserPrivilege = async function (privileges) {
 		privileges.push('poll:create');
-		callback(null, privileges);
+		return privileges;
 	};
 
-	Plugin.addPrivilegeLabels = function (labels, callback) {
+	Plugin.addPrivilegeLabels = async function (labels) {
 		labels.push({ name: 'Create Poll' });
-		callback(null, labels);
+		return labels;
 	};
 
-	Plugin.addGroupPrivilege = function (privileges, callback) {
+	Plugin.addGroupPrivilege = async function (privileges) {
 		privileges.push('groups:poll:create');
-		callback(null, privileges);
+		return privileges;
 	};
 
-	Plugin.copyPrivilegesFrom = function (data, callback) {
+	Plugin.copyPrivilegesFrom = async function (data) {
 		if (data.privileges.indexOf('poll:create') === -1) {
 			data.privileges.push('poll:create');
 		}
-
 		if (data.privileges.indexOf('groups:poll:create') === -1) {
 			data.privileges.push('groups:poll:create');
 		}
-		callback(null, data);
+		return data;
 	};
 }(exports));
