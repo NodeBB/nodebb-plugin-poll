@@ -26,9 +26,20 @@
   "error.max_options": "You can only create %d options.",
   "error.no_options": "Create at least one option.",
   "error.valid_date": "Please enter a valid date.",
-
   "error.not_main": "Can only add poll in main post.",
   "error.privilege.create": "You're not allowed to create a poll",
+  "error.legacy_poll": "Legacy polls are not supported",
+  "error.need_login_to": "You need to be logged in to %1",
+  "error.option_voted_or_invalid": "Already voted or invalid option",
+  "error.max_votes": "You can only vote for %1 options on this poll.",
+  "error.vote_action": "Can't %1 vote",
+
+  "error.invalid_request": "Invalid request",
+  "error.invalid_request_desc": "Invalid request, %1",
+  "error.invalid_vote": "Invalid vote",
+  "error.invalid_option": "Invalid option",
+  "error.unexpected": "Something went wrong",
+  "error.thrown_during": "Error during %1",
 
   "warning.redactor": "You're using Redactor. Do <strong>not</strong> edit the markup manually. Instead, re-open the poll creator.",
 
