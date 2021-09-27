@@ -300,7 +300,7 @@
 
 	View.prototype.showResultsPanel = function () {
 		this.hideVotingPanel();
-		if (this.voteUpdateAllowed() && !this.hasPollEndedOrDeleted()) {
+		if ((!this.pollData.hasVoted || this.voteUpdateAllowed()) && !this.hasPollEndedOrDeleted()) {
 			this.showVotingPanelButton();
 		} else {
 			this.hideVotingPanelButton();
