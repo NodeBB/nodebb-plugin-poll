@@ -39,10 +39,8 @@
     "public/js/poll/creator.js",
     "public/js/poll/view.js"
   ],
-  "acpScripts": [
-    "public/js/admin.js"
-  ],
   "modules": {
+    "../admin/plugins/poll.js": "public/js/admin.js",
     "dayjs.js": "vendor/dayjs.min.js",
     "flatpickr.js": "vendor/flatpickr.min.js",
     "flatpickr.i10n.js": "vendor/flatpickr.l10n.js"
