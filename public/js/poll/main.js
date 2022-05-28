@@ -1,6 +1,6 @@
 'use strict';
 
-var Poll = {};
+window.Poll = {};
 
 (function () {
 	$(window).on('action:topic.loading', function () {
