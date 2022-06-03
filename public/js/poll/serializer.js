@@ -1,14 +1,7 @@
 'use strict';
 
-(function (module) {
-	var utils;
+module.exports = function (utils) {
 	var Serializer = {};
-
-	if (typeof window === 'undefined') {
-		utils 	= require.main.require('./src/utils');
-	} else {
-		utils = window.utils;
-	}
 
 	var pollRegex = /(?:(?:\[poll(?<settings>.*?)\])(?:\\n|\n|<br \/>)(?<content>(?:-.+?(?:\\n|\n|<br \/>))+)(?:\[\/poll\]))/g;
 	var settingsRegex = /(?<key>.+?)=(?:"|&quot;|&#92;)(?<value>.+?)(?:"|&quot;|&#92;)/g;
@@ -165,13 +158,8 @@
 		return deserialized;
 	}
 
-	module.exports = Serializer;
-
 	if (typeof window !== 'undefined') {
-		window.Poll.serializer = module.exports;
+		window.Poll.serializer = Serializer;
 	}
-}(typeof module === 'undefined' ? {
-	module: {
-		exports: {},
-	},
-} : module));
+	return Serializer;
+};

@@ -3,6 +3,7 @@
 window.Poll = {};
 
 (function () {
+	require('poll/serializer')(window.utils);
 	$(window).on('action:topic.loading', function () {
 		if (ajaxify.data.posts.length > 0 && ajaxify.data.posts[0].hasOwnProperty('pollId')) {
 			getPoll(ajaxify.data.posts[0].pollId);

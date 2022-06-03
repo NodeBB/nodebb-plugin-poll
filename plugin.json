@@ -34,13 +34,13 @@
   ],
   "scripts": [
     "public/js/poll/main.js",
-    "public/js/poll/serializer.js",
     "public/js/poll/sockets.js",
     "public/js/poll/creator.js",
     "public/js/poll/view.js"
   ],
   "modules": {
     "../admin/plugins/poll.js": "public/js/admin.js",
+    "poll/serializer.js": "public/js/poll/serializer.js",
     "dayjs.js": "vendor/dayjs.min.js",
     "flatpickr.js": "vendor/flatpickr.min.js",
     "flatpickr.i10n.js": "vendor/flatpickr.l10n.js"
