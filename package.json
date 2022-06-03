@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-poll",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "NodeBB Poll Plugin",
   "main": "library.js",
   "scripts": {
