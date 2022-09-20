@@ -8,7 +8,7 @@
     margin-top: 0;
   }
 
-  .panel-title {
+  .card-title {
     display: inline-block;
   }
 
@@ -22,14 +22,6 @@
 
 .poll-result-progressbar {
   min-width: 2em;
-}
-
-.poll-result-avatar {
-  width: 50px;
-  height: 50px;
-  font-size: 3rem;
-  vertical-align: middle;
-  margin-bottom: 3px;
 }
 
 .poll-result-details:hover {

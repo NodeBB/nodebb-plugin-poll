@@ -29,8 +29,8 @@
     "public": "public",
     "vendor": "vendor"
   },
-  "less": [
-    "public/less/style.less"
+  "scss": [
+    "public/scss/style.scss"
   ],
   "scripts": [
     "public/js/poll/main.js",

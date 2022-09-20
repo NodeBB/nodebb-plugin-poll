@@ -8,7 +8,7 @@
     </small>
     <div class="progress">
         <div class="progress-bar poll-result-progressbar" role="progressbar" aria-valuenow="{poll.options.percentage}" aria-valuemin="0" aria-valuemax="100" style="width: {poll.options.percentage}%;">
-            <span>{poll.options.percentage}</span>%
+            <span><span class="percent">{poll.options.percentage}</span>%</span>
         </div>
     </div>
 </div>

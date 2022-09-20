@@ -1,14 +1,14 @@
 <div class="poll-view" data-poll-id="{poll.info.pollId}">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{poll.settings.title}</h3>
-            <div class="btn-group pull-right hidden">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">{poll.settings.title}</h3>
+            <div class="btn-group float-end hidden">
                 <a href="#" class="poll-button-edit">
                     <span class="fa fa-pencil"></span>
                 </a>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="poll-view-messages hidden"></div>
             <div class="poll-view-voting <!-- IF poll.hasVoted -->hidden<!-- ENDIF poll.hasVoted -->">
                 <!-- IMPORT poll/view/voting.tpl -->

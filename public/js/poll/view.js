@@ -229,7 +229,7 @@
 			var el = this.dom.resultsPanel.find('[data-poll-option-id=' + option.id + ']');
 			el.find('.poll-result-votecount span').text(option.voteCount);
 			el.find('.poll-result-progressbar').css('width', option.percentage + '%')
-				.find('span').text(option.percentage);
+				.find('span.percent').text(option.percentage);
 		}, this);
 	};
 
