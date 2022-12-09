@@ -43,5 +43,6 @@
   "vote_is_final": "Changing your vote is not allowed for this poll so your vote is final",
 
   "vote_count": "users voted for this option",
-  "votes": "votes"
+  "votes": "votes",
+  "admin.create-poll": "Create Poll"
 }

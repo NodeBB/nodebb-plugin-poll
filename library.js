@@ -1,6 +1,6 @@
 'use strict';
 
-const	NodeBB = require('./lib/nodebb');
+const NodeBB = require('./lib/nodebb');
 const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
 const Hooks = require('./lib/hooks');
@@ -46,19 +46,10 @@ const Scheduler = require('./lib/scheduler');
 		callback(null, payload);
 	};
 
-	Plugin.addUserPrivilege = function (privileges, callback) {
-		privileges.push('poll:create');
-		callback(null, privileges);
-	};
-
-	Plugin.addPrivilegeLabels = function (labels, callback) {
-		labels.push({ name: 'Create Poll' });
-		callback(null, labels);
-	};
-
-	Plugin.addGroupPrivilege = function (privileges, callback) {
-		privileges.push('groups:poll:create');
-		callback(null, privileges);
+	Plugin.addPrivilege = function (hookData) {
+		hookData.privileges.set(
+			'poll:create', { label: '[[poll:admin.create-poll]]' },
+		);
 	};
 
 	Plugin.copyPrivilegesFrom = function (data, callback) {
