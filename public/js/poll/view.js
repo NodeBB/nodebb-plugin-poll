@@ -28,7 +28,7 @@
 						}
 
 						if (err) {
-							return app.alertError(err.message);
+							return Poll.alertError(err.message);
 						}
 
 						view.showResultsPanel();
@@ -58,7 +58,7 @@
 
 					Poll.sockets.updateVote(voteData, function (err) {
 						if (err) {
-							return app.alertError(err.message);
+							return Poll.alertError(err.message);
 						}
 						view.showResultsPanel();
 					});
@@ -78,7 +78,7 @@
 
 				Poll.sockets.removeVote(voteData, function (err) {
 					if (err) {
-						return app.alertError(err.message);
+						return Poll.alertError(err.message);
 					}
 					view.showResultsPanel();
 				});
@@ -124,7 +124,7 @@
 					optionId: optionId,
 				}, function (err, details) {
 					if (err) {
-						return app.alertError(err.message);
+						return Poll.alertError(err.message);
 					}
 
 					view.showOptionDetails(details);

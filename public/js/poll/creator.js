@@ -61,18 +61,21 @@
 	}
 
 	function composerBtnHandle(composer, textarea) {
-		require(['composer/controls'], function (controls) {
+		require(['composer/controls', 'alerts'], function (controls, alerts) {
 			var post = composer.posts[composer.active];
 			if (!post || !post.isMain || (isNaN(parseInt(post.cid, 10)) && isNaN(parseInt(post.pid, 10)))) {
-				return app.alertError('[[poll:error.not_main]]');
+				return alerts.error('[[poll:error.not_main]]');
 			}
 			if (parseInt(post.cid, 10) === 0) {
-				return app.alertError('[[error:category-not-selected]]');
+				return alerts.error('[[error:category-not-selected]]');
 			}
 
 			Poll.sockets.canCreate({ cid: post.cid, pid: post.pid }, function (err, canCreate) {
-				if (err || !canCreate) {
-					return app.alertError(err.message);
+				if (err) {
+					return alerts.error(err.message);
+				}
+				if (!canCreate) {
+					return alerts.error('[[error:no-privileges]]');
 				}
 
 				Poll.sockets.getConfig(null, function (err, config) {
@@ -118,7 +121,7 @@
 
 	Creator.show = function (poll, config, callback) {
 		if (poll.hasOwnProperty('info')) {
-			return app.alertError('Editing not implemented.');
+			return Poll.alertError('Editing not implemented');
 		}
 
 		require(['flatpickr', 'flatpickr.i10n', 'bootbox', 'dayjs', 'translator'], function (flatpickr, flatpickrI10N, bootbox, dayjs, Translator) {
