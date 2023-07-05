@@ -249,6 +249,7 @@
 		app.parseAndTranslate('poll/view/details', details, function (html) {
 			bootbox.dialog({
 				message: html,
+				backdrop: true,
 				buttons: {
 					close: {
 						label: 'Close',
