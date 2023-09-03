@@ -34,6 +34,13 @@
     </div>
 
     <div class="mb-3">
+        <div class="form-check">
+            <label class="form-check-label" for="pollPrivateVotes">[[poll:private_votes]]</label>
+            <input class="form-check-input" type="checkbox" name="settings.privateVotes" id="pollPrivateVotes" {{{if poll.settings.privateVotes}}}checked{{{end}}}>
+        </div>
+    </div>
+
+    <div class="mb-3">
         <label class="form-label" for="pollInputEnd">[[poll:auto_end_title]]</label>
         <div class="input-group date flatpickr">
             <input id="pollInputEnd" placeholder="[[poll:auto_end_placeholder]]" name="settings.end" class="form-control" value="{poll.settings.end}" data-input>
