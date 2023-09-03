@@ -12,6 +12,8 @@ Currently supported settings:
     maxvotes="1" //Max number of votes per user. If larger than 1, a multiple choice poll will be created
     disallowVoteUpdate="0" //if set, users won't be able to update/remove their vote
     title="Poll title" //Poll title
+    privateVotes="true" //if set, only the poll creator and admins can see per user voting details
+    hiddenVotes="true" //if set, only admins can see per user voting details
 
 There's also a helpful modal available that will allow you to easily create a poll:
 ![](https://i.imgur.com/2fPnWLb.png)
