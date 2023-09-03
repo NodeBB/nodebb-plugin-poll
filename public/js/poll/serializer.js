@@ -30,6 +30,14 @@ module.exports = function (utils) {
 				return value === 'true' || value === true ? 1 : 0;
 			},
 		},
+		hiddenVotes: {
+			test: function (value) {
+				return /true|false/.test(value);
+			},
+			parse: function (value) {
+				return value === 'true' || value === true ? 1 : 0;
+			},
+		},
 		disallowVoteUpdate: {
 			test: function (value) {
 				return /true|false/.test(value);

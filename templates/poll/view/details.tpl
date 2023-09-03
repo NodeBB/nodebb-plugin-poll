@@ -5,5 +5,8 @@
 </a>
 <!-- END votes -->
 <!-- IF privateVotes -->
-<p>[[poll:votes_are_hidden]]</p>
+<p>[[poll:votes_are_private]]</p>
 <!-- ENDIF privateVotes -->
+<!-- IF hiddenVotes -->
+<p>[[poll:votes_are_hidden]]</p>
+<!-- ENDIF hiddenVotes -->

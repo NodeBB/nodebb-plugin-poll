@@ -127,7 +127,7 @@
 						return Poll.alertError(err.message);
 					}
 
-					view.showOptionDetails({...details, privateVotes: view.isPrivateVotes()});
+					view.showOptionDetails({...details, privateVotes: view.isPrivateVotes(), hiddenVotes: view.isHiddenVotes()});
 				});
 			},
 		},
@@ -206,6 +206,10 @@
 
 	View.prototype.isPrivateVotes = function () {
 		return parseInt(this.pollData.settings.privateVotes, 10) === 1;
+	};
+
+	View.prototype.isHiddenVotes = function () {
+		return parseInt(this.pollData.settings.hiddenVotes, 10) === 1;
 	};
 
 	View.prototype.pollEndedOrDeleted = function () {

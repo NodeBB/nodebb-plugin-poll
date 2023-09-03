@@ -35,6 +35,13 @@
 
     <div class="mb-3">
         <div class="form-check">
+            <label class="form-check-label" for="pollPrivateVotes">[[poll:hidden_votes]]</label>
+            <input class="form-check-input" type="checkbox" name="settings.hiddenVotes" id="pollPrivateVotes" {{{if poll.settings.hiddenVotes}}}checked{{{end}}}>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check">
             <label class="form-check-label" for="pollPrivateVotes">[[poll:private_votes]]</label>
             <input class="form-check-input" type="checkbox" name="settings.privateVotes" id="pollPrivateVotes" {{{if poll.settings.privateVotes}}}checked{{{end}}}>
         </div>
