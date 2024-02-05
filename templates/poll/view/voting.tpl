@@ -1,4 +1,4 @@
-<form role="form" class="poll-voting-form">
+<form role="form" class="poll-voting-form mb-3 d-flex flex-column gap-3">
     <!-- BEGIN poll.options -->
     <div class="poll-view-option {poll.optionType}" data-poll-option-id="{poll.options.id}">
         <label>

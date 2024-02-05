@@ -1,7 +1,7 @@
 <div class="poll-view" data-poll-id="{poll.info.pollId}">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">{poll.settings.title}</h3>
+            <h5 class="card-title mb-0">{poll.settings.title}</h5>
             <div class="btn-group float-end hidden">
                 <a href="#" class="poll-button-edit">
                     <span class="fa fa-pencil"></span>
@@ -13,7 +13,7 @@
             <div class="poll-view-voting <!-- IF poll.hasVoted -->hidden<!-- ENDIF poll.hasVoted -->">
                 <!-- IMPORT poll/view/voting.tpl -->
             </div>
-            <div class="poll-view-results <!-- IF !poll.hasVoted -->hidden<!-- ENDIF !poll.hasVoted -->">
+            <div class="poll-view-results d-flex flex-column gap-3 mb-3 <!-- IF !poll.hasVoted -->hidden<!-- ENDIF !poll.hasVoted -->">
                 <!-- IMPORT poll/view/results.tpl -->
             </div>
 
