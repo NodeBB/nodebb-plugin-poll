@@ -1,4 +1,4 @@
-<div class="poll-view" data-poll-id="{poll.info.pollId}">
+<div class="poll-view mb-3" data-poll-id="{poll.info.pollId}">
     <div class="card">
         <div class="card-header">
             <h5 class="card-title mb-0">{poll.settings.title}</h5>
