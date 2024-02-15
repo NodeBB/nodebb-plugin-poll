@@ -234,6 +234,8 @@
 				title: obj['settings.title'],
 				maxvotes: obj['settings.maxvotes'],
 				disallowVoteUpdate: obj['settings.disallowVoteUpdate'] === 'on' ? 'true' : 'false',
+				privateVotes: obj['settings.privateVotes'] === 'on' ? 'true' : 'false',
+				hiddenVotes: obj['settings.hiddenVotes'] === 'on' ? 'true' : 'false',
 				end: obj['settings.end'],
 			},
 		};

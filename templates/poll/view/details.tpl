@@ -4,3 +4,10 @@
     {buildAvatar(votes, "24px", true)}
 </a>
 <!-- END votes -->
+<!-- IF hiddenVotes -->
+<p>[[poll:votes_are_hidden]]</p>
+<!-- ELSE -->
+<!-- IF privateVotes -->
+<p>[[poll:votes_are_private]]</p>
+<!-- ENDIF privateVotes -->
+<!-- ENDIF hiddenVotes -->
