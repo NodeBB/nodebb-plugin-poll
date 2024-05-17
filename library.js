@@ -8,10 +8,9 @@ const Scheduler = require('./lib/scheduler');
 
 const Plugin = module.exports;
 
-
 Plugin.hooks = Hooks;
 
-Plugin.load = function (params, callback) {
+Plugin.load = async function (params) {
 	const routeHelpers = require.main.require('./src/routes/helpers');
 	const { router } = params;
 
@@ -27,27 +26,25 @@ Plugin.load = function (params, callback) {
 	NodeBB.app = params.app;
 	Scheduler.start();
 
-	Config.init(callback);
+	await Config.init();
 };
 
-Plugin.addAdminNavigation = function (adminHeader, callback) {
+Plugin.addAdminNavigation = function (adminHeader) {
 	adminHeader.plugins.push({
 		route: `/plugins/${Config.plugin.id}`,
 		icon: Config.plugin.icon,
 		name: Config.plugin.name,
 	});
-
-	callback(null, adminHeader);
+	return adminHeader;
 };
 
-Plugin.registerFormatting = function (payload, callback) {
+Plugin.registerFormatting = function (payload) {
 	payload.options.push({
 		name: 'poll',
 		className: `fa ${Config.plugin.icon}`,
 		title: '[[poll:creator_title]]',
 	});
-
-	callback(null, payload);
+	return payload;
 };
 
 Plugin.addPrivilege = function (hookData) {
@@ -56,7 +53,7 @@ Plugin.addPrivilege = function (hookData) {
 	);
 };
 
-Plugin.copyPrivilegesFrom = function (data, callback) {
+Plugin.copyPrivilegesFrom = function (data) {
 	if (data.privileges.indexOf('poll:create') === -1) {
 		data.privileges.push('poll:create');
 	}
@@ -64,5 +61,5 @@ Plugin.copyPrivilegesFrom = function (data, callback) {
 	if (data.privileges.indexOf('groups:poll:create') === -1) {
 		data.privileges.push('groups:poll:create');
 	}
-	callback(null, data);
+	return data;
 };

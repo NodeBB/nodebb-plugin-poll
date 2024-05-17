@@ -85,7 +85,7 @@ module.exports = function (utils) {
 
 		rawOptions.forEach(function (option) {
 			if (option.length) {
-				option = option.split('-').slice(1).join('-').trim()
+				option = option.split('-').slice(1).join('-').trim();
 
 				if (option.length) {
 					pollOptions.push(option);
