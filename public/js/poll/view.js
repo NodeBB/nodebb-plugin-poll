@@ -227,10 +227,14 @@
 
 		this.pollData.options.forEach(function (option) {
 			var el = this.dom.resultsPanel.find('[data-poll-option-id=' + option.id + ']');
-			el.find('.poll-result-votecount span').text(option.voteCount);
+			el.find('.poll-result-votecount span').translateText(`[[poll:x-votes, ${option.voteCount}]]`);
 			el.find('.poll-result-progressbar').css('width', option.percentage + '%')
 				.find('span.percent').text(option.percentage);
 		}, this);
+
+		this.dom.resultsPanel
+			.find('.poll-result-total-votecount')
+			.translateText(`[[poll:total-votes-x, ${pollData.info.voteCount}]]`);
 	};
 
 	View.prototype.showMessage = function (title, content) {

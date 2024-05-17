@@ -44,5 +44,7 @@
 
   "vote_count": "users voted for this option",
   "votes": "votes",
+  "x-votes": "%1 votes",
+  "total-votes-x": "Total Votes: %1",
   "admin.create-poll": "Create Poll"
 }

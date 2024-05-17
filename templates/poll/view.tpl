@@ -15,6 +15,7 @@
             </div>
             <div class="poll-view-results d-flex flex-column gap-3 mb-3 <!-- IF !poll.hasVoted -->hidden<!-- ENDIF !poll.hasVoted -->">
                 <!-- IMPORT poll/view/results.tpl -->
+                <div class="text-end text-sm text-secondary poll-result-total-votecount">[[poll:total-votes-x, {poll.info.voteCount}]]</div>
             </div>
 
             <div class="poll-view-buttons">

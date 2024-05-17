@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-between mb-1">
         <strong>{poll.options.title}</strong>
         <a class="poll-result-votecount small" href="#">
-            <span>{poll.options.voteCount}</span> [[poll:votes]]
+            <span>[[poll:x-votes, {poll.options.voteCount}]]</span>
         </a>
     </div>
     <div class="progress">
