@@ -80,7 +80,7 @@
 
 				Poll.sockets.getConfig(null, function (err, config) {
 					if (err) {
-						console.error(err);
+						return alerts.error(err);
 					}
 
 					var poll = {};
