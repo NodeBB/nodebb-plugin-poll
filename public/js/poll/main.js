@@ -16,6 +16,14 @@ window.Poll = {};
 		}
 	});
 
+	$(window).on('action:posts.loaded', function (ev, data) {
+		data.posts.forEach((post) => {
+			if (post.hasOwnProperty('pollId')) {
+				getPoll(post.pollId);
+			}
+		});
+	});
+
 	$(window).on('action:posts.edited', function (ev, data) {
 		if (data.post.hasOwnProperty('pollId')) {
 			getPoll(data.post.pollId);
