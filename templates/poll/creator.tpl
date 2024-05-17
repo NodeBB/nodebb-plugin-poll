@@ -35,9 +35,8 @@
 
     <div class="mb-3">
         <label class="form-label" for="pollInputEnd">[[poll:auto_end_title]]</label>
-        <div class="input-group date flatpickr">
-            <input id="pollInputEnd" placeholder="[[poll:auto_end_placeholder]]" name="settings.end" class="form-control" value="{poll.settings.end}" data-input>
-            <a class="input-group-text" data-toggle><i class="fa fa-calendar"></i></a>
+        <div class="input-group date">
+            <input id="pollInputEnd" placeholder="[[poll:auto_end_placeholder]]" name="settings.end" class="form-control" value="{poll.settings.end}" type="datetime-local">
         </div>
         <p class="form-text">[[poll:auto_end_help]]</p>
     </div>

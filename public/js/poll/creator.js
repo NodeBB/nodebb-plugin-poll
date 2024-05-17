@@ -124,7 +124,7 @@
 			return Poll.alertError('Editing not implemented');
 		}
 
-		require(['flatpickr', 'flatpickr.i10n', 'bootbox', 'dayjs', 'translator'], function (flatpickr, flatpickrI10N, bootbox, dayjs, Translator) {
+		require(['bootbox'], function (bootbox) {
 			app.parseAndTranslate('poll/creator', { poll: poll, config: config, isRedactor: !!$.Redactor }, function (html) {
 				// Initialise modal
 				var modal = bootbox.dialog({
@@ -156,12 +156,9 @@
 									return error('[[poll:error.no_options]]');
 								}
 
-								if (obj.settings.end && !dayjs(new Date(obj.settings.end)).isValid()) {
-									return error('[[poll:error.valid_date]]');
-								} else if (obj.settings.end) {
-									obj.settings.end = dayjs(new Date(obj.settings.end)).valueOf();
+								if (obj.settings.end) {
+									obj.settings.end = new Date(obj.settings.end).getTime();
 								}
-
 								callback(obj);
 								return true;
 							},
@@ -191,23 +188,9 @@
 						}
 					});
 
-				var currentLocale = Translator.getLanguage();
-				var flatpickrInstance = flatpickr('.flatpickr', {
-					enableTime: true,
-					altFormat: 'F j, Y h:i K',
-					time_24hr: false,
-					wrap: true,
-					locale: getFlatpickrLocale(currentLocale, flatpickrI10N.default),
-					onOpen: function () {
-						modal.removeAttr('tabindex');
-					},
-					onClose: function () {
-						modal.attr('tabindex', -1);
-					},
-				});
-
 				if (poll.settings && poll.settings.end) {
-					flatpickrInstance.setDate(poll.settings.end);
+
+					// flatpickrInstance.setDate(poll.settings.end);
 				}
 			});
 		});
@@ -239,13 +222,6 @@
 		};
 
 		return result;
-	}
-
-	function getFlatpickrLocale(nodebbLocale, flatpickrLocales = {}) {
-		if (Object.keys(flatpickrLocales).includes(nodebbLocale.toLowerCase())) {
-			return flatpickrLocales[nodebbLocale];
-		}
-		return flatpickrLocales.default;
 	}
 
 	Poll.creator = Creator;
