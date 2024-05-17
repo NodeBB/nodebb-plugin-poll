@@ -1,12 +1,11 @@
 <div class="poll-view mb-3" data-poll-id="{poll.info.pollId}">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">{poll.settings.title}</h5>
-            <div class="btn-group float-end hidden">
-                <a href="#" class="poll-button-edit">
-                    <span class="fa fa-pencil"></span>
-                </a>
-            </div>
+
+            <a href="#" class="btn btn-sm btn-light border poll-button-edit hidden">
+                <span class="fa fa-pencil"></span>
+            </a>
         </div>
         <div class="card-body">
             <div class="poll-view-messages hidden"></div>
