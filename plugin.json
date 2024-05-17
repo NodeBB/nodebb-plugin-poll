@@ -37,9 +37,6 @@
     "../admin/plugins/poll.js": "public/js/admin.js",
     "poll/serializer.js": "public/js/poll/serializer.js"
   },
-  "css": [
-    "vendor/flatpickr.min.css"
-  ],
   "templates": "templates",
   "languages": "languages",
   "upgrades": [
