@@ -20,10 +20,6 @@
     { "hook": "action:topic.delete", "method": "hooks.action.topicDelete" },
     { "hook": "action:topic.restore", "method": "hooks.action.topicRestore" }
   ],
-  "staticDirs": {
-    "public": "public",
-    "vendor": "vendor"
-  },
   "scss": [
     "public/scss/style.scss"
   ],
