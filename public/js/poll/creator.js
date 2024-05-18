@@ -70,15 +70,14 @@
 				return alerts.error('[[error:category-not-selected]]');
 			}
 
-			Poll.sockets.canCreate({ cid: post.cid, pid: post.pid }, function (err, canCreate) {
+			socket.emit('plugins.poll.canCreate', { cid: post.cid, pid: post.pid }, function (err, canCreate) {
 				if (err) {
 					return alerts.error(err.message);
 				}
 				if (!canCreate) {
 					return alerts.error('[[error:no-privileges]]');
 				}
-
-				Poll.sockets.getConfig(null, function (err, config) {
+				socket.emit('plugins.poll.getConfig', null, function (err, config) {
 					if (err) {
 						return alerts.error(err);
 					}

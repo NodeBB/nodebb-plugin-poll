@@ -1,5 +1,7 @@
 'use strict';
 
+/* global Poll */
+
 window.Poll = {};
 
 (function () {
@@ -9,7 +11,9 @@ window.Poll = {};
 		});
 	};
 
+	// eslint-disable-next-line import/no-unresolved
 	require('poll/serializer')(window.utils);
+
 	$(window).on('action:topic.loading', function () {
 		if (ajaxify.data.posts.length > 0 && ajaxify.data.posts[0].hasOwnProperty('pollId')) {
 			getPoll(ajaxify.data.posts[0].pollId);
@@ -30,11 +34,15 @@ window.Poll = {};
 		}
 	});
 
+	socket.on('event:poll.voteChange', function (data) {
+		Poll.view.update(data);
+	});
+
 	function getPoll(pollId) {
 		pollId = parseInt(pollId, 10);
 
 		if (!isNaN(pollId)) {
-			Poll.sockets.getPoll({ pollId: pollId }, function (err, pollData) {
+			socket.emit('plugins.poll.get', { pollId }, function (err, pollData) {
 				if (err) {
 					return Poll.alertError(err.message);
 				}

@@ -22,7 +22,7 @@
 						options: votes,
 					};
 
-					Poll.sockets.vote(voteData, function (err) {
+					socket.emit('plugins.poll.vote', voteData, function (err) {
 						if (!config.loggedIn) {
 							$(window).trigger('action:poll.vote.notloggedin');
 						}
@@ -55,8 +55,7 @@
 						pollId: view.pollData.info.pollId,
 						options: votes,
 					};
-
-					Poll.sockets.updateVote(voteData, function (err) {
+					socket.emit('plugins.poll.updateVote', voteData, function (err) {
 						if (err) {
 							return Poll.alertError(err.message);
 						}
@@ -76,7 +75,7 @@
 			handle: function (view) {
 				var voteData = { pollId: view.pollData.info.pollId };
 
-				Poll.sockets.removeVote(voteData, function (err) {
+				socket.emit('plugins.poll.removeVote', voteData, function (err) {
 					if (err) {
 						return Poll.alertError(err.message);
 					}
@@ -119,7 +118,7 @@
 			handle: function (view, e) {
 				var optionId = $(e.currentTarget).parents('[data-poll-option-id]').data('poll-option-id');
 
-				Poll.sockets.getOptionDetails({
+				socket.emit('plugins.poll.getOptionDetails', {
 					pollId: view.pollData.info.pollId,
 					optionId: optionId,
 				}, function (err, details) {
@@ -140,7 +139,7 @@
 				});
 			},
 			handle: function (view) {
-				Poll.sockets.getConfig(null, function (err, config) {
+				socket.emit('plugins.poll.getConfig', null, function (err, config) {
 					if (err) {
 						console.error(err);
 					}
@@ -250,15 +249,17 @@
 	};
 
 	View.prototype.showOptionDetails = function (details) {
-		app.parseAndTranslate('poll/view/details', details, function (html) {
-			bootbox.dialog({
-				message: html,
-				backdrop: true,
-				buttons: {
-					close: {
-						label: 'Close',
+		require(['bootbox'], function (bootbox) {
+			app.parseAndTranslate('poll/view/details', details, function (html) {
+				bootbox.dialog({
+					message: html,
+					backdrop: true,
+					buttons: {
+						close: {
+							label: 'Close',
+						},
 					},
-				},
+				});
 			});
 		});
 	};
