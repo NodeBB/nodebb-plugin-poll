@@ -19,6 +19,7 @@
 
             <div class="poll-view-buttons">
                 <button type="button" class="btn btn-sm btn-primary poll-button-vote hidden">[[poll:vote]]</button>
+                <button type="button" class="btn btn-sm btn-primary poll-button-vote-anon hidden">[[poll:vote_anonymously]]</button>
                 <button type="button" class="btn btn-sm btn-primary poll-button-update-vote hidden">[[poll:update_vote]]</button>
                 <button type="button" class="btn btn-sm btn-danger poll-button-remove-vote hidden">[[poll:remove_vote]]</button>
                 <button type="button" class="btn btn-sm btn-link poll-button-results hidden">[[poll:to_results]]</button>

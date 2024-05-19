@@ -8,6 +8,7 @@
   "default_title": "Default poll title",
   "max_votes": "Maximum number of votes per user",
   "disallow_vote_update": "Don't allow users to update their vote",
+  "allow_anon_voting": "Allow anonymous voting",
   "info_choices": "A number greater than 1 will enable multiple choice polls.",
   "settings": "Settings",
   "save": "Save",
@@ -29,10 +30,12 @@
 
   "error.not_main": "Can only add poll in main post.",
   "error.privilege.create": "You're not allowed to create a poll",
+  "error.anon-voting-not-allowed": "This poll does not allow voting anonymously",
 
   "warning.redactor": "You're using Redactor. Do <strong>not</strong> edit the markup manually. Instead, re-open the poll creator.",
 
   "vote": "Vote",
+  "vote_anonymously": "Vote anonymously",
   "update_vote": "Update vote",
   "remove_vote": "Remove vote",
   "to_voting": "To Voting",

@@ -11,6 +11,7 @@ Currently supported settings:
 
     maxvotes="1" //Max number of votes per user. If larger than 1, a multiple choice poll will be created
     disallowVoteUpdate="0" //if set, users won't be able to update/remove their vote
+    allowAnonVoting="0" // if set to 1, users will be able to vote anonymously
     title="Poll title" //Poll title
 
 There's also a helpful modal available that will allow you to easily create a poll:

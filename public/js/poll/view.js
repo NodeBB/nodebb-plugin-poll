@@ -1,6 +1,33 @@
 'use strict';
 
 (function (Poll) {
+	function vote(view, options) {
+		var form = view.dom.votingPanel.find('form');
+		var votes = form.serializeArray().map(function (option) {
+			return parseInt(option.value, 10);
+		});
+
+		if (votes.length > 0) {
+			var voteData = {
+				pollId: view.pollData.info.pollId,
+				options: votes,
+				voteAnon: options.voteAnon,
+			};
+
+			socket.emit('plugins.poll.vote', voteData, function (err) {
+				if (!config.loggedIn) {
+					$(window).trigger('action:poll.vote.notloggedin');
+				}
+
+				if (err) {
+					return Poll.alertError(err.message);
+				}
+
+				view.showResultsPanel();
+			});
+		}
+	}
+
 	var Actions = [
 		{
 			// Voting
@@ -11,33 +38,27 @@
 				});
 			},
 			handle: function (view) {
-				var form = view.dom.votingPanel.find('form');
-				var votes = form.serializeArray().map(function (option) {
-					return parseInt(option.value, 10);
+				vote(view, {
+					voteAnon: false,
 				});
-
-				if (votes.length > 0) {
-					var voteData = {
-						pollId: view.pollData.info.pollId,
-						options: votes,
-					};
-
-					socket.emit('plugins.poll.vote', voteData, function (err) {
-						if (!config.loggedIn) {
-							$(window).trigger('action:poll.vote.notloggedin');
-						}
-
-						if (err) {
-							return Poll.alertError(err.message);
-						}
-
-						view.showResultsPanel();
-					});
-				}
 			},
 		},
 		{
-			// Voting
+			// vote anon
+			register: function (view) {
+				var self = this;
+				view.dom.voteAnonButton.off('click').on('click', function () {
+					self.handle(view);
+				});
+			},
+			handle: function (view) {
+				vote(view, {
+					voteAnon: true,
+				});
+			},
+		},
+		{
+			// update voting
 			register: function (view) {
 				var self = this;
 				view.dom.updateVoteButton.off('click').on('click', function () {
@@ -169,6 +190,7 @@
 						votingPanel: panel.find('.poll-view-voting'),
 						resultsPanel: panel.find('.poll-view-results'),
 						voteButton: panel.find('.poll-button-vote'),
+						voteAnonButton: panel.find('.poll-button-vote-anon'),
 						updateVoteButton: panel.find('.poll-button-update-vote'),
 						removeVoteButton: panel.find('.poll-button-remove-vote'),
 						votingPanelButton: panel.find('.poll-button-voting'),
@@ -291,6 +313,9 @@
 			}
 		} else {
 			this.showVoteButton();
+			if (this.pollData.settings.allowAnonVoting) {
+				this.showVoteAnonButton();
+			}
 		}
 		this.dom.votingPanel.removeClass('hidden');
 	};
@@ -301,6 +326,7 @@
 		this.hideRemoveVoteButton();
 		this.resetVotingForm();
 		this.hideVoteButton();
+		this.hideVoteAnonButton();
 		this.dom.votingPanel.addClass('hidden');
 	};
 
@@ -325,6 +351,14 @@
 
 	View.prototype.hideVoteButton = function () {
 		this.dom.voteButton.addClass('hidden');
+	};
+
+	View.prototype.showVoteAnonButton = function () {
+		this.dom.voteAnonButton.removeClass('hidden');
+	};
+
+	View.prototype.hideVoteAnonButton = function () {
+		this.dom.voteAnonButton.addClass('hidden');
 	};
 
 	View.prototype.showUpdateVoteButton = function () {

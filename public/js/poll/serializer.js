@@ -30,6 +30,14 @@ module.exports = function (utils) {
 				return value === 'true' || value === true ? 1 : 0;
 			},
 		},
+		allowAnonVoting: {
+			test: function (value) {
+				return /true|false/.test(value);
+			},
+			parse: function (value) {
+				return value === 'true' || value === true ? 1 : 0;
+			},
+		},
 		end: {
 			test: function (value) {
 				return (!isNaN(value) && parseInt(value, 10) > Date.now());

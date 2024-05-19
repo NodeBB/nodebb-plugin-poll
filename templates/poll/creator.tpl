@@ -26,11 +26,14 @@
                min="1" max="10" step="1" placeholder="[[poll:max_votes_placeholder]]" class="form-control">
     </div>
 
-    <div class="mb-3">
-        <div class="form-check">
-            <label class="form-check-label" for="pollDisallowVoteUpdate">[[poll:disallow_vote_update]]</label>
-            <input class="form-check-input" type="checkbox" name="settings.disallowVoteUpdate" id="pollDisallowVoteUpdate" {{{if poll.settings.disallowVoteUpdate}}}checked{{{end}}}>
-        </div>
+    <div class="form-check mb-3">
+        <label class="form-check-label" for="pollDisallowVoteUpdate">[[poll:disallow_vote_update]]</label>
+        <input class="form-check-input" type="checkbox" name="settings.disallowVoteUpdate" id="pollDisallowVoteUpdate" {{{if poll.settings.disallowVoteUpdate}}}checked{{{end}}}>
+    </div>
+
+    <div class="form-check mb-3">
+        <label class="form-check-label" for="allowAnonVoting">[[poll:allow_anon_voting]]</label>
+        <input class="form-check-input" type="checkbox" name="settings.allowAnonVoting" id="allowAnonVoting" {{{if poll.settings.allowAnonVoting}}}checked{{{end}}}>
     </div>
 
     <div class="mb-3">

@@ -70,9 +70,12 @@
 				return alerts.error('[[error:category-not-selected]]');
 			}
 
-			socket.emit('plugins.poll.canCreate', { cid: post.cid, pid: post.pid }, function (err, canCreate) {
+			socket.emit('plugins.poll.canCreate', {
+				cid: post.cid,
+				pid: post.pid,
+			}, function (err, canCreate) {
 				if (err) {
-					return alerts.error(err.message);
+					return alerts.error(err);
 				}
 				if (!canCreate) {
 					return alerts.error('[[error:no-privileges]]');
@@ -216,6 +219,7 @@
 				title: obj['settings.title'],
 				maxvotes: obj['settings.maxvotes'],
 				disallowVoteUpdate: obj['settings.disallowVoteUpdate'] === 'on' ? 'true' : 'false',
+				allowAnonVoting: obj['settings.allowAnonVoting'] === 'on' ? 'true' : 'false',
 				end: obj['settings.end'],
 			},
 		};
