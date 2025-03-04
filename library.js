@@ -68,3 +68,30 @@ Plugin.copyPrivilegesFrom = function (data) {
 	}
 	return data;
 };
+
+Plugin.defineWidgets = async function (widgets) {
+	const widget = {
+		widget: 'poll',
+		name: 'Poll',
+		description: 'Display a poll',
+		content: await NodeBB.app.renderAsync('admin/partials/widgets/poll', {}),
+	};
+
+	widgets.push(widget);
+	return widgets;
+};
+
+Plugin.renderPollWidget = async function (widget) {
+	const { tid } = widget.data;
+	const Poll = require('./lib/poll');
+	const pollId = await Poll.getPollIdByTid(tid);
+	if (!pollId) {
+		return null;
+	}
+	const pollData = await Poll.get(pollId, widget.uid, widget.req.loggedIn);
+	if (!pollData) {
+		return null;
+	}
+	widget.html = await NodeBB.app.renderAsync('poll/widget.tpl', { pollId });
+	return widget;
+};

@@ -176,44 +176,41 @@
 
 	View.prototype.load = function () {
 		var self = this;
+		if (!self.pollData.container.length) {
+			return;
+		}
 
-		require(['components'], function (components) {
-			var posts = components.get('post');
-			if (posts.length > 0 && parseInt(posts.eq(0).data('pid'), 10) === parseInt(self.pollData.info.pid, 10)) {
-				app.parseAndTranslate('poll/view', { poll: self.pollData }, function (panel) {
-					posts.eq(0).find('[component="post/content"]').prepend(panel);
+		app.parseAndTranslate('poll/view', { poll: self.pollData }, function (panel) {
+			self.pollData.container.prepend(panel);
+			self.dom = {
+				panel: panel,
+				votingForm: panel.find('.poll-voting-form'),
+				messages: panel.find('.poll-view-messages'),
+				votingPanel: panel.find('.poll-view-voting'),
+				resultsPanel: panel.find('.poll-view-results'),
+				voteButton: panel.find('.poll-button-vote'),
+				voteAnonButton: panel.find('.poll-button-vote-anon'),
+				updateVoteButton: panel.find('.poll-button-update-vote'),
+				removeVoteButton: panel.find('.poll-button-remove-vote'),
+				votingPanelButton: panel.find('.poll-button-voting'),
+				resultsPanelButton: panel.find('.poll-button-results'),
+				editButton: panel.find('.poll-button-edit'),
+			};
 
-					self.dom = {
-						panel: panel,
-						votingForm: panel.find('.poll-voting-form'),
-						messages: panel.find('.poll-view-messages'),
-						votingPanel: panel.find('.poll-view-voting'),
-						resultsPanel: panel.find('.poll-view-results'),
-						voteButton: panel.find('.poll-button-vote'),
-						voteAnonButton: panel.find('.poll-button-vote-anon'),
-						updateVoteButton: panel.find('.poll-button-update-vote'),
-						removeVoteButton: panel.find('.poll-button-remove-vote'),
-						votingPanelButton: panel.find('.poll-button-voting'),
-						resultsPanelButton: panel.find('.poll-button-results'),
-						editButton: panel.find('.poll-button-edit'),
-					};
+			self.hideMessage();
 
-					self.hideMessage();
+			self.pollEndedOrDeleted();
+			self.hasVotedAndVotingUpdateDisallowed();
 
-					self.pollEndedOrDeleted();
-					self.hasVotedAndVotingUpdateDisallowed();
-
-					if (!app.user.uid || self.pollData.hasVoted) {
-						self.showResultsPanel();
-					} else {
-						self.showVotingPanel();
-					}
-
-					Actions.forEach(function (action) {
-						action.register(self);
-					});
-				});
+			if (!app.user.uid || self.pollData.hasVoted) {
+				self.showResultsPanel();
+			} else {
+				self.showVotingPanel();
 			}
+
+			Actions.forEach(function (action) {
+				action.register(self);
+			});
 		});
 	};
 
@@ -241,8 +238,16 @@
 		}
 	};
 
-	View.prototype.update = function (pollData) {
+	View.prototype.update = function (pollData, uid) {
+		const isSelf = String(uid) === String(app.user.uid);
+		const hasVoted = this.pollData.hasVoted;
+		const vote = this.pollData.vote;
 		this.pollData = pollData;
+		if (!isSelf) {
+			// restore user specific data if update is not self
+			this.pollData.hasVoted = hasVoted;
+			this.pollData.vote = vote;
+		}
 
 		this.pollEndedOrDeleted();
 
@@ -401,10 +406,10 @@
 
 			view.load();
 		},
-		update: function (pollData) {
+		update: function (pollData, uid) {
 			var pollId = pollData.info.pollId;
 			if (this.polls.hasOwnProperty(pollId)) {
-				this.polls[pollId].update(pollData);
+				this.polls[pollId].update(pollData, uid);
 			}
 		},
 	};

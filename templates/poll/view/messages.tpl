@@ -1,3 +1,3 @@
-<h3>{title}</h3>
+<h5>{title}</h5>
 <p>{content}</p>
 <hr>
