@@ -1,0 +1,1 @@
+<div data-widget-poll-id="{./pollId}"></div>
