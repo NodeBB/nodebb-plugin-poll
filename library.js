@@ -1,5 +1,7 @@
 'use strict';
 
+const nconf = require.main.require('nconf');
+
 const NodeBB = require('./lib/nodebb');
 const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
@@ -24,7 +26,10 @@ Plugin.load = async function (params) {
 	NodeBB.AdminSockets[Config.plugin.id] = Config.adminSockets;
 
 	NodeBB.app = params.app;
-	Scheduler.start();
+
+	if (nconf.get('runJobs')) {
+		Scheduler.start();
+	}
 
 	await Config.init();
 };
