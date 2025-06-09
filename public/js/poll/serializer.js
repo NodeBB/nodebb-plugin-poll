@@ -133,7 +133,7 @@ module.exports = function (utils) {
 
 		const stripped = utils.stripHTMLTags(raw).replace(/\\/g, '&#92;');
 		let match;
-		while ((match = settingsRegex.exec(stripped)) !== null) { // eslint-disable-line no-cond-assign
+		while ((match = settingsRegex.exec(stripped)) !== null) {
 			var key = match.groups.key.trim();
 			var value = match.groups.value.trim();
 
@@ -150,7 +150,7 @@ module.exports = function (utils) {
 	function deserializeSettings(settings, config) {
 		var deserialized = '';
 
-		for (var k in settings) {
+		for (var k of Object.keys(settings)) {
 			if (settings.hasOwnProperty(k) && config.defaults.hasOwnProperty(k)) {
 				var key = utils.stripHTMLTags(k).trim();
 				var value = utils.stripHTMLTags(settings[k]).trim();
