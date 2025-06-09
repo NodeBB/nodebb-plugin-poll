@@ -11,7 +11,6 @@ window.Poll = {};
 		});
 	};
 
-	// eslint-disable-next-line import/no-unresolved
 	require('poll/serializer')(window.utils);
 
 	$(window).on('action:topic.loading', function () {
