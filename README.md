@@ -20,7 +20,6 @@ There's also a helpful modal available that will allow you to easily create a po
 ## Todo
 
 - Add the ability to edit a poll
-- Anonymous voting
 - A lot more...
 
 If you're willing to help, please make any improvements you want and submit a PR.
