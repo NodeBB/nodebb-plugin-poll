@@ -187,11 +187,6 @@
 							prevOption.clone().val('').insertBefore(el).focus();
 						}
 					});
-
-				if (poll.settings && poll.settings.end) {
-
-					// flatpickrInstance.setDate(poll.settings.end);
-				}
 			});
 		});
 	};
