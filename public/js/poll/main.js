@@ -53,6 +53,9 @@ window.Poll = {};
 	function getPoll(pollId, container) {
 		pollId = parseInt(pollId, 10);
 		if (!isNaN(pollId)) {
+			if (!socket.connected) {
+				socket.connect();
+			}
 			socket.emit('plugins.poll.get', { pollId }, function (err, pollData) {
 				if (err) {
 					return Poll.alertError(err.message);
