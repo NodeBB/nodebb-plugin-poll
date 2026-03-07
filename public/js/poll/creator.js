@@ -136,14 +136,12 @@
 					buttons: {
 						cancel: {
 							label: '[[modules:bootbox.cancel]]',
-							className: 'btn-default',
 							callback: function () {
 								return true;
 							},
 						},
 						save: {
 							label: '[[modules:bootbox.confirm]]',
-							className: 'btn-primary',
 							callback: function (e) {
 								clearErrors();
 								var form = $(e.currentTarget).parents('.bootbox').find('#pollCreator');
