@@ -33,16 +33,6 @@ Plugin.addAdminNavigation = function (adminHeader) {
 	return adminHeader;
 };
 
-Plugin.registerFormatting = function (payload) {
-	payload.options.push({
-		name: 'poll',
-		className: `fa ${Config.plugin.icon}`,
-		title: '[[poll:creator_title]]',
-		badge: true,
-	});
-	return payload;
-};
-
 Plugin.addPrivilege = function (hookData) {
 	hookData.privileges.set(
 		'poll:create', { label: '[[poll:admin.create-poll]]' },
