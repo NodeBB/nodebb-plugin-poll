@@ -210,6 +210,10 @@
 							container.append(newOptionInput);
 							modal.find(`[data-option-id="${id}"] input`).focus();
 						});
+
+					modal.find('#poll-options-container').on('click', '[data-action="remove-option"]', function () {
+						$(this).parents('[component="post/poll/option/item"]').remove();
+					});
 				});
 			});
 		});
