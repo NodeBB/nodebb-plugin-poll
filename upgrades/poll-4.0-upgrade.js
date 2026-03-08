@@ -51,7 +51,7 @@ async function convertSettings() {
 				newSettings.defaultTitle = parsed.defaults.title;
 			}
 			if (parsed?.defaults?.maxvotes) {
-				newSettings.maximumVotesPerUser = parsed.defaults.title;
+				newSettings.maximumVotesPerUser = parsed.defaults.maxvotes;
 			}
 			await db.setObject('settings:poll', newSettings);
 		} catch (err) {

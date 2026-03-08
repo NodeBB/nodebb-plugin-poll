@@ -22,7 +22,7 @@
 
     <div class="mb-3">
         <label class="form-label" for="pollInputAmount">[[poll:max_votes]]</label>
-        <input type="number" name="maximumVotesPerUser" id="pollInputAmount" value="{poll.maxVotesPerUser}" min="1" max="10" step="1" placeholder="[[poll:max_votes_placeholder]]" class="form-control">
+        <input type="number" name="maximumVotesPerUser" id="pollInputAmount" value="{poll.maximumVotesPerUser}" min="1" max="10" step="1" placeholder="[[poll:max_votes_placeholder]]" class="form-control">
         <p class="form-text">[[poll:info_choices]]</p>
     </div>
 

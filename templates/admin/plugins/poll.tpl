@@ -19,16 +19,16 @@
                             <h6>[[poll:toggles]]</h6>
                             <div class="mb-3">
                                 <div class="form-check">
-                                    <label class="form-check-label">[[poll:allow_guests]]</label>
-                                    <input class="form-check-input" type="checkbox" data-key="toggles.allowAnon" data-trim="false">
+                                    <label class="form-check-label" for="allowGuestsToViewResults">[[poll:allow_guests]]</label>
+                                    <input class="form-check-input" type="checkbox" id="allowGuestsToViewResults" name="allowGuestsToViewResults">
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <h6>[[poll:limits]]</h6>
                             <div>
-                                <label class="form-label" for="maxPollOptions">[[poll:max_options]]</label>
-                                <input type="number" class="form-control" id="maxPollOptions" placeholder="10" min="1" max="100" data-key="limits.maxOptions">
+                                <label class="form-label" for="maxOptions">[[poll:max_options]]</label>
+                                <input type="number" class="form-control" id="maxOptions" placeholder="10" min="1" max="100" name="maxOptions">
                             </div>
                         </div>
                     </div>
@@ -38,12 +38,12 @@
                     <div class="card-header">[[poll:defaults]]</div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="form-label" for="defaultsTitle">[[poll:default_title]]</label>
-                            <input type="text" class="form-control" id="defaultsTitle" placeholder="Poll" data-key="defaults.title">
+                            <label class="form-label" for="defaultTitle">[[poll:default_title]]</label>
+                            <input type="text" class="form-control" id="defaultTitle" placeholder="Poll" name="defaultTitle">
                         </div>
                         <div>
-                            <label class="form-label" for="defaultsMaxVotes">[[poll:max_votes]]</label>
-                            <input type="number" class="form-control" id="defaultsMaxVotes" placeholder="1" min="1" max="100" data-key="defaults.maxvotes">
+                            <label class="form-label" for="maximumVotesPerUser">[[poll:max_votes]]</label>
+                            <input type="number" class="form-control" id="maximumVotesPerUser" placeholder="1" min="1" max="100" name="maximumVotesPerUser">
                             <p class="form-text">[[poll:info_choices]]</p>
                         </div>
                     </div>
