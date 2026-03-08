@@ -172,43 +172,42 @@
 		this.pollData = pollData;
 	};
 
-	View.prototype.load = function () {
+	View.prototype.load = async function () {
 		const self = this;
 		if (!self.pollData.container.length) {
 			return;
 		}
 
-		app.parseAndTranslate('poll/view', { poll: self.pollData }, function (panel) {
-			self.pollData.container.prepend(panel);
-			self.dom = {
-				panel: panel,
-				votingForm: panel.find('.poll-voting-form'),
-				messages: panel.find('.poll-view-messages'),
-				votingPanel: panel.find('.poll-view-voting'),
-				resultsPanel: panel.find('.poll-view-results'),
-				voteButton: panel.find('.poll-button-vote'),
-				voteAnonButton: panel.find('.poll-button-vote-anon'),
-				updateVoteButton: panel.find('.poll-button-update-vote'),
-				removeVoteButton: panel.find('.poll-button-remove-vote'),
-				votingPanelButton: panel.find('.poll-button-voting'),
-				resultsPanelButton: panel.find('.poll-button-results'),
-				editButton: panel.find('.poll-button-edit'),
-			};
+		const panel = await app.parseAndTranslate('poll/view', { poll: self.pollData });
+		self.pollData.container.prepend(panel);
+		self.dom = {
+			panel: panel,
+			votingForm: panel.find('.poll-voting-form'),
+			messages: panel.find('.poll-view-messages'),
+			votingPanel: panel.find('.poll-view-voting'),
+			resultsPanel: panel.find('.poll-view-results'),
+			voteButton: panel.find('.poll-button-vote'),
+			voteAnonButton: panel.find('.poll-button-vote-anon'),
+			updateVoteButton: panel.find('.poll-button-update-vote'),
+			removeVoteButton: panel.find('.poll-button-remove-vote'),
+			votingPanelButton: panel.find('.poll-button-voting'),
+			resultsPanelButton: panel.find('.poll-button-results'),
+			editButton: panel.find('.poll-button-edit'),
+		};
 
-			self.hideMessage();
+		self.hideMessage();
 
-			self.pollEndedOrDeleted();
-			self.hasVotedAndVotingUpdateDisallowed();
+		self.pollEndedOrDeleted();
+		self.hasVotedAndVotingUpdateDisallowed();
 
-			if (!app.user.uid || self.pollData.hasVoted) {
-				self.showResultsPanel();
-			} else {
-				self.showVotingPanel();
-			}
+		if (!app.user.uid || self.pollData.hasVoted) {
+			self.showResultsPanel();
+		} else {
+			self.showVotingPanel();
+		}
 
-			Actions.forEach(function (action) {
-				action.register(self);
-			});
+		Actions.forEach(function (action) {
+			action.register(self);
 		});
 	};
 
@@ -398,16 +397,19 @@
 	};
 
 	Poll.view = {
-		polls: {},
-		load: function (pollData) {
+		polls: Object.create(null),
+		load: async function (pollData) {
+			const pollId = pollData.info.pollId;
+			if (Object.hasOwn(this.polls, pollId)) {
+				pollData.container.find(`[data-poll-id="${pollId}"]`).remove();
+			}
 			const view = new View(pollData);
-			this.polls[pollData.info.pollId] = view;
-
-			view.load();
+			this.polls[pollId] = view;
+			await view.load();
 		},
 		update: function (pollData, uid) {
 			const pollId = pollData.info.pollId;
-			if (this.polls.hasOwnProperty(pollId)) {
+			if (Object.hasOwn(this.polls, pollId)) {
 				this.polls[pollId].update(pollData, uid);
 			}
 		},

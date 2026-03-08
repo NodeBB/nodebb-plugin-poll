@@ -16,6 +16,31 @@ $(document).ready(function () {
 		hooks.on('filter:composer.submit', function (hookData) {
 			hookData.composerData.polls = hookData.postData.polls || [];
 		});
+
+		hooks.on('filter:composer.drafts.save', function (hookData) {
+			const { draft, postData } = hookData;
+			if (Object.hasOwn(postData, 'polls')) {
+				draft.polls = postData.polls || [];
+			}
+			return hookData;
+		});
+
+		hooks.on('filter:composer.drafts.open', function (hookData) {
+			const { draft } = hookData;
+			if (Object.hasOwn(draft, 'polls')) {
+				hookData.composerData.polls = draft.polls || [];
+			}
+			return hookData;
+		});
+
+		hooks.on('filter:composer.topic.push', function (hookData) {
+			hookData.pushData.polls = hookData.data.polls || [];
+			return hookData;
+		});
+		hooks.on('filter:composer.reply.push', function (hookData) {
+			hookData.pushData.polls = hookData.data.polls || [];
+			return hookData;
+		});
 	});
 
 	$(window).on('action:topic.loading', function () {
@@ -60,19 +85,16 @@ $(document).ready(function () {
 
 	function getPolls(pollIds, container) {
 		const validPollIds = pollIds.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
-		if (!socket.connected) {
-			socket.connect();
-		}
-
-		socket.emit('plugins.poll.get', { pollIds: validPollIds.reverse() }, function (err, pollDataArr) {
+		socket.emit('plugins.poll.get', { pollIds: validPollIds }, async function (err, pollDataArr) {
 			if (err) {
 				return Poll.alertError(err.message);
 			}
-
-			pollDataArr.forEach((pollData) => {
+			pollDataArr.reverse();
+			for (const pollData of pollDataArr) {
 				pollData.container = container;
-				Poll.view.load(pollData);
-			});
+				// eslint-disable-next-line no-await-in-loop
+				await Poll.view.load(pollData);
+			}
 		});
 	}
 });
