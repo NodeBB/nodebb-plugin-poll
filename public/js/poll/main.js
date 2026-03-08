@@ -19,11 +19,9 @@ $(document).ready(function () {
 	});
 
 	$(window).on('action:topic.loading', function () {
-		if (ajaxify.data.posts.length > 0) {
-			ajaxify.data.posts.forEach((post) => {
-				getPollByPost(post);
-			});
-		}
+		ajaxify.data.posts.forEach((post) => {
+			getPollByPost(post);
+		});
 	});
 
 	$(window).on('action:posts.loaded', function (ev, data) {
@@ -33,9 +31,7 @@ $(document).ready(function () {
 	});
 
 	$(window).on('action:posts.edited', function (ev, data) {
-		if (data.post.hasOwnProperty('pollId')) {
-			getPollByPost(data.post);
-		}
+		getPollByPost(data.post);
 	});
 
 	$(window).on('action:ajaxify.end', function () {

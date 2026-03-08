@@ -71,7 +71,7 @@ async function moveSettingsToPollHash(pollIds) {
 				end: Object.hasOwn(s, 'end') ? s.end : 0,
 				disallowVoteUpdate: Object.hasOwn(s, 'disallowVoteUpdate') ? s.disallowVoteUpdate : 0,
 				allowAnonVoting: Object.hasOwn(s, 'allowAnonVoting') ? s.allowAnonVoting : 0,
-				maximumVotesPeruser: Object.hasOwn(s, 'maxvotes') ? s.maxvotes : 0,
+				maximumVotesPerUser: Object.hasOwn(s, 'maxvotes') ? s.maxvotes : 0,
 			}]);
 		}
 	});

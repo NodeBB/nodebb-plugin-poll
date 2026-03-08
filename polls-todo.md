@@ -10,4 +10,5 @@ ability to order poll options by drag and drop
 
 TODO:
  save/restore drafts
+ (done) edit polls in posts
  (done) composer formatting toolbar badge number to show how many polls there are
