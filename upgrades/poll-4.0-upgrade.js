@@ -99,7 +99,10 @@ async function savePollOptionsInPollHash(pollIds) {
 			const optionData = await db.getObjects(keys);
 			bulkSet.push([
 				`poll:${pollId}`,
-				{ options: JSON.stringify(optionData.map(o => ({ id: o.id, title: o.title }))) },
+				{
+					pollId: pollId, // some old polls had "pollid" field, this fixes that
+					options: JSON.stringify(optionData.map(o => ({ id: o.id, title: o.title })))
+				},
 			]);
 		}
 	}));

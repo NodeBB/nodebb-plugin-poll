@@ -55,5 +55,7 @@
   "votes": "votes",
   "x-votes": "%1 votes",
   "total-votes-x": "Total Votes: %1",
-  "admin.create-poll": "Create Poll"
+  "admin.create-poll": "Create Poll",
+  "created-time": "Created",
+  "end-time": "End"
 }

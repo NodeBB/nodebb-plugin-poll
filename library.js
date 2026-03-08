@@ -4,6 +4,10 @@ const NodeBB = require('./lib/nodebb');
 const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
 const Hooks = require('./lib/hooks');
+const Poll = require('./lib/poll');
+const db = require.main.require('./src/database');
+const pagination = require.main.require('./src/pagination');
+const utils = require.main.require('./src/utils');
 
 const Plugin = module.exports;
 
@@ -13,9 +17,30 @@ Plugin.load = async function (params) {
 	const routeHelpers = require.main.require('./src/routes/helpers');
 	const { router } = params;
 
-	routeHelpers.setupAdminPageRoute(router, `/admin/plugins/${Config.plugin.id}`, (req, res) => {
+	routeHelpers.setupAdminPageRoute(router, `/admin/plugins/${Config.plugin.id}`, async (req, res) => {
+		const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+		const itemsPerPage = 20;
+		const start = Math.max(0, (page - 1) * itemsPerPage);
+		const stop = start + itemsPerPage - 1;
+		const [pollIds, count] = await Promise.all([
+			db.getSortedSetRevRange('polls:createtime', start, stop),
+			db.sortedSetCard('polls:createtime'),
+		]);
+
+		const pollData = await db.getObjects(pollIds.map(pollId => `poll:${pollId}`));
+		const voteCounts = await Promise.all(pollIds.map(Poll.getVoteCount));
+		pollData.forEach((poll, index) => {
+			if (poll) {
+				poll.timestampISO = utils.toISOString(poll.timestamp);
+				poll.endISO = utils.toISOString(poll.end);
+				poll.voteCount = voteCounts[index];
+			}
+		});
+		const pageCount = Math.ceil(count / itemsPerPage);
 		res.render(`admin/plugins/${Config.plugin.id}`, {
 			title: 'Poll',
+			polls: pollData,
+			pagination: pagination.create(page, pageCount, req.query),
 		});
 	});
 
