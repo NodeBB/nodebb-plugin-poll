@@ -41,6 +41,7 @@
 	}
 
 	async function openManageModal(payload) {
+		const bootbox = await app.require('bootbox');
 		const { postData, modal, uuid } = payload;
 		const html = await app.parseAndTranslate('poll/manage', { post: postData });
 
@@ -86,7 +87,8 @@
 		}
 	}
 
-	function handleDelete(payload) {
+	async function handleDelete(payload) {
+		const bootbox = await app.require('bootbox');
 		const { uuid, modal, postData } = payload;
 		modal.on('click', 'button[data-action="remove"]', function () {
 			const clickedPollId = $(this).attr('data-poll-id');
@@ -111,7 +113,7 @@
 			const clickedPollId = $(this).attr('data-poll-id');
 			const poll = postData?.polls.find(poll => String(poll.pollId) === clickedPollId);
 			if (poll) {
-				const editedPoll = await Creator.show(poll, payload.config);
+				const editedPoll = await Creator.show(poll, config.poll);
 				if (editedPoll) {
 					postData.polls = postData.polls.map(
 						p => String(p.pollId) === String(editedPoll.pollId) ? editedPoll : p
@@ -183,6 +185,8 @@
 						},
 					});
 
+					handleOptionSort({ modal });
+
 					// Add option adder
 					modal.find('#pollAddOption')
 						.off('click')
@@ -198,13 +202,24 @@
 								id: id,
 								title: '',
 							});
-							newOptionInput.insertBefore(el);
+							const container = modal.find('#poll-options-container');
+							container.append(newOptionInput);
 							modal.find(`[data-option-id="${id}"] input`).focus();
 						});
 				});
 			});
 		});
 	};
+
+	function handleOptionSort({ modal }) {
+		const selectorEl = modal.find('#poll-options-container');
+		selectorEl.sortable({
+			handle: '[component="sort/handle"]',
+			axis: 'y',
+			zIndex: 9999,
+			items: '[component="post/poll/option/item"]',
+		});
+	}
 
 	async function error(message) {
 		const errorBox = $('#pollErrorBox');

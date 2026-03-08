@@ -10,11 +10,13 @@
 
     <div class="mb-3 d-flex flex-column gap-1">
         <label class="form-label" for="pollInputOptions">[[poll:options_title]]</label>
+        <div id="poll-options-container" class="d-flex flex-column gap-1">
         {{{ if poll.options.length }}}
         {{{ each poll.options }}}
         <!-- IMPORT poll/option-input.tpl -->
         {{{ end }}}
         {{{ end }}}
+        </div>
         <button type="button" id="pollAddOption" class="btn btn-primary btn-sm btn-block mt-2">[[poll:options_add]]</button>
     </div>
 
