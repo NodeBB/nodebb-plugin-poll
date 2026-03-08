@@ -61,7 +61,8 @@ $(document).ready(function () {
 
 	$(window).on('action:ajaxify.end', function () {
 		$('[data-widget-poll-id]').each(function () {
-			getPolls([$(this).attr('data-widget-poll-id')], $(this));
+			const $this = $(this);
+			getPolls([$this.attr('data-widget-poll-id')], $this);
 		});
 	});
 
@@ -92,6 +93,9 @@ $(document).ready(function () {
 			pollDataArr.reverse();
 			for (const pollData of pollDataArr) {
 				pollData.container = container;
+				if (container.attr('data-widget-poll-id')) {
+					pollData.isWidget = true;
+				}
 				// eslint-disable-next-line no-await-in-loop
 				await Poll.view.load(pollData);
 			}

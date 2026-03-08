@@ -58,7 +58,7 @@
 						label: '<i class="fa fa-plus"></i> [[poll:add-poll]]',
 						className: 'btn-success',
 						callback: () => {
-							Creator.show({
+							Creator.show('[[poll:creator_title]]', {
 								// temp id, will be replaced in the backend before saving
 								// used to identify the poll in the manage modal after creation
 								// so we can edit/delete
@@ -113,7 +113,11 @@
 			const clickedPollId = $(this).attr('data-poll-id');
 			const poll = postData?.polls.find(poll => String(poll.pollId) === clickedPollId);
 			if (poll) {
-				const editedPoll = await Creator.show(poll, config.poll);
+				const editedPoll = await Creator.show(
+					'[[poll:edit-a-poll-title]]',
+					poll,
+					config.poll,
+				);
 				if (editedPoll) {
 					postData.polls = postData.polls.map(
 						p => String(p.pollId) === String(editedPoll.pollId) ? editedPoll : p
@@ -150,12 +154,12 @@
 		}
 	};
 
-	Creator.show = function (poll, config) {
+	Creator.show = function (modalTitle, poll, config) {
 		return new Promise((resolve) => {
 			require(['bootbox'], function (bootbox) {
 				app.parseAndTranslate('poll/creator', { poll, config }, function (html) {
 					const modal = bootbox.dialog({
-						title: '[[poll:creator_title]]',
+						title: modalTitle,
 						message: html,
 						className: 'poll-creator',
 						buttons: {

@@ -149,23 +149,6 @@
 				});
 			},
 		},
-		{
-			// Editing
-			register: function (view) {
-				const self = this;
-				view.dom.editButton.off('click').on('click', function () {
-					self.handle(view);
-				});
-			},
-			handle: function (view) {
-				socket.emit('plugins.poll.getConfig', null, function (err, config) {
-					if (err) {
-						console.error(err);
-					}
-					Poll.creator.show(view.pollData, config, function () {});
-				});
-			},
-		},
 	];
 
 	const View = function (pollData) {
@@ -178,7 +161,10 @@
 			return;
 		}
 
-		const panel = await app.parseAndTranslate('poll/view', { poll: self.pollData });
+		const panel = await app.parseAndTranslate('poll/view', {
+			poll: self.pollData,
+			isAdmin: app.user.isAdmin,
+		});
 		self.pollData.container.prepend(panel);
 		self.dom = {
 			panel: panel,
@@ -192,7 +178,6 @@
 			removeVoteButton: panel.find('.poll-button-remove-vote'),
 			votingPanelButton: panel.find('.poll-button-voting'),
 			resultsPanelButton: panel.find('.poll-button-results'),
-			editButton: panel.find('.poll-button-edit'),
 		};
 
 		self.hideMessage();

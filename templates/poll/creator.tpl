@@ -45,10 +45,4 @@
         </div>
         <p class="form-text">[[poll:auto_end_help]]</p>
     </div>
-
-    {{{ if isRedactor }}}
-    <div class="alert alert-warning" role="alert">
-        [[poll:warning.redactor]]
-    </div>
-    {{{ end }}}
 </form>
