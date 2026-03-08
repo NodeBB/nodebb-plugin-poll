@@ -13,7 +13,10 @@
   "settings": "Settings",
   "save": "Save",
   "reset": "Reset",
-
+  "manage-polls": "Manage polls",
+  "add-poll": "Add poll",
+  "no-polls": "No polls found",
+  "confirm-remove": "Are you sure you want to remove this poll?",
   "creator_title": "Create a poll",
   "poll_title": "Poll Title",
   "poll_title_placeholder": "Enter poll title",
@@ -24,11 +27,12 @@
   "auto_end_placeholder": "Click to enter date and time",
   "auto_end_help": "Leaving this empty will never end the poll.",
 
-  "error.max_options": "You can only create %d options.",
+  "error.max_options": "You can only create %1 options.",
   "error.no_options": "Create at least one option.",
   "error.valid_date": "Please enter a valid date.",
 
   "error.not_main": "Can only add poll in main post.",
+  "error.invalid-post": "Invalid post.",
   "error.privilege.create": "You're not allowed to create a poll",
   "error.anon-voting-not-allowed": "This poll does not allow voting anonymously",
 
@@ -45,7 +49,7 @@
   "voting_update_disallowed_message": "You have already voted and changing your vote is not allowed for this poll",
   "vote_is_final": "Changing your vote is not allowed for this poll so your vote is final",
 
-  "vote_count": "users voted for this option",
+  "x-users-voted-for-this-option": "%1 user(s) voted for this option",
   "votes": "votes",
   "x-votes": "%1 votes",
   "total-votes-x": "Total Votes: %1",

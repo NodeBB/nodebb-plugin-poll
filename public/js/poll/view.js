@@ -2,13 +2,11 @@
 
 (function (Poll) {
 	function vote(view, options) {
-		var form = view.dom.votingPanel.find('form');
-		var votes = form.serializeArray().map(function (option) {
-			return parseInt(option.value, 10);
-		});
+		const form = view.dom.votingPanel.find('form');
+		const votes = form.serializeArray().map(option => parseInt(option.value, 10));
 
 		if (votes.length > 0) {
-			var voteData = {
+			const voteData = {
 				pollId: view.pollData.info.pollId,
 				options: votes,
 				voteAnon: options.voteAnon,
@@ -28,11 +26,11 @@
 		}
 	}
 
-	var Actions = [
+	const Actions = [
 		{
 			// Voting
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.voteButton.off('click').on('click', function () {
 					self.handle(view);
 				});
@@ -46,7 +44,7 @@
 		{
 			// vote anon
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.voteAnonButton.off('click').on('click', function () {
 					self.handle(view);
 				});
@@ -60,19 +58,19 @@
 		{
 			// update voting
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.updateVoteButton.off('click').on('click', function () {
 					self.handle(view);
 				});
 			},
 			handle: function (view) {
-				var form = view.dom.votingPanel.find('form');
-				var votes = form.serializeArray().map(function (option) {
+				const form = view.dom.votingPanel.find('form');
+				const votes = form.serializeArray().map(function (option) {
 					return parseInt(option.value, 10);
 				});
 
 				if (votes.length > 0) {
-					var voteData = {
+					const voteData = {
 						pollId: view.pollData.info.pollId,
 						options: votes,
 					};
@@ -88,13 +86,13 @@
 		{
 			// Remove vote
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.removeVoteButton.off('click').on('click', function () {
 					self.handle(view);
 				});
 			},
 			handle: function (view) {
-				var voteData = { pollId: view.pollData.info.pollId };
+				const voteData = { pollId: view.pollData.info.pollId };
 
 				socket.emit('plugins.poll.removeVote', voteData, function (err) {
 					if (err) {
@@ -107,7 +105,7 @@
 		{
 			// Results button
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.resultsPanelButton.off('click').on('click', function () {
 					self.handle(view);
 				});
@@ -119,7 +117,7 @@
 		{
 			// To Voting button
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.votingPanelButton.off('click').on('click', function () {
 					self.handle(view);
 				});
@@ -131,13 +129,13 @@
 		{
 			// Option details
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.resultsPanel.off('click').on('click', '.poll-result-votecount', function (e) {
 					self.handle(view, e);
 				});
 			},
 			handle: function (view, e) {
-				var optionId = $(e.currentTarget).parents('[data-poll-option-id]').data('poll-option-id');
+				const optionId = $(e.currentTarget).parents('[data-poll-option-id]').data('poll-option-id');
 
 				socket.emit('plugins.poll.getOptionDetails', {
 					pollId: view.pollData.info.pollId,
@@ -154,7 +152,7 @@
 		{
 			// Editing
 			register: function (view) {
-				var self = this;
+				const self = this;
 				view.dom.editButton.off('click').on('click', function () {
 					self.handle(view);
 				});
@@ -170,12 +168,12 @@
 		},
 	];
 
-	var View = function (pollData) {
+	const View = function (pollData) {
 		this.pollData = pollData;
 	};
 
 	View.prototype.load = function () {
-		var self = this;
+		const self = this;
 		if (!self.pollData.container.length) {
 			return;
 		}
@@ -219,7 +217,7 @@
 	};
 
 	View.prototype.voteUpdateAllowed = function () {
-		return parseInt(this.pollData.settings.disallowVoteUpdate, 10) !== 1;
+		return parseInt(this.pollData.disallowVoteUpdate, 10) !== 1;
 	};
 
 	View.prototype.pollEndedOrDeleted = function () {
@@ -252,7 +250,7 @@
 		this.pollEndedOrDeleted();
 
 		this.pollData.options.forEach(function (option) {
-			var el = this.dom.resultsPanel.find('[data-poll-option-id=' + option.id + ']');
+			const el = this.dom.resultsPanel.find('[data-poll-option-id=' + option.id + ']');
 			el.find('.poll-result-votecount span').translateText(`[[poll:x-votes, ${option.voteCount}]]`);
 			el.find('.poll-result-progressbar').css('width', option.percentage + '%')
 				.find('span.percent').text(option.percentage);
@@ -264,7 +262,7 @@
 	};
 
 	View.prototype.showMessage = function (title, content) {
-		var self = this;
+		const self = this;
 
 		app.parseAndTranslate('poll/view/messages', { title: title, content: content }, function (html) {
 			self.dom.messages.html(html).removeClass('hidden');
@@ -279,6 +277,7 @@
 		require(['bootbox'], function (bootbox) {
 			app.parseAndTranslate('poll/view/details', details, function (html) {
 				bootbox.dialog({
+					title: `[[poll:x-users-voted-for-this-option, ${details.voteCount}]]`,
 					message: html,
 					backdrop: true,
 					buttons: {
@@ -292,7 +291,7 @@
 	};
 
 	View.prototype.fillVotingForm = function () {
-		var self = this;
+		const self = this;
 		this.resetVotingForm();
 		if (this.pollData.vote && this.pollData.vote.options) {
 			this.pollData.vote.options.forEach(function (id) {
@@ -318,7 +317,7 @@
 			}
 		} else {
 			this.showVoteButton();
-			if (this.pollData.settings.allowAnonVoting) {
+			if (this.pollData.allowAnonVoting) {
 				this.showVoteAnonButton();
 			}
 		}
@@ -401,13 +400,13 @@
 	Poll.view = {
 		polls: {},
 		load: function (pollData) {
-			var view = new View(pollData);
+			const view = new View(pollData);
 			this.polls[pollData.info.pollId] = view;
 
 			view.load();
 		},
 		update: function (pollData, uid) {
-			var pollId = pollData.info.pollId;
+			const pollId = pollData.info.pollId;
 			if (this.polls.hasOwnProperty(pollId)) {
 				this.polls[pollId].update(pollData, uid);
 			}

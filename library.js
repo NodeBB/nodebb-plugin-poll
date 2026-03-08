@@ -1,12 +1,9 @@
 'use strict';
 
-const nconf = require.main.require('nconf');
-
 const NodeBB = require('./lib/nodebb');
 const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
 const Hooks = require('./lib/hooks');
-const Scheduler = require('./lib/scheduler');
 
 const Plugin = module.exports;
 
@@ -23,15 +20,8 @@ Plugin.load = async function (params) {
 	});
 
 	NodeBB.PluginSockets[Config.plugin.id] = Sockets;
-	NodeBB.AdminSockets[Config.plugin.id] = Config.adminSockets;
 
 	NodeBB.app = params.app;
-
-	if (nconf.get('runJobs')) {
-		Scheduler.start();
-	}
-
-	await Config.init();
 };
 
 Plugin.addAdminNavigation = function (adminHeader) {
@@ -48,6 +38,7 @@ Plugin.registerFormatting = function (payload) {
 		name: 'poll',
 		className: `fa ${Config.plugin.icon}`,
 		title: '[[poll:creator_title]]',
+		badge: true,
 	});
 	return payload;
 };
@@ -82,12 +73,8 @@ Plugin.defineWidgets = async function (widgets) {
 };
 
 Plugin.renderPollWidget = async function (widget) {
-	const { tid } = widget.data;
+	const { pollId } = widget.data;
 	const Poll = require('./lib/poll');
-	const pollId = await Poll.getPollIdByTid(tid);
-	if (!pollId) {
-		return null;
-	}
 	const pollData = await Poll.get(pollId, widget.uid, widget.req.loggedIn);
 	if (!pollData) {
 		return null;
