@@ -34,8 +34,7 @@
     "public/js/poll/view.js"
   ],
   "modules": {
-    "../admin/plugins/poll.js": "public/js/admin.js",
-    "poll/serializer.js": "public/js/poll/serializer.js"
+    "../admin/plugins/poll.js": "public/js/admin.js"
   },
   "templates": "templates",
   "languages": "languages",
