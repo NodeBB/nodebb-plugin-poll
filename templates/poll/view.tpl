@@ -1,14 +1,14 @@
 <div class="poll-view mb-3" data-poll-id="{poll.info.pollId}">
     <div class="card shadow-sm border-0">
-        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
+            <h5 class="card-title mb-0 {{{ if poll.isWidget }}}fs-6{{{ end }}}">
                 {{{ if poll.isWidget }}}
-                <a class="text-reset" href="{config.relative_path}/post/{poll.info.pid}">{poll.info.title}</a>
+                <a class="text-reset text-break" href="{config.relative_path}/post/{poll.info.pid}">{poll.info.title}</a>
                 {{{ else }}}
                 {poll.info.title}
                 {{{ end }}}
             </h5>
-            {{{ if isAdmin }}}
+            {{{ if (isAdmin && !poll.isWidget) }}}
             <span class="text-sm text-secondary">[[poll:poll-id-x, {poll.info.pollId}]]</span>
             {{{ end }}}
         </div>
