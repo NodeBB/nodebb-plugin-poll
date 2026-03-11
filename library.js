@@ -1,12 +1,13 @@
 'use strict';
 
-const nconf = require.main.require('nconf');
-
 const NodeBB = require('./lib/nodebb');
 const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
 const Hooks = require('./lib/hooks');
-const Scheduler = require('./lib/scheduler');
+const Poll = require('./lib/poll');
+const db = require.main.require('./src/database');
+const pagination = require.main.require('./src/pagination');
+const utils = require.main.require('./src/utils');
 
 const Plugin = module.exports;
 
@@ -16,22 +17,36 @@ Plugin.load = async function (params) {
 	const routeHelpers = require.main.require('./src/routes/helpers');
 	const { router } = params;
 
-	routeHelpers.setupAdminPageRoute(router, `/admin/plugins/${Config.plugin.id}`, (req, res) => {
+	routeHelpers.setupAdminPageRoute(router, `/admin/plugins/${Config.plugin.id}`, async (req, res) => {
+		const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+		const itemsPerPage = 20;
+		const start = Math.max(0, (page - 1) * itemsPerPage);
+		const stop = start + itemsPerPage - 1;
+		const [pollIds, count] = await Promise.all([
+			db.getSortedSetRevRange('polls:createtime', start, stop),
+			db.sortedSetCard('polls:createtime'),
+		]);
+
+		const pollData = await db.getObjects(pollIds.map(pollId => `poll:${pollId}`));
+		const voteCounts = await Promise.all(pollIds.map(Poll.getVoteCount));
+		pollData.forEach((poll, index) => {
+			if (poll) {
+				poll.timestampISO = utils.toISOString(poll.timestamp);
+				poll.endISO = utils.toISOString(poll.end);
+				poll.voteCount = voteCounts[index];
+			}
+		});
+		const pageCount = Math.ceil(count / itemsPerPage);
 		res.render(`admin/plugins/${Config.plugin.id}`, {
 			title: 'Poll',
+			polls: pollData,
+			pagination: pagination.create(page, pageCount, req.query),
 		});
 	});
 
 	NodeBB.PluginSockets[Config.plugin.id] = Sockets;
-	NodeBB.AdminSockets[Config.plugin.id] = Config.adminSockets;
 
 	NodeBB.app = params.app;
-
-	if (nconf.get('runJobs')) {
-		Scheduler.start();
-	}
-
-	await Config.init();
 };
 
 Plugin.addAdminNavigation = function (adminHeader) {
@@ -41,15 +56,6 @@ Plugin.addAdminNavigation = function (adminHeader) {
 		name: Config.plugin.name,
 	});
 	return adminHeader;
-};
-
-Plugin.registerFormatting = function (payload) {
-	payload.options.push({
-		name: 'poll',
-		className: `fa ${Config.plugin.icon}`,
-		title: '[[poll:creator_title]]',
-	});
-	return payload;
 };
 
 Plugin.addPrivilege = function (hookData) {
@@ -82,12 +88,8 @@ Plugin.defineWidgets = async function (widgets) {
 };
 
 Plugin.renderPollWidget = async function (widget) {
-	const { tid } = widget.data;
+	const { pollId } = widget.data;
 	const Poll = require('./lib/poll');
-	const pollId = await Poll.getPollIdByTid(tid);
-	if (!pollId) {
-		return null;
-	}
 	const pollData = await Poll.get(pollId, widget.uid, widget.req.loggedIn);
 	if (!pollData) {
 		return null;

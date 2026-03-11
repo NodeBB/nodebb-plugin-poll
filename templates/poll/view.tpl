@@ -1,18 +1,23 @@
 <div class="poll-view mb-3" data-poll-id="{poll.info.pollId}">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0">{poll.settings.title}</h5>
-
-            <a href="#" class="btn btn-sm btn-light border poll-button-edit hidden">
-                <span class="fa fa-pencil"></span>
-            </a>
+    <div class="card shadow-sm border-0">
+        <div class="card-header border-0 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+                {{{ if poll.isWidget }}}
+                <a class="text-reset" href="{config.relative_path}/post/{poll.info.pid}">{poll.info.title}</a>
+                {{{ else }}}
+                {poll.info.title}
+                {{{ end }}}
+            </h5>
+            {{{ if isAdmin }}}
+            <span class="text-sm text-secondary">[[poll:poll-id-x, {poll.info.pollId}]]</span>
+            {{{ end }}}
         </div>
         <div class="card-body">
             <div class="poll-view-messages hidden"></div>
-            <div class="poll-view-voting <!-- IF poll.hasVoted -->hidden<!-- ENDIF poll.hasVoted -->">
+            <div class="poll-view-voting {{{ if poll.hasVoted }}}hidden{{{ end }}}">
                 <!-- IMPORT poll/view/voting.tpl -->
             </div>
-            <div class="poll-view-results d-flex flex-column gap-3 mb-3 <!-- IF !poll.hasVoted -->hidden<!-- ENDIF !poll.hasVoted -->">
+            <div class="poll-view-results d-flex flex-column gap-3 mb-3 {{{ if !poll.hasVoted }}}hidden{{{ end }}}">
                 <!-- IMPORT poll/view/results.tpl -->
                 <div class="text-end text-sm text-secondary poll-result-total-votecount">[[poll:total-votes-x, {poll.info.voteCount}]]</div>
             </div>

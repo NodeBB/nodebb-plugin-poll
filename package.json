@@ -26,10 +26,10 @@
     "cron": "^1.8.2"
   },
   "nbbpm": {
-    "compatibility": "^4.0.0"
+    "compatibility": "^4.9.2"
   },
   "devDependencies": {
-    "eslint": "9.28.0",
-    "eslint-config-nodebb": "1.1.7"
+    "eslint": "10.0.3",
+    "eslint-config-nodebb": "^2.0.0"
   }
 }
