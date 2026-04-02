@@ -5,7 +5,7 @@
 
     <div class="mb-3">
         <label class="form-label" for="pollInputTitle">[[poll:poll_title]]</label>
-        <input type="text" name="title" id="pollInputTitle" value="{poll.title}" placeholder="[[poll:poll_title_placeholder]]" class="form-control">
+        <input type="text" name="title" id="pollInputTitle" value="{escape(poll.title)}" placeholder="[[poll:poll_title_placeholder]]" class="form-control">
     </div>
 
     <div class="mb-3 d-flex flex-column gap-1">

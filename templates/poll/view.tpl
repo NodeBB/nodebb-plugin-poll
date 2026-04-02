@@ -3,9 +3,9 @@
         <div class="card-header border-0 d-flex justify-content-between align-items-center flex-wrap">
             <h5 class="card-title mb-0 {{{ if poll.isWidget }}}fs-6{{{ end }}}">
                 {{{ if poll.isWidget }}}
-                <a class="text-reset text-break" href="{config.relative_path}/post/{poll.info.pid}">{poll.info.title}</a>
+                <a class="text-reset text-break" href="{config.relative_path}/post/{poll.info.pid}">{escape(poll.info.title)}</a>
                 {{{ else }}}
-                {poll.info.title}
+                {escape(poll.info.title)}
                 {{{ end }}}
             </h5>
             {{{ if (isAdmin && !poll.isWidget) }}}
