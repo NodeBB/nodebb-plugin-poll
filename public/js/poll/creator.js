@@ -13,8 +13,8 @@
 				formatting.addButtonDispatch('poll', function (/* textarea */) {
 					onPollButtonClicked(composer);
 				});
-
-				updateComposerBadgeCount(postContainer, postData.polls ? postData.polls.length : 0);
+				const uuid = postContainer.attr('data-uuid');
+				updateComposerBadgeCount(uuid, postData.polls ? postData.polls.length : 0);
 			}
 		});
 	}
@@ -69,8 +69,8 @@
 									postData.polls.push(newPoll);
 								}
 								openManageModal({ ...payload, modal });
-								const postContainer = $(`[component="composer"][data-uuid="${uuid}"]`);
-								updateComposerBadgeCount(postContainer, postData.polls.length);
+
+								updateComposerBadgeCount(uuid, postData.polls.length);
 							});
 							return false;
 						},
@@ -100,8 +100,7 @@
 				if (poll) {
 					postData.polls = postData.polls.filter(poll => String(poll.pollId) !== clickedPollId);
 					openManageModal(payload);
-					const postContainer = $(`[component="composer"][data-uuid="${uuid}"]`);
-					updateComposerBadgeCount(postContainer, postData.polls.length);
+					updateComposerBadgeCount(uuid, postData.polls.length);
 				}
 			});
 		});
@@ -270,13 +269,11 @@
 		});
 	}
 
-	function updateComposerBadgeCount(postContainer, count) {
-		require(['composer'], (composer) => {
-			composer.updateFormattingBtnBadgeCount(
-				postContainer,
-				'poll',
-				count
-			);
+	function updateComposerBadgeCount(uuid, count) {
+		$(window).trigger('action:composer.updateFormattingBtnBadgeCount', {
+			uuid: uuid,
+			formatName: 'poll',
+			count,
 		});
 	}
 
