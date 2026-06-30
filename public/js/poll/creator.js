@@ -41,21 +41,22 @@
 	}
 
 	async function openManageModal(payload) {
-		const bootbox = await app.require('bootbox');
+		const [modals, Benchpress] = await app.require(['modals', 'benchpressjs']);
 		const { postData, modal, uuid } = payload;
-		const html = await app.parseAndTranslate('poll/manage', { post: postData });
+		const html = await Benchpress.render('poll/manage', { post: postData });
 
 		if (modal) {
-			modal.find('.bootbox-body').html(html[0].outerHTML);
+			// modal.find('.bootbox-body').html(html[0].outerHTML);
+			modal.find('.bootbox-body').html(html);
 			handleSort({ modal, polls: postData.polls });
 		} else {
-			const modal = bootbox.dialog({
+			const modal = await modals.dialog({
 				title: '[[poll:manage-polls]]',
 				message: html,
 				className: 'poll-manage',
 				buttons: {
 					add: {
-						label: '<i class="fa fa-plus"></i> [[poll:add-poll]]',
+						label: '[[poll:add-poll]]',
 						className: 'btn-success',
 						callback: () => {
 							Creator.show('[[poll:creator_title]]', {
@@ -88,11 +89,11 @@
 	}
 
 	async function handleDelete(payload) {
-		const bootbox = await app.require('bootbox');
+		const modals = await app.require('modals');
 		const { uuid, modal, postData } = payload;
 		modal.on('click', 'button[data-action="remove"]', function () {
 			const clickedPollId = $(this).attr('data-poll-id');
-			bootbox.confirm('[[poll:confirm-remove]]', (ok) => {
+			modals.confirm('[[poll:confirm-remove]]', (ok) => {
 				if (!ok) {
 					return;
 				}
@@ -155,9 +156,9 @@
 
 	Creator.show = function (modalTitle, poll, config) {
 		return new Promise((resolve) => {
-			require(['bootbox'], function (bootbox) {
-				app.parseAndTranslate('poll/creator', { poll, config }, function (html) {
-					const modal = bootbox.dialog({
+			app.require(['benchpressjs', 'modals']).then(([Benchpress, modals]) => {
+				Benchpress.render('poll/creator', { poll, config }).then(async function (html) {
+					const modal = await modals.dialog({
 						title: modalTitle,
 						message: html,
 						className: 'poll-creator',

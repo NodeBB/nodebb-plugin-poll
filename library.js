@@ -92,7 +92,7 @@ Plugin.renderPollWidget = async function (widget) {
 	const Poll = require('./lib/poll');
 
 	const settings = await Config.getSettings();
-	const allowAnon = parseInt(settings.allowGuestsToViewResults, 10) === 1;
+	const allowAnon = settings.allowGuestsToViewResults === 'on';
 
 	if (!widget.uid && !allowAnon) {
 		return null;
