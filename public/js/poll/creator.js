@@ -195,9 +195,9 @@
 					// Add option adder
 					modal.find('#pollAddOption')
 						.off('click')
-						.on('click', async function (e) {
-							const el = $(e.currentTarget);
-							if (config.maxOptions <= el.prevAll('input').length) {
+						.on('click', async function () {
+							const optionEls = modal.find('[component="post/poll/option/item"]');
+							if (config.maxOptions <= optionEls.length) {
 								clearErrors();
 								error(`[[poll:error.max_options, ${config.maxOptions}]]`);
 								return false;
