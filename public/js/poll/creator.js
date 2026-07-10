@@ -64,6 +64,7 @@
 								// used to identify the poll in the manage modal after creation
 								// so we can edit/delete
 								pollId: Date.now(),
+								title: config.poll.defaultTitle,
 								maximumVotesPerUser: config.poll.maximumVotesPerUser,
 							}, config.poll).then((newPoll) => {
 								if (newPoll) {

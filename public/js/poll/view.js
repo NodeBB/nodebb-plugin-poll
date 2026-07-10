@@ -258,9 +258,9 @@
 	};
 
 	View.prototype.showOptionDetails = function (details) {
-		require(['bootbox'], function (bootbox) {
-			app.parseAndTranslate('poll/view/details', details, function (html) {
-				bootbox.dialog({
+		require(['benchpress', 'modals'], function (benchpress, modals) {
+			benchpress.render('poll/view/details', details).then(function (html) {
+				modals.dialog({
 					title: `[[poll:x-users-voted-for-this-option, ${details.voteCount}]]`,
 					message: html,
 					backdrop: true,
@@ -301,7 +301,7 @@
 			}
 		} else {
 			this.showVoteButton();
-			if (this.pollData.allowAnonVoting) {
+			if (this.pollData?.info?.allowAnonVoting) {
 				this.showVoteAnonButton();
 			}
 		}
