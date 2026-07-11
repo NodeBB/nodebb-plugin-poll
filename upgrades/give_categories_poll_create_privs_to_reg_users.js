@@ -1,6 +1,6 @@
 'use strict';
 
-const async = require.main.require('async');
+const async = nodebb.require('async');
 const NodeBB = require('../lib/nodebb');
 
 module.exports = {

@@ -1,6 +1,6 @@
 'use strict';
 
-const async = require.main.require('async');
+const async = nodebb.require('async');
 const NodeBB = require('../lib/nodebb');
 
 const timestamp = Date.UTC(2019, 3, 1);

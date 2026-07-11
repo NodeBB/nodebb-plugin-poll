@@ -262,17 +262,6 @@
 
 	View.prototype.showOptionDetails = async function (details) {
 		const [modals, Benchpress] = await app.require(['modals', 'benchpressjs']);
-		if (details.votes) {
-			const translator = await app.require('translator');
-			await Promise.all(details.votes.map(async (voter) => {
-				if (voter.displayname && voter.displayname.includes('[[')) {
-					voter.displayname = await translator.translate(voter.displayname);
-				}
-				if (voter.username && voter.username.includes('[[')) {
-					voter.username = await translator.translate(voter.username);
-				}
-			}));
-		}
 		const html = await Benchpress.render('poll/view/details', details);
 		await modals.dialog({
 			title: `[[poll:x-users-voted-for-this-option, ${details.voteCount}]]`,
