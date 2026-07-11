@@ -1,7 +1,7 @@
 'use strict';
 
-const db = nodebb.require('./src/database');
-const batch = nodebb.require('./src/batch');
+const db = require.main.require('./src/database');
+const batch = require.main.require('./src/batch');
 
 module.exports = {
 	name: 'Convert data structures for v4.0',

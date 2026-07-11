@@ -23,7 +23,7 @@
   "auto_end_placeholder": "Tarih ve saat bilgisini buraya girin",
   "auto_end_help": "Burayı boş bırakırsanız anket hiç sonlanmayacak.",
 
-  "error.max_options": "Sadece %d seçenek oluşturabilirsiniz.",
+  "error.max_options": "Sadece %1 seçenek oluşturabilirsiniz.",
   "error.no_options": "En az bir seçenek oluşturmalısınız",
   "error.valid_date": "Lütfen geçerli bir tarih girin",
 

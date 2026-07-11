@@ -22,7 +22,7 @@
   "auto_end_title": "Terminer le sondage automatiquement",
   "auto_end_placeholder": "Cliquez pour entrer la date et l'heure",
   "auto_end_help": "Laisser ce champ vide pour que le sondage ne se termine jamais.",
-  "error.max_options": "Vous ne pouvez créer que %d options.",
+  "error.max_options": "Vous ne pouvez créer que %1 options.",
   "error.no_options": "Créez au moins une option.",
   "error.valid_date": "Veuillez entrer une date valide.",
   "error.not_main": "Le sondage ne peut être ajouté que dans le post principal.",

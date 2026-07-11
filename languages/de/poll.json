@@ -22,7 +22,7 @@
   "auto_end_placeholder": "Datum und Zeit eingeben",
   "auto_end_help": "Lasse dieses Feld leer, wenn die Umfrage niemals enden soll.",
 
-  "error.max_options": "Du kannst höchstens %d Optionen angeben.",
+  "error.max_options": "Du kannst höchstens %1 Optionen angeben.",
   "error.no_options": "Erstelle mindestens eine Option.",
   "error.valid_date": "Bitte gib ein gültiges Datum an.",
 

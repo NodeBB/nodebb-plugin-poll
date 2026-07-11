@@ -5,16 +5,16 @@ const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
 const Hooks = require('./lib/hooks');
 const Poll = require('./lib/poll');
-const db = nodebb.require('./src/database');
-const pagination = nodebb.require('./src/pagination');
-const utils = nodebb.require('./src/utils');
+const db = require.main.require('./src/database');
+const pagination = require.main.require('./src/pagination');
+const utils = require.main.require('./src/utils');
 
 const Plugin = module.exports;
 
 Plugin.hooks = Hooks;
 
 Plugin.load = async function (params) {
-	const routeHelpers = nodebb.require('./src/routes/helpers');
+	const routeHelpers = require.main.require('./src/routes/helpers');
 	const { router } = params;
 
 	routeHelpers.setupAdminPageRoute(router, `/admin/plugins/${Config.plugin.id}`, async (req, res) => {
@@ -92,7 +92,7 @@ Plugin.renderPollWidget = async function (widget) {
 	const Poll = require('./lib/poll');
 
 	const settings = await Config.getSettings();
-	const allowAnon = settings.allowGuestsToViewResults === 'on';
+	const allowAnon = !!settings.allowGuestsToViewResults;
 
 	if (!widget.uid && !allowAnon) {
 		return null;

@@ -129,6 +129,9 @@
 		{
 			// Option details
 			register: function (view) {
+				if (!app.user.uid) {
+					return;
+				}
 				const self = this;
 				view.dom.resultsPanel.off('click').on('click', '.poll-result-votecount', function (e) {
 					self.handle(view, e);
@@ -201,7 +204,7 @@
 	};
 
 	View.prototype.voteUpdateAllowed = function () {
-		return parseInt(this.pollData.disallowVoteUpdate, 10) !== 1;
+		return parseInt(this.pollData.info.disallowVoteUpdate, 10) !== 1;
 	};
 
 	View.prototype.pollEndedOrDeleted = function () {
@@ -257,20 +260,29 @@
 		this.dom.messages.addClass('hidden');
 	};
 
-	View.prototype.showOptionDetails = function (details) {
-		require(['benchpress', 'modals'], function (benchpress, modals) {
-			benchpress.render('poll/view/details', details).then(function (html) {
-				modals.dialog({
-					title: `[[poll:x-users-voted-for-this-option, ${details.voteCount}]]`,
-					message: html,
-					backdrop: true,
-					buttons: {
-						close: {
-							label: 'Close',
-						},
-					},
-				});
-			});
+	View.prototype.showOptionDetails = async function (details) {
+		const [modals, Benchpress] = await app.require(['modals', 'benchpressjs']);
+		if (details.votes) {
+			const translator = await app.require('translator');
+			await Promise.all(details.votes.map(async (voter) => {
+				if (voter.displayname && voter.displayname.includes('[[')) {
+					voter.displayname = await translator.translate(voter.displayname);
+				}
+				if (voter.username && voter.username.includes('[[')) {
+					voter.username = await translator.translate(voter.username);
+				}
+			}));
+		}
+		const html = await Benchpress.render('poll/view/details', details);
+		await modals.dialog({
+			title: `[[poll:x-users-voted-for-this-option, ${details.voteCount}]]`,
+			message: html,
+			backdrop: true,
+			buttons: {
+				close: {
+					label: '[[global:close]]',
+				},
+			},
 		});
 	};
 
@@ -301,7 +313,7 @@
 			}
 		} else {
 			this.showVoteButton();
-			if (this.pollData?.info?.allowAnonVoting) {
+			if (this.pollData.info.allowAnonVoting) {
 				this.showVoteAnonButton();
 			}
 		}

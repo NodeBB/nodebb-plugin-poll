@@ -1,6 +1,6 @@
 <div class="topic-poll-modal">
 	{{{ if !post.polls.length }}}
-	<div class="alert alert-info">[[poll:no-polls]]</div>
+	<div class="alert alert-info">{{tx("poll:no-polls")}}</div>
 	{{{ end }}}
 	{{{ each post.polls }}}
 	<div component="post/poll/item" data-poll-id="{./pollId}" class="bg-body d-flex align-items-center justify-content-between mb-3 p-1 border rounded-1">

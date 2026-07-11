@@ -22,7 +22,7 @@
   "auto_end_placeholder": "Fai clic aquí para introduci-la data e a hora",
   "auto_end_help": "Deixar esta opción baleira fará que a enquisa non remate nunca.",
 
-  "error.max_options": "You can only create %d options.",
+  "error.max_options": "You can only create %1 options.",
   "error.no_options": "Create at least one option.",
   "error.valid_date": "Please enter a valid date.",
 

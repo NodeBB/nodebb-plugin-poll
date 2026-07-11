@@ -1,7 +1,7 @@
 'use strict';
 
-const db = nodebb.require('./src/database');
-const privileges = nodebb.require('./src/privileges');
+const db = require.main.require('./src/database');
+const privileges = require.main.require('./src/privileges');
 
 module.exports = {
 	name: 'Fix incorrectly given poll privilege',
