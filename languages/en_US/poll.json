@@ -24,7 +24,7 @@
   "auto_end_placeholder": "Click to enter date and time",
   "auto_end_help": "Leaving this empty will never end the poll.",
 
-  "error.max_options": "You can only create %d options.",
+  "error.max_options": "You can only create %1 options.",
   "error.no_options": "Create at least one option.",
   "error.valid_date": "Please enter a valid date.",
 

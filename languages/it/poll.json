@@ -22,7 +22,7 @@
   "auto_end_placeholder": "Clicca per inserire data e ora",
   "auto_end_help": "Lasciare vuoto per non far terminare il sondaggio",
 
-  "error.max_options": "Puoi creare al massimo %d opzioni.",
+  "error.max_options": "Puoi creare al massimo %1 opzioni.",
   "error.no_options": "Crea almeno una opzione.",
   "error.valid_date": "Inserisci una data valida.",
 

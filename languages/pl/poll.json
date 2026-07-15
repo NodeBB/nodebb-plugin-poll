@@ -24,7 +24,7 @@
   "auto_end_placeholder": "Kliknij, aby wprowadzić datę i godzinę",
   "auto_end_help": "Pozostaw pole puste, aby sonda trwała bez końca.",
 
-  "error.max_options": "Możesz utworzyć nie więcej niż %d opcji.",
+  "error.max_options": "Możesz utworzyć nie więcej niż %1 opcji.",
   "error.no_options": "Wymagana jest co najmniej jedna opcja.",
   "error.valid_date": "Wprowadź poprawną datę.",
 

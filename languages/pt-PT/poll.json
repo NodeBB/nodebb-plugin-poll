@@ -22,7 +22,7 @@
   "auto_end_placeholder": "Clica para escolheres uma data e uma hora",
   "auto_end_help": "Deixar este campo vazio irá fazer com que a votação nunca encerre.",
 
-  "error.max_options": "Apenas podes criar %d opções.",
+  "error.max_options": "Apenas podes criar %1 opções.",
   "error.no_options": "Primeiro tens de criar pelo menos uma opção.",
   "error.valid_date": "Por favor introduz uma data válida.",
 

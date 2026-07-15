@@ -23,7 +23,7 @@
   "auto_end_placeholder": "הקש להגדיר תאריך ושעה",
   "auto_end_help": "באם לא נבחר תאריך הסקר לא יפוג לעולם",
 
-  "error.max_options": "אתה יכול ליצור רק %d אפשרויות בחירה",
+  "error.max_options": "אתה יכול ליצור רק %1 אפשרויות בחירה",
   "error.no_options": "צור אפשרות אחת לפחות",
   "error.valid_date": "נא להזין תאריך חוקי",
 

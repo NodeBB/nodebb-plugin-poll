@@ -71,16 +71,27 @@ $(document).ready(function () {
 	});
 
 	function getPollByPost(post) {
-		if (!post || !post.hasOwnProperty('pollIds') || !post.pollIds) return;
-		let pollIds;
-		try {
-			pollIds = JSON.parse(post.pollIds || '[]');
-		} catch (err) {
-			pollIds = [];
+		if (!post) return;
+		let pollIds = [];
+		if (post.pollIds) {
+			try {
+				pollIds = JSON.parse(post.pollIds);
+			} catch (err) {
+				pollIds = [];
+			}
 		}
+		const postEl = $(`[component="post"][data-pid="${post.pid}"]`);
+		const container = postEl.find('[component="post/content"]');
+		const validPollIdSet = new Set((pollIds || []).map(id => String(id)));
+		container.find('[data-poll-id]').each(function () {
+			const existingPollId = $(this).attr('data-poll-id');
+			if (!validPollIdSet.has(existingPollId)) {
+				$(this).remove();
+				delete Poll.view.polls[existingPollId];
+			}
+		});
 		if (pollIds.length) {
-			const postEl = $(`[component="post"][data-pid="${post.pid}"]`);
-			getPolls(pollIds, postEl.find('[component="post/content"]'));
+			getPolls(pollIds, container);
 		}
 	}
 

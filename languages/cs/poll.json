@@ -23,7 +23,7 @@
   "auto_end_placeholder": "Kliknutím vyberete datum a čas",
   "auto_end_help": "Není-li vyplňeno, hlasování nebude ukončeno nikdy",
 
-  "error.max_options": "Hlasování může obsahovat maximálně %d možností.",
+  "error.max_options": "Hlasování může obsahovat maximálně %1 možností.",
   "error.no_options": "Přidejte alespoň jednu možnost.",
   "error.valid_date": "Vyplňte prosím platné datum.",
 

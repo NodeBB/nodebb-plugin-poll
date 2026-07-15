@@ -46,7 +46,6 @@
 		const html = await Benchpress.render('poll/manage', { post: postData });
 
 		if (modal) {
-			// modal.find('.bootbox-body').html(html[0].outerHTML);
 			modal.find('.bootbox-body').html(html);
 			handleSort({ modal, polls: postData.polls });
 		} else {
@@ -158,7 +157,16 @@
 	Creator.show = function (modalTitle, poll, config) {
 		return new Promise((resolve) => {
 			app.require(['benchpressjs', 'modals']).then(([Benchpress, modals]) => {
-				Benchpress.render('poll/creator', { poll, config }).then(async function (html) {
+				const pollForTemplate = { ...poll };
+				const end = parseInt(pollForTemplate.end, 10);
+				if (end > 0) {
+					const d = new Date(end);
+					const pad = n => String(n).padStart(2, '0');
+					pollForTemplate.end = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+				} else {
+					pollForTemplate.end = '';
+				}
+				Benchpress.render('poll/creator', { poll: pollForTemplate, config }).then(async function (html) {
 					const modal = await modals.dialog({
 						title: modalTitle,
 						message: html,
@@ -190,14 +198,15 @@
 						},
 					});
 
+					setTimezoneLabel(modal);
 					handleOptionSort({ modal });
 
 					// Add option adder
 					modal.find('#pollAddOption')
 						.off('click')
 						.on('click', async function () {
-							const optionEls = modal.find('[component="post/poll/option/item"]');
-							if (config.maxOptions <= optionEls.length) {
+							const optionCount = modal.find('#poll-options-container [component="post/poll/option/item"]').length;
+							if (config.maxOptions <= optionCount) {
 								clearErrors();
 								error(`[[poll:error.max_options, ${config.maxOptions}]]`);
 								return false;
@@ -228,6 +237,14 @@
 			zIndex: 9999,
 			items: '[component="post/poll/option/item"]',
 		});
+	}
+
+	function setTimezoneLabel(modal) {
+		const offsetMinutes = -new Date().getTimezoneOffset();
+		const sign = offsetMinutes >= 0 ? '+' : '-';
+		const hours = String(Math.floor(Math.abs(offsetMinutes) / 60)).padStart(2, '0');
+		const minutes = String(Math.abs(offsetMinutes) % 60).padStart(2, '0');
+		modal.find('[data-timezone-label]').text(`(UTC${sign}${hours}:${minutes})`);
 	}
 
 	async function error(message) {

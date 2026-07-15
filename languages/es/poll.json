@@ -22,7 +22,7 @@
   "auto_end_placeholder": "Click para introducir fecha y hora",
   "auto_end_help": "Dejar esta opción vacia hará que la encuesta no acabe nunca.",
 
-  "error.max_options": "Solo puedes crear %d opciones.",
+  "error.max_options": "Solo puedes crear %1 opciones.",
   "error.no_options": "Crea una opción al menos.",
   "error.valid_date": "Por favor introduce una fecha valida.",
 
