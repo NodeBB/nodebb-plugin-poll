@@ -1,0 +1,34 @@
+test/index.js
+  s_0b94faf1077fcb::t_8e13da13aa1558 17,33
+  s_0b94faf1077fcb::t_353da05ade76dd 23,43,72,90,117,136
+  s_0b94faf1077fcb::t_9a440aa361426b 1-16,18-22,24-32,34-42,44-46,48-71,73-89,91-116,118-135,137-166
+  s_0b94faf1077fcb::t_11f213df6cf7e8 47
+public/js/poll/view.js
+  s_0b94faf1077fcb::t_675c79fe11702a 334-336
+  s_0b94faf1077fcb::t_977ec7d3daed89 191-193
+test/helpers.js
+  s_0b94faf1077fcb::t_d96d6029f16f2a 1-49
+lib/hooks.js
+  s_0b94faf1077fcb::t_fa2b927ae497e6 52-59,78-104
+lib/vote.js
+  s_0b94faf1077fcb::t_cd53a1551a71bf 76-79,94-97
+lib/poll.js
+  s_0b94faf1077fcb::t_9e70e1fa845248 3-4
+  s_0b94faf1077fcb::t_d125d780beeaa5 51-136,302-313
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cffeb5b1a95a6ed597bb492901170aad240f94d9",
+  "prompts": {},
+  "sessions": {
+    "s_0b94faf1077fcb": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d4f5-cecd-7060-b432-76811ad9559e",
+        "model": "Qwen3.8"
+      },
+      "human_author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
