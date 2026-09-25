@@ -6,5 +6,12 @@ import publicConfig from 'eslint-config-nodebb/public';
 export default [
 	...publicConfig,
 	...serverConfig,
+	{
+		languageOptions: {
+			globals: {
+				nodebb: 'readonly',
+			},
+		},
+	},
 ];
 
