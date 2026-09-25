@@ -1,0 +1,21 @@
+public/js/poll/view.js
+  s_0b94faf1077fcb::t_34ff1c55a176a7 207-210
+lib/vote.js
+  s_0b94faf1077fcb::t_0a74e37f133df5 76-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "75fec42ecd7b475a2f1f8146ad08c53dd42b78f1",
+  "prompts": {},
+  "sessions": {
+    "s_0b94faf1077fcb": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d4f5-cecd-7060-b432-76811ad9559e",
+        "model": "Qwen3.8"
+      },
+      "human_author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
