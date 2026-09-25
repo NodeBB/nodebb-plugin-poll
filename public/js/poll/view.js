@@ -188,9 +188,7 @@
 		self.pollEndedOrDeleted();
 		self.hasVotedAndVotingUpdateDisallowed();
 
-		// Federated (remote) polls are results-only in Phase 1 (no local voting)
-		const isRemote = parseInt(self.pollData.info.remote, 10) === 1;
-		if (isRemote || !app.user.uid || self.pollData.hasVoted) {
+		if (!app.user.uid || self.pollData.hasVoted) {
 			self.showResultsPanel();
 		} else {
 			self.showVotingPanel();
@@ -331,9 +329,7 @@
 
 	View.prototype.showResultsPanel = function () {
 		this.hideVotingPanel();
-		// Federated (remote) polls are results-only in Phase 1 — no path to the voting panel
-		const isRemote = parseInt(this.pollData.info.remote, 10) === 1;
-		if (!isRemote && (!this.pollData.hasVoted || this.voteUpdateAllowed()) && !this.hasPollEndedOrDeleted()) {
+		if ((!this.pollData.hasVoted || this.voteUpdateAllowed()) && !this.hasPollEndedOrDeleted()) {
 			this.showVotingPanelButton();
 		} else {
 			this.hideVotingPanelButton();
