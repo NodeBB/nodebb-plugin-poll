@@ -163,4 +163,102 @@ describe('nodebb-plugin-poll (FEP-9967 federated polls)', () => {
 			assert.strictEqual(optionB.voteCount, 12);
 		});
 	});
+
+	describe('Outbound Question serialization (filter:activitypub.mocks.note)', () => {
+		const Plugin = require('../library');
+
+		it('should transform a post with a single-choice poll into a Question', async () => {
+			const pid = `test-pid-${utils.generateUUID()}`;
+			const end = Date.now() + (24 * 60 * 60 * 1000);
+			const poll = await Poll.add({ pid, uid: 1, timestamp: Date.now() }, [{
+				title: 'Test poll',
+				end,
+				maximumVotesPerUser: 1,
+				options: [
+					{ id: '1', title: 'Option A' },
+					{ id: '2', title: 'Option B' },
+				],
+			}]);
+			await db.setObjectField(`post:${pid}`, 'pollIds', JSON.stringify(poll.map(p => String(p.pollId))));
+
+			// One vote on Option A so votersCount > 0
+			await db.sortedSetAdd(`poll:${poll[0].pollId}:options:1:votes`, Date.now(), 'voter-1');
+			await db.sortedSetAdd(`poll:${poll[0].pollId}:voters`, Date.now(), 'voter-1');
+
+			// Simulate the object Mocks.notes.public builds for a main post (an Article)
+			const object = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://example.org/post/123',
+				type: 'Article',
+				name: 'Test topic title',
+				content: '<p>Test poll</p>',
+				preview: { type: 'Note', content: '<p>Test poll</p>' },
+				summary: 'Test poll [...]',
+				sensitive: false,
+			};
+
+			const result = await Plugin.hooks.filter.activitypubMocksNote({ object, post: { pid } });
+
+			assert.strictEqual(result.object.type, 'Question');
+			assert(result.object.oneOf, 'should have oneOf');
+			assert.strictEqual(result.object.oneOf.length, 2);
+			assert.strictEqual(result.object.oneOf[0].name, 'Option A');
+			assert.strictEqual(result.object.oneOf[0].replies.totalItems, 1, 'Option A should have 1 vote');
+			assert.strictEqual(result.object.oneOf[1].name, 'Option B');
+			assert.strictEqual(result.object.oneOf[1].replies.totalItems, 0, 'Option B should have 0 votes');
+			assert(result.object.endTime, 'should have endTime');
+			assert.strictEqual(result.object.votersCount, 1, 'should have votersCount');
+			assert.strictEqual(result.object.name, 'Test topic title', 'name should be kept');
+			assert.strictEqual(result.object.preview, undefined, 'preview should be dropped');
+			assert.strictEqual(result.object.summary, undefined, 'summary should be dropped');
+			assert.strictEqual(result.object.sensitive, undefined, 'sensitive should be dropped');
+		});
+
+		it('should use anyOf for a multi-choice poll and omit endTime when open', async () => {
+			const pid = `test-pid-${utils.generateUUID()}`;
+			const poll = await Poll.add({ pid, uid: 1, timestamp: Date.now() }, [{
+				title: 'Test poll',
+				end: 0,
+				maximumVotesPerUser: 3,
+				options: [
+					{ id: '1', title: 'Option A' },
+					{ id: '2', title: 'Option B' },
+					{ id: '3', title: 'Option C' },
+				],
+			}]);
+			await db.setObjectField(`post:${pid}`, 'pollIds', JSON.stringify(poll.map(p => String(p.pollId))));
+
+			const object = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://example.org/post/456',
+				type: 'Note',
+				content: '<p>Test poll</p>',
+			};
+
+			const result = await Plugin.hooks.filter.activitypubMocksNote({ object, post: { pid } });
+
+			assert.strictEqual(result.object.type, 'Question');
+			assert(result.object.anyOf, 'should have anyOf');
+			assert.strictEqual(result.object.anyOf.length, 3);
+			assert.strictEqual(result.object.oneOf, undefined, 'should not have oneOf');
+			assert.strictEqual(result.object.endTime, undefined, 'should not have endTime (open poll)');
+			assert.strictEqual(result.object.closed, undefined, 'should not have closed (open poll)');
+		});
+
+		it('should leave a post without polls untouched', async () => {
+			const pid = `test-pid-${utils.generateUUID()}`;
+			const object = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://example.org/post/789',
+				type: 'Note',
+				content: '<p>No poll</p>',
+			};
+
+			const result = await Plugin.hooks.filter.activitypubMocksNote({ object, post: { pid } });
+
+			assert.strictEqual(result.object.type, 'Note', 'type should be unchanged');
+			assert.strictEqual(result.object.oneOf, undefined);
+			assert.strictEqual(result.object.anyOf, undefined);
+		});
+	});
 });

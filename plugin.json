@@ -17,6 +17,7 @@
     { "hook": "filter:post.create", "method": "hooks.filter.postCreate" },
     { "hook": "filter:post.getFields", "method": "hooks.filter.postGetFields" },
     { "hook": "filter:post.edit", "method": "hooks.filter.postEdit" },
+    { "hook": "filter:activitypub.mocks.note", "method": "hooks.filter.activitypubMocksNote" },
 
     { "hook": "action:post.delete", "method": "hooks.action.postDelete" },
     { "hook": "action:post.restore", "method": "hooks.action.postRestore" },
