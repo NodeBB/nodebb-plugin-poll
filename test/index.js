@@ -382,4 +382,149 @@ describe('nodebb-plugin-poll (FEP-9967 federated polls)', () => {
 			assert.strictEqual(optionA.voteCount, 4, 'should display remoteVotes (3) + local votes (1) = 4');
 		});
 	});
+
+	describe('FEP-9967 inbound vote reception (Phase 4)', () => {
+		let plugins;
+		let Poll;
+		let nconf;
+
+		let topics;
+
+		before(async () => {
+			plugins = nodebb.require('./src/plugins');
+			Poll = require('../lib/poll');
+			nconf = nodebb.require('nconf');
+			topics = nodebb.require('./src/topics');
+		});
+
+		it('should apply a remote vote to a local poll', async () => {
+			// Create a local topic and post
+			const topic = await topics.create({ title: 'Local Poll Topic', cid: 1, uid: 1 });
+			const post = await posts.create({ uid: 1, tid: topic.tid, content: 'Local poll' });
+
+			// Add a poll to the post
+			const savedPolls = await Poll.add(
+				{ pid: post.pid, uid: 1, timestamp: Date.now() },
+				[{
+					title: 'Local Poll',
+					options: [{ id: 'opt1', title: 'Option A' }, { id: 'opt2', title: 'Option B' }],
+					maximumVotesPerUser: 1,
+					end: 0,
+				}]
+			);
+			const pollId = savedPolls[0].pollId;
+
+			// Set pollIds on the post (normally done by filter:post.create)
+			await db.setObjectField(`post:${post.pid}`, 'pollIds', JSON.stringify([String(pollId)]));
+
+			// Get the post's URL (this is the Question id)
+			const postUrl = `${nconf.get('url')}/post/${post.pid}`;
+
+			// Create a Create(Note) activity that represents a vote
+			const voteNote = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://remote.example/votes/1',
+				type: 'Note',
+				attributedTo: 'https://remote.example/users/bob',
+				inReplyTo: postUrl,
+				name: 'Option A',
+				to: [`${nconf.get('url')}/uid/1`],
+			};
+			const createActivity = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://remote.example/activities/vote-1',
+				type: 'Create',
+				actor: 'https://remote.example/users/bob',
+				object: voteNote,
+			};
+
+			// Fire the filter:activitypub.create hook
+			const context = await plugins.hooks.fire('filter:activitypub.create', {
+				req: {},
+				activity: createActivity,
+				claimed: false,
+			});
+
+			assert(context.claimed, 'activity should be claimed');
+
+			// Check that the vote was applied
+			const voters = await db.getSortedSetMembers(`poll:${pollId}:voters`);
+			assert(voters.includes('https://remote.example/users/bob'), 'remote voter should be in the voters set');
+
+			const optionVotes = await db.getSortedSetMembers(`poll:${pollId}:options:opt1:votes`);
+			assert(optionVotes.includes('https://remote.example/users/bob'), 'remote voter should be in the option votes set');
+		});
+
+		it('should not apply a vote if the actor already voted (single-choice)', async () => {
+			// Create a local topic and post
+			const topic = await topics.create({ title: 'Local Poll Topic 2', cid: 1, uid: 1 });
+			const post = await posts.create({ uid: 1, tid: topic.tid, content: 'Local poll 2' });
+
+			// Add a poll to the post
+			const savedPolls = await Poll.add(
+				{ pid: post.pid, uid: 1, timestamp: Date.now() },
+				[{
+					title: 'Local Poll 2',
+					options: [{ id: 'opt1', title: 'Option A' }, { id: 'opt2', title: 'Option B' }],
+					maximumVotesPerUser: 1,
+					end: 0,
+				}]
+			);
+			const pollId = savedPolls[0].pollId;
+			await db.setObjectField(`post:${post.pid}`, 'pollIds', JSON.stringify([String(pollId)]));
+			const postUrl = `${nconf.get('url')}/post/${post.pid}`;
+
+			// First vote
+			const voteNote1 = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://remote.example/votes/2',
+				type: 'Note',
+				attributedTo: 'https://remote.example/users/bob',
+				inReplyTo: postUrl,
+				name: 'Option A',
+				to: [`${nconf.get('url')}/uid/1`],
+			};
+			const createActivity1 = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://remote.example/activities/vote-2',
+				type: 'Create',
+				actor: 'https://remote.example/users/bob',
+				object: voteNote1,
+			};
+			await plugins.hooks.fire('filter:activitypub.create', {
+				req: {},
+				activity: createActivity1,
+				claimed: false,
+			});
+
+			// Second vote (same actor, different option — should be rejected for single-choice)
+			const voteNote2 = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://remote.example/votes/3',
+				type: 'Note',
+				attributedTo: 'https://remote.example/users/bob',
+				inReplyTo: postUrl,
+				name: 'Option B',
+				to: [`${nconf.get('url')}/uid/1`],
+			};
+			const createActivity2 = {
+				'@context': 'https://www.w3.org/ns/activitystreams',
+				id: 'https://remote.example/activities/vote-3',
+				type: 'Create',
+				actor: 'https://remote.example/users/bob',
+				object: voteNote2,
+			};
+			const context2 = await plugins.hooks.fire('filter:activitypub.create', {
+				req: {},
+				activity: createActivity2,
+				claimed: false,
+			});
+
+			assert(!context2.claimed, 'second vote should not be claimed (actor already voted)');
+
+			// Only Option A should have the vote
+			const optionBVotes = await db.getSortedSetMembers(`poll:${pollId}:options:opt2:votes`);
+			assert(!optionBVotes.includes('https://remote.example/users/bob'), 'Option B should not have the vote');
+		});
+	});
 });
