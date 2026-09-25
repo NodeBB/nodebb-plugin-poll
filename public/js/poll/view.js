@@ -204,6 +204,10 @@
 	};
 
 	View.prototype.voteUpdateAllowed = function () {
+		// Remote polls: vote changes/removals are not federated (no OSW support yet)
+		if (parseInt(this.pollData.info.remote, 10) === 1) {
+			return false;
+		}
 		return parseInt(this.pollData.info.disallowVoteUpdate, 10) !== 1;
 	};
 
