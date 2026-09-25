@@ -14,3 +14,9 @@
     {{tx("poll:vote_is_final")}}
 </div>
 {{{ end }}}
+
+{{{ if poll.info.remote }}}
+<div class="alert alert-info" role="alert">
+    {{tx("poll:remote_vote_caveat")}}
+</div>
+{{{ end }}}

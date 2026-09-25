@@ -51,7 +51,7 @@ Limitations:
 
 - Only the **first** poll on a post is federated (FEP-9967 models one `Question` per poll); multiple polls per post are not supported.
 - **Anonymous votes are not federated**, since FEP-9967 votes are attributed to the voter's actor.
-- Votes on **remote** polls cannot be changed or removed (only new votes are federated).
+- Votes on **remote** polls can be changed or removed (federated as `Create`/`Delete` per FEP-9967), but not all servers support this — e.g. some ignore `Delete` of a vote — so the change may not be reflected on the remote poll.
 
 ## Installation
 

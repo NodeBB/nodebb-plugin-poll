@@ -51,6 +51,7 @@
   "voting_unavailable_message": "This poll has ended or has been marked as deleted. You can still view the results.",
   "voting_update_disallowed_message": "You have already voted and changing your vote is not allowed for this poll",
   "vote_is_final": "Changing your vote is not allowed for this poll so your vote is final",
+  "remote_vote_caveat": "This poll is from another server. Not all servers support changing or removing a vote, so your update may not be reflected there.",
 
   "x-users-voted-for-this-option": "%1 user(s) voted for this option",
   "votes": "votes",
