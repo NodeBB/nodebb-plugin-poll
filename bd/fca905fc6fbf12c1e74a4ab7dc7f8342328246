@@ -1,0 +1,21 @@
+lib/sockets.js
+  s_0b94faf1077fcb::t_f1948407a3d141 82-84,286
+eslint.config.mjs
+  s_0b94faf1077fcb::t_24f94828a9f64e 9-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bdfca905fc6fbf12c1e74a4ab7dc7f8342328246",
+  "prompts": {},
+  "sessions": {
+    "s_0b94faf1077fcb": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d4f5-cecd-7060-b432-76811ad9559e",
+        "model": "Qwen3.8"
+      },
+      "human_author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
