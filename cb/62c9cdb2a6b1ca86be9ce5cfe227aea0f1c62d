@@ -1,0 +1,34 @@
+lib/sockets.js
+  s_0b94faf1077fcb::t_745493cdc90abb 3,286
+  s_0b94faf1077fcb::t_4ff983fa750f59 80-84,123-126,128-136,158-163,165-171,173,250-281,287-323
+  s_0b94faf1077fcb::t_260b66c771c664 282-285
+languages/en_GB/poll.json
+  s_0b94faf1077fcb::t_0db71de6c84535 13
+templates/poll/creator.tpl
+  s_0b94faf1077fcb::t_10ad088b463f51 39
+public/js/poll/creator.js
+  s_0b94faf1077fcb::t_892afd95e0f635 204-208
+lib/poll.js
+  s_0b94faf1077fcb::t_a80f37eb8dcb8a 303-305,309-311
+test/index.js
+  s_0b94faf1077fcb::t_fc65acc3b254c8 278-281
+  s_0b94faf1077fcb::t_271ab6881e0929 305-306,328,334,349,356,369,376,381
+  s_0b94faf1077fcb::t_0621fe30dd0fc8 282,284-296
+  s_0b94faf1077fcb::t_1953f43900d527 264-277,283,297-304,307-327,329-333,335-348,350-355,357-368,370-375,377-380,382-384
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb62c9cdb2a6b1ca86be9ce5cfe227aea0f1c62d",
+  "prompts": {},
+  "sessions": {
+    "s_0b94faf1077fcb": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d4f5-cecd-7060-b432-76811ad9559e",
+        "model": "Qwen3.8"
+      },
+      "human_author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
