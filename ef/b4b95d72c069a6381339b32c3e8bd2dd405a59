@@ -1,0 +1,23 @@
+test/index.js
+  s_0b94faf1077fcb::t_90ac6b1bc0244c 166-263
+plugin.json
+  s_0b94faf1077fcb::t_8a1ad3045bf0f2 20
+lib/hooks.js
+  s_0b94faf1077fcb::t_02582e99fa2fac 127-186
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "efb4b95d72c069a6381339b32c3e8bd2dd405a59",
+  "prompts": {},
+  "sessions": {
+    "s_0b94faf1077fcb": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d4f5-cecd-7060-b432-76811ad9559e",
+        "model": "Qwen3.8"
+      },
+      "human_author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
