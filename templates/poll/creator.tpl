@@ -36,6 +36,7 @@
     <div class="form-check mb-3">
         <label class="form-check-label" for="allowAnonVoting">{{tx("poll:allow_anon_voting")}}</label>
         <input class="form-check-input" type="checkbox" name="allowAnonVoting" id="allowAnonVoting" {{{if poll.allowAnonVoting}}}checked{{{end}}}>
+        <p class="form-text {{{if poll.allowAnonVoting}}}{{{else}}}hidden{{{end}}}" id="pollAnonVotingNote">{{tx("poll:anon_voting_not_federated")}}</p>
     </div>
 
     <div class="mb-3">

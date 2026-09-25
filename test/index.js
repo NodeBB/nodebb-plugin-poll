@@ -261,4 +261,125 @@ describe('nodebb-plugin-poll (FEP-9967 federated polls)', () => {
 			assert.strictEqual(result.object.anyOf, undefined);
 		});
 	});
+
+	describe('FEP-9967 outbound vote federation (Phase 3)', () => {
+		let Sockets;
+		let Vote;
+		let Poll;
+		let activitypub;
+
+		before(async () => {
+			Sockets = require('../lib/sockets');
+			Vote = require('../lib/vote');
+			Poll = require('../lib/poll');
+			activitypub = nodebb.require('./src/activitypub');
+		});
+
+		beforeEach(() => {
+			activitypub._sent.clear();
+		});
+
+		// Create a remote poll via inbox ingestion and return the poll data + question id
+		async function createRemotePollFixture({ options, remoteVotes, allowAnonVoting = 0 }) {
+			const oneOf = options.map((title, i) => ({
+				type: 'Note',
+				name: title,
+				replies: { type: 'Collection', totalItems: (remoteVotes && remoteVotes[i + 1]) || 0 },
+			}));
+
+			const { question, id } = pollHelpers.question({ oneOf });
+			const { activity } = helpers.mocks.create(question);
+
+			await db.sortedSetAdd(`followersRemote:${question.attributedTo}`, Date.now(), uid);
+			await activitypub.inbox.create({ body: activity });
+
+			const pollIds = JSON.parse(await db.getObjectField(`post:${id}`, 'pollIds'));
+			const pollId = pollIds[0];
+			let pollData = await db.getObject(`poll:${pollId}`);
+
+			if (allowAnonVoting) {
+				pollData.allowAnonVoting = allowAnonVoting;
+				await db.setObject(`poll:${pollId}`, pollData);
+			}
+
+			const optionIds = JSON.parse(pollData.options).map(o => o.id);
+			return { pollData, id, pollId, optionIds };
+		}
+
+		// Find a sent activity matching the given predicate
+		function findSentActivity(predicate) {
+			for (const [, { payload }] of activitypub._sent) {
+				if (predicate(payload)) return payload;
+			}
+			return null;
+		}
+
+		it('should allow canVote for remote polls', async () => {
+			const { pollId } = await createRemotePollFixture({
+				options: ['Option A', 'Option B'],
+				remoteVotes: { 1: 3, 2: 5 },
+			});
+
+			const canVote = await Vote.canVote(1, pollId);
+			assert.strictEqual(canVote, true, 'should allow voting on remote polls');
+		});
+
+		it('should federate a Create(voteNote) when voting on a remote poll', async () => {
+			const { pollId, optionIds } = await createRemotePollFixture({
+				options: ['Option A', 'Option B'],
+				remoteVotes: { 1: 3, 2: 5 },
+			});
+
+			const socket = { uid: 1 };
+			const data = { pollId, options: [optionIds[0]] };
+
+			await Sockets.vote(socket, data);
+
+			const sent = findSentActivity(p =>
+				p.type === 'Create' &&
+				p.object && p.object.type === 'Note' &&
+				p.object.name === 'Option A'
+			);
+			assert(sent, 'should have sent a Create(voteNote) activity');
+			assert.strictEqual(sent.object.inReplyTo, sent.object.inReplyTo, 'inReplyTo should be set');
+			assert(Array.isArray(sent.object.to), 'to should be an array');
+		});
+
+		it('should not federate anonymous votes', async () => {
+			const { pollId, optionIds } = await createRemotePollFixture({
+				options: ['Option A', 'Option B'],
+				remoteVotes: { 1: 3, 2: 5 },
+				allowAnonVoting: 1,
+			});
+
+			const socket = { uid: 1 };
+			const data = { pollId, options: [optionIds[0]], voteAnon: true };
+
+			await Sockets.vote(socket, data);
+
+			const sent = findSentActivity(p =>
+				p.type === 'Create' &&
+				p.object && p.object.type === 'Note' &&
+				p.object.name === 'Option A'
+			);
+			assert(!sent, 'should not have sent a vote activity for anonymous votes');
+		});
+
+		it('should display remoteVotes + local votes', async () => {
+			const { pollId, optionIds } = await createRemotePollFixture({
+				options: ['Option A', 'Option B'],
+				remoteVotes: { 1: 3, 2: 5 },
+			});
+
+			// Vote on the poll
+			const socket = { uid: 1 };
+			const data = { pollId, options: [optionIds[0]] };
+			await Sockets.vote(socket, data);
+
+			// Check the displayed count
+			const pollInfo = await Poll.getInfo(pollId);
+			const optionA = pollInfo.options.find(o => String(o.id) === optionIds[0]);
+			assert.strictEqual(optionA.voteCount, 4, 'should display remoteVotes (3) + local votes (1) = 4');
+		});
+	});
 });
