@@ -1,0 +1,21 @@
+README.md
+  s_412627816abf5a::t_9846563fe33ae5 11-42
+  s_412627816abf5a::t_c1b8511d65be06 43-53,55
+  s_412627816abf5a::t_84e01b18fcae62 54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fe82ba51bc4b9bd11fe04843e387de6f87dc69db",
+  "prompts": {},
+  "sessions": {
+    "s_412627816abf5a": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0d99d-2d6e-7060-b432-7689d26e0a9e",
+        "model": "Qwen3.8"
+      },
+      "human_author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
