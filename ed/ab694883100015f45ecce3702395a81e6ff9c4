@@ -1,0 +1,14 @@
+package.json
+  h_7fe16615636fba 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "edab694883100015f45ecce3702395a81e6ff9c4",
+  "prompts": {},
+  "humans": {
+    "h_7fe16615636fba": {
+      "author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
