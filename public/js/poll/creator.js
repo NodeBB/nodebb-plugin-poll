@@ -201,6 +201,11 @@
 					setTimezoneLabel(modal);
 					handleOptionSort({ modal });
 
+					// Show/hide the anon-voting federation note as the checkbox is toggled
+					modal.find('#allowAnonVoting').on('change', function () {
+						modal.find('#pollAnonVotingNote').toggleClass('hidden', !this.checked);
+					});
+
 					// Add option adder
 					modal.find('#pollAddOption')
 						.off('click')

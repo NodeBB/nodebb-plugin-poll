@@ -3,7 +3,7 @@
 (function (Poll) {
 	function vote(view, options) {
 		const form = view.dom.votingPanel.find('form');
-		const votes = form.serializeArray().map(option => parseInt(option.value, 10));
+		const votes = form.serializeArray().map(option => option.value);
 
 		if (votes.length > 0) {
 			const voteData = {
@@ -66,7 +66,7 @@
 			handle: function (view) {
 				const form = view.dom.votingPanel.find('form');
 				const votes = form.serializeArray().map(function (option) {
-					return parseInt(option.value, 10);
+					return option.value;
 				});
 
 				if (votes.length > 0) {
@@ -204,6 +204,10 @@
 	};
 
 	View.prototype.voteUpdateAllowed = function () {
+		// Remote polls: vote changes/removals are not federated (no OSW support yet)
+		if (parseInt(this.pollData.info.remote, 10) === 1) {
+			return false;
+		}
 		return parseInt(this.pollData.info.disallowVoteUpdate, 10) !== 1;
 	};
 
