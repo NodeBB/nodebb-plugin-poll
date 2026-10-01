@@ -1,5 +1,7 @@
 'use strict';
 
+const nconf = nodebb.require('nconf');
+
 const NodeBB = require('./lib/nodebb');
 const Config = require('./lib/config');
 const Sockets = require('./lib/sockets');
@@ -47,6 +49,10 @@ Plugin.load = async function (params) {
 	NodeBB.PluginSockets[Config.plugin.id] = Sockets;
 
 	NodeBB.app = params.app;
+
+	if (nconf.get('runJobs')) {
+		await db.delete(`poll:voteLocks`);
+	}
 };
 
 Plugin.addAdminNavigation = function (adminHeader) {

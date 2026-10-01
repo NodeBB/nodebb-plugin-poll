@@ -38,6 +38,7 @@
   "error.invalid-post": "Invalid post.",
   "error.privilege.create": "You're not allowed to create a poll",
   "error.anon-voting-not-allowed": "This poll does not allow voting anonymously",
+  "error.already-voting": "You are already voting for this poll",
 
   "warning.redactor": "You're using Redactor. Do <strong>not</strong> edit the markup manually. Instead, re-open the poll creator.",
 
