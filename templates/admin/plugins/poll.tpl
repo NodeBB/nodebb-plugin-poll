@@ -25,7 +25,7 @@
 					{{{ each polls }}}
 					<tr class="align-middle">
 						<td>{./pollId}</td>
-						<td><a href="{config.relative_path}/post/{./pid}">{./title}</a></td>
+						<td><a href="{config.relative_path}/post/{encodeURIComponent(./pid)}">{./title}</a></td>
 						<td class="text-nowrap"><span class="timeago" title="{./timestampISO}"></span></td>
 						<td class="text-nowrap">
 							{{{ if ./end }}}
