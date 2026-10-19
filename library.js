@@ -31,13 +31,21 @@ Plugin.load = async function (params) {
 
 		const pollData = await db.getObjects(pollIds.map(pollId => `poll:${pollId}`));
 		const voteCounts = await Promise.all(pollIds.map(Poll.getVoteCount));
+
 		pollData.forEach((poll, index) => {
-			if (poll) {
-				poll.timestampISO = utils.toISOString(poll.timestamp);
-				poll.endISO = utils.toISOString(poll.end);
-				poll.voteCount = voteCounts[index];
+			if (!poll) {
+				return;
 			}
+			poll.timestampISO = utils.toISOString(poll.timestamp);
+			poll.endISO = utils.toISOString(poll.end);
+			poll.voteCount = voteCounts[index];
 		});
+
+		await Promise.all(pollData.map(async (poll) => {
+			if (poll) {
+				poll.title = await Poll.getDisplayTitle(poll);
+			}
+		}));
 		const pageCount = Math.ceil(count / itemsPerPage);
 		res.render(`admin/plugins/${Config.plugin.id}`, {
 			title: 'Poll',

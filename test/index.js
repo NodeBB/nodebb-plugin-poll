@@ -17,6 +17,7 @@ const db = nodebb.require('./test/mocks/databasemock');
 const install = nodebb.require('./src/install');
 const user = nodebb.require('./src/user');
 const posts = nodebb.require('./src/posts');
+const topics = nodebb.require('./src/topics');
 const activitypub = nodebb.require('./src/activitypub');
 const utils = nodebb.require('./src/utils');
 const helpers = nodebb.require('./test/activitypub/helpers');
@@ -161,6 +162,50 @@ describe('nodebb-plugin-poll (FEP-9967 federated polls)', () => {
 			const optionB = info.options.find(o => o.title === 'Option B');
 			assert.strictEqual(optionA.voteCount, 5);
 			assert.strictEqual(optionB.voteCount, 12);
+		});
+	});
+
+	describe('Poll.getDisplayTitle', () => {
+		it('should return the topic title for a remote poll (uuid tid)', async () => {
+			const { question, id } = pollHelpers.question();
+			const { activity } = helpers.mocks.create(question);
+
+			await db.sortedSetAdd(`followersRemote:${question.attributedTo}`, Date.now(), uid);
+			await activitypub.inbox.create({ body: activity });
+
+			const pollIds = JSON.parse(await db.getObjectField(`post:${id}`, 'pollIds'));
+			const poll = await db.getObject(`poll:${pollIds[0]}`);
+			assert.strictEqual(poll.title, 'Poll', 'remote poll should be ingested with the default title');
+
+			// The post lives in a remote topic (uuid tid)
+			const tid = await posts.getPostField(id, 'tid');
+			assert(tid, 'post should have a tid');
+			assert(!utils.isNumber(tid), 'remote tid should be a uuid, not a number');
+
+			const topicTitle = await topics.getTopicField(tid, 'title');
+			assert(topicTitle, 'topic should have a title');
+
+			const displayTitle = await Poll.getDisplayTitle(poll);
+			assert.strictEqual(displayTitle, topicTitle, 'should return the topic title');
+			assert.notStrictEqual(displayTitle, 'Poll', 'should not return the default "Poll" title');
+		});
+
+		it('should return the poll title for a local poll (numeric tid)', async () => {
+			const topic = await topics.create({ title: 'Local Topic', cid: 1, uid: 1 });
+			const post = await posts.create({ uid: 1, tid: topic.tid, content: 'Local poll' });
+			const savedPolls = await Poll.add(
+				{ pid: post.pid, uid: 1, timestamp: Date.now() },
+				[{
+					title: 'My Local Poll',
+					options: [{ id: 'opt1', title: 'Option A' }, { id: 'opt2', title: 'Option B' }],
+					maximumVotesPerUser: 1,
+					end: 0,
+				}]
+			);
+			const poll = savedPolls[0];
+
+			const displayTitle = await Poll.getDisplayTitle(poll);
+			assert.strictEqual(displayTitle, 'My Local Poll', 'should return the poll title for a local poll');
 		});
 	});
 
