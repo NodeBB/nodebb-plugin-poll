@@ -1,0 +1,16 @@
+package-lock.json
+  h_7fe16615636fba 3,9
+package.json
+  h_7fe16615636fba 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8392fb9e28b7a398984028c4f97c3dff80db0789",
+  "prompts": {},
+  "humans": {
+    "h_7fe16615636fba": {
+      "author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
