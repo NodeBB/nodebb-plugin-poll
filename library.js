@@ -17,7 +17,8 @@ Plugin.hooks = Hooks;
 
 Plugin.load = async function (params) {
 	const routeHelpers = nodebb.require('./src/routes/helpers');
-	const { router } = params;
+	const controllerHelpers = nodebb.require('./src/controllers/helpers');
+	const { router, middleware } = params;
 
 	routeHelpers.setupAdminPageRoute(router, `/admin/plugins/${Config.plugin.id}`, async (req, res) => {
 		const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
@@ -52,6 +53,32 @@ Plugin.load = async function (params) {
 			polls: pollData,
 			pagination: pagination.create(page, pageCount, req.query),
 		});
+	});
+
+	routeHelpers.setupApiRoute(router, 'delete', `/api/v3/admin/plugins/${Config.plugin.id}/poll/:pollId`, [middleware.ensureLoggedIn, middleware.admin.checkPrivileges], async (req, res) => {
+		const pollId = parseInt(req.params.pollId, 10);
+		if (!Number.isInteger(pollId) || pollId <= 0) {
+			return controllerHelpers.formatApiResponse(400, res, '[[poll:error.invalid_poll_id]]');
+		}
+
+		const poll = await db.getObject(`poll:${pollId}`);
+		if (!poll) {
+			return controllerHelpers.formatApiResponse(404, res, '[[poll:error.poll_not_found]]');
+		}
+
+		await Poll.deletePolls([pollId]);
+
+		// Remove the pollId from the post's pollIds list (or drop the field if it's now empty)
+		if (poll.pid) {
+			const remaining = (await Poll.getPollIdsByPid(poll.pid)).filter(id => String(id) !== String(pollId));
+			if (remaining.length) {
+				await db.setObjectField(`post:${poll.pid}`, 'pollIds', JSON.stringify(remaining));
+			} else {
+				await db.deleteObjectField(`post:${poll.pid}`, 'pollIds');
+			}
+		}
+
+		await controllerHelpers.formatApiResponse(200, res, { pollId });
 	});
 
 	NodeBB.PluginSockets[Config.plugin.id] = Sockets;

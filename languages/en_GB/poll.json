@@ -60,5 +60,10 @@
   "total-votes-x": "Total Votes: %1",
   "admin.create-poll": "Create Poll",
   "created-time": "Created",
-  "end-time": "End"
+  "end-time": "End",
+  "delete": "Delete",
+  "confirm-delete-poll": "Are you sure you want to delete this poll? This will permanently remove the poll and all of its votes.",
+  "poll-deleted": "Poll deleted.",
+  "error.invalid_poll_id": "Invalid poll ID.",
+  "error.poll_not_found": "Poll not found."
 }

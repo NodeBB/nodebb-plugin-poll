@@ -16,11 +16,13 @@ const assert = require('assert');
 const db = nodebb.require('./test/mocks/databasemock');
 const install = nodebb.require('./src/install');
 const user = nodebb.require('./src/user');
+const groups = nodebb.require('./src/groups');
 const posts = nodebb.require('./src/posts');
 const topics = nodebb.require('./src/topics');
 const activitypub = nodebb.require('./src/activitypub');
 const utils = nodebb.require('./src/utils');
 const helpers = nodebb.require('./test/activitypub/helpers');
+const testHelpers = nodebb.require('./test/helpers');
 const pollHelpers = require('./helpers');
 
 const Poll = require('../lib/poll');
@@ -571,5 +573,88 @@ describe('nodebb-plugin-poll (FEP-9967 federated polls)', () => {
 			const optionBVotes = await db.getSortedSetMembers(`poll:${pollId}:options:opt2:votes`);
 			assert(!optionBVotes.includes('https://remote.example/users/bob'), 'Option B should not have the vote');
 		});
+	});
+});
+
+describe('nodebb-plugin-poll (admin delete poll API)', () => {
+	let adminUid;
+	let adminUsername;
+	let jar;
+
+	before(async () => {
+		adminUsername = `polladmin-${utils.generateUUID()}`;
+		adminUid = await user.create({
+			username: adminUsername,
+			password: 'polladminpw',
+			email: `${adminUsername}@example.org`,
+		});
+		await groups.join('administrators', adminUid);
+		({ jar } = await testHelpers.loginUser(adminUsername, 'polladminpw'));
+	});
+
+	// Create a topic + post + poll and link them; returns { pid, pollId }
+	async function createPollFixture() {
+		const topic = await topics.create({ title: `Delete Test ${utils.generateUUID()}`, cid: 1, uid: 1 });
+		const post = await posts.create({ uid: 1, tid: topic.tid, content: 'Delete test poll' });
+		const savedPolls = await Poll.add(
+			{ pid: post.pid, uid: 1, timestamp: Date.now() },
+			[{ title: 'Delete Me', options: [{ id: 'opt1', title: 'Option A' }, { id: 'opt2', title: 'Option B' }], maximumVotesPerUser: 1, end: 0 }]
+		);
+		const pollId = savedPolls[0].pollId;
+		await db.setObjectField(`post:${post.pid}`, 'pollIds', JSON.stringify([String(pollId)]));
+		return { pid: post.pid, pollId };
+	}
+
+	it('should delete a poll via the admin API route', async () => {
+		const { pid, pollId } = await createPollFixture();
+
+		// Add a vote so we can verify cleanup
+		await db.sortedSetAdd(`poll:${pollId}:options:opt1:votes`, Date.now(), 'voter-1');
+		await db.sortedSetAdd(`poll:${pollId}:voters`, Date.now(), 'voter-1');
+
+		const { response } = await testHelpers.request('DELETE', `/api/v3/admin/plugins/poll/poll/${pollId}`, { jar });
+		assert.strictEqual(response.statusCode, 200, 'should return 200');
+
+		// The poll object is gone
+		const poll = await db.getObject(`poll:${pollId}`);
+		assert(!poll, 'poll object should be deleted');
+
+		// Vote sets are cleaned up
+		const optionVotes = await db.getSortedSetMembers(`poll:${pollId}:options:opt1:votes`);
+		assert.strictEqual(optionVotes.length, 0, 'option votes should be cleaned up');
+
+		// Removed from the createtime index
+		const inSet = await db.isSortedSetMember('polls:createtime', pollId);
+		assert(!inSet, 'poll should be removed from createtime set');
+
+		// The post's pollIds field is dropped (it was the only poll)
+		const pollIds = await db.getObjectField(`post:${pid}`, 'pollIds');
+		assert(!pollIds, 'post pollIds field should be removed');
+	});
+
+	it('should keep remaining pollIds on a post with multiple polls', async () => {
+		const { pid, pollId } = await createPollFixture();
+		const second = await Poll.add(
+			{ pid, uid: 1, timestamp: Date.now() },
+			[{ title: 'Keep Me', options: [{ id: 'opt1', title: 'Option A' }], maximumVotesPerUser: 1, end: 0 }]
+		);
+		const secondPollId = second[0].pollId;
+		await db.setObjectField(`post:${pid}`, 'pollIds', JSON.stringify([String(pollId), String(secondPollId)]));
+
+		const { response } = await testHelpers.request('DELETE', `/api/v3/admin/plugins/poll/poll/${pollId}`, { jar });
+		assert.strictEqual(response.statusCode, 200, 'should return 200');
+
+		const remaining = JSON.parse(await db.getObjectField(`post:${pid}`, 'pollIds'));
+		assert.deepStrictEqual(remaining, [String(secondPollId)], 'only the remaining pollId should be kept');
+	});
+
+	it('should return 400 for an invalid poll id', async () => {
+		const { response } = await testHelpers.request('DELETE', '/api/v3/admin/plugins/poll/poll/abc', { jar });
+		assert.strictEqual(response.statusCode, 400, 'should return 400 for invalid poll id');
+	});
+
+	it('should return 404 for a non-existent poll', async () => {
+		const { response } = await testHelpers.request('DELETE', '/api/v3/admin/plugins/poll/poll/999999', { jar });
+		assert.strictEqual(response.statusCode, 404, 'should return 404 for non-existent poll');
 	});
 });

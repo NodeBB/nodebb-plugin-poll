@@ -19,6 +19,7 @@
 							<th class="text-nowrap">{{tx("poll:created-time")}}</th>
 							<th class="text-nowrap">{{tx("poll:end-time")}}</th>
 							<th class="text-end text-nowrap text-capitalize">{{tx("poll:votes")}}</th>
+							<th class="text-end text-nowrap">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody class="text-xs text-tabular">
@@ -36,6 +37,11 @@
 						</td>
 						<td class="text-end">
 							{./voteCount}
+						</td>
+						<td class="text-end">
+							<button type="button" class="btn btn-sm btn-ghost text-danger" data-action="delete-poll" data-poll-id="{./pollId}" title="{{tx('poll:delete')}}">
+								<i class="fa fa-trash"></i>
+							</button>
 						</td>
 					</tr>
 					{{{ end }}}
