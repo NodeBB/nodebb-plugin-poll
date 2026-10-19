@@ -1,0 +1,27 @@
+library.js
+  s_235c706d1fabc5::t_37f1a5534b7c18 34,36-37,39-41
+  s_235c706d1fabc5::t_759b0f52f05083 43-48
+lib/poll.js
+  s_235c706d1fabc5::t_7dc66c7e354a9f 7-9,140-151,153
+  s_235c706d1fabc5::t_706007d953d383 152
+  s_235c706d1fabc5::t_9cf2a8ac6c097a 154-155
+test/index.js
+  s_235c706d1fabc5::t_55316cd7c666d8 20,168-209
+  s_235c706d1fabc5::t_bc09e0101a5122 210-211
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6810b5c64279cb28176397318e0bbc3b694b8fda",
+  "prompts": {},
+  "sessions": {
+    "s_235c706d1fabc5": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a15556-9a17-75fc-a482-485e7d843235",
+        "model": "Qwen3.8"
+      },
+      "human_author": "Julian Lam <julian@nodebb.org>"
+    }
+  }
+}
