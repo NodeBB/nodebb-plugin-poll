@@ -39,7 +39,7 @@
 							{./voteCount}
 						</td>
 						<td class="text-end">
-							<button type="button" class="btn btn-sm btn-ghost text-danger" data-action="delete-poll" data-poll-id="{./pollId}" title="{{tx('poll:delete')}}">
+							<button type="button" class="btn btn-sm btn-ghost text-danger" data-action="delete-poll" data-poll-id="{./pollId}" title="{{tx("poll:delete")}}">
 								<i class="fa fa-trash"></i>
 							</button>
 						</td>
