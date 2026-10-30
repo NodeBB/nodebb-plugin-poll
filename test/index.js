@@ -485,14 +485,42 @@ describe('nodebb-plugin-poll (FEP-9967 federated polls)', () => {
 				object: voteNote,
 			};
 
-			// Fire the filter:activitypub.create hook
-			const context = await plugins.hooks.fire('filter:activitypub.create', {
-				req: {},
-				activity: createActivity,
-				claimed: false,
-			});
+			// Spy on activitypub.send to capture the federated Update(Question)
+			const activitypub = nodebb.require('./src/activitypub');
+			const originalSend = activitypub.send;
+			let sentActivity = null;
+			activitypub.send = async (type, id, targets, payload) => {
+				sentActivity = payload;
+			};
 
-			assert(context.claimed, 'activity should be claimed');
+			try {
+				// Fire the filter:activitypub.create hook
+				const context = await plugins.hooks.fire('filter:activitypub.create', {
+					req: {},
+					activity: createActivity,
+					claimed: false,
+				});
+
+				assert(context.claimed, 'activity should be claimed');
+
+				// Wait for the setImmediate'd Update(Question) publish
+				await new Promise((resolve, reject) => {
+					const started = Date.now();
+					const check = () => {
+						if (sentActivity) return resolve();
+						if (Date.now() - started > 5000) return reject(new Error('timed out waiting for Update(Question)'));
+						setImmediate(check);
+					};
+					setImmediate(check);
+				});
+
+				// The Update(Question) must be attributed to the author actor URL, not the raw uid
+				assert(sentActivity.type === 'Update', 'should publish an Update activity');
+				assert.strictEqual(sentActivity.actor, `${nconf.get('url')}/uid/1`, 'actor should be the author actor URL');
+				assert.strictEqual(sentActivity.object.attributedTo, `${nconf.get('url')}/uid/1`, 'attributedTo should be the author actor URL');
+			} finally {
+				activitypub.send = originalSend;
+			}
 
 			// Check that the vote was applied
 			const voters = await db.getSortedSetMembers(`poll:${pollId}:voters`);
